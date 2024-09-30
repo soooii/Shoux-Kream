@@ -1,0 +1,75 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.4'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// RESTful API를 포함한 웹 애플리케이션을 개발하기 위한 Spring Boot 스타터
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// 데이터베이스 접근을 위한 Spring Data JPA와 ORM을 사용하기 위한 Spring Boot 스타터
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.hibernate.validator:hibernate-validator:7.0.1.Final'
+
+	// Thymeleaf를 뷰 엔진으로 사용하기 위한 Spring Boot 스타터
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// 인증 및 인가를 처리하기 위한 Spring Security 통합
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// 개발 중 애플리케이션이 자동으로 재시작되지 않고도 변경 사항을 반영할 수 있게 해주는 도구
+	implementation 'org.springframework.boot:spring-boot-devtools'
+
+
+	// Thymeleaf와 Spring Security를 통합해 사용자 권한 등의 보안 정보를 뷰에서 사용할 수 있게 해줌
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+	// OAuth2 클라이언트 기능을 추가해 소셜 로그인이나 OAuth2 인증을 통해 보안 자원에 접근 가능하게 함
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// Spring MVC 애플리케이션에서 OpenAPI 문서를 자동으로 생성하기 위한 SpringDoc
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+
+
+	// JWT(JSON Web Token) 생성 및 파싱을 위한 라이브러리로, 토큰 기반 인증에 사용
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	// XML 처리 및 바인딩을 위한 JAXB(Java Architecture for XML Binding) API
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+
+	// 개발 및 테스트 환경에서 사용되는 인메모리 데이터베이스인 H2
+	runtimeOnly 'com.h2database:h2'
+
+	// 코드에서 getter, setter, constructor 등을 자동으로 생성해주는 Lombok 라이브러리
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// 테스트 환경에서도 Lombok을 사용하기 위한 의존성
+	testImplementation 'org.projectlombok:lombok'
+
+	// 유닛 테스트와 통합 테스트를 작성하고 실행하기 위한 Spring Boot 테스트 스타터
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// 보안 설정을 테스트할 수 있도록 도와주는 Spring Security 테스트 지원 라이브러리
+	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
