@@ -23,7 +23,6 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    //여길 바꿨구나!
     private final UserDetailsService userService;
     private final JwtFilter jwtFilter;
 
