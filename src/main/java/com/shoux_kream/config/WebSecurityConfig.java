@@ -40,19 +40,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(auth->auth
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/login","/signup",
-                                "/user","/login",
-                               // "/oauth2/**","/login/**",
-                                "/auth/**","/api/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .csrf(csrf->csrf.disable())
+                                "/api/users/signup",
+                                "/api/users/login"
+                        ).permitAll()  // 위 경로는 인증 없이 접근 가능
+                        .anyRequest().authenticated())
+                .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 
 
     // 7. 인증 관리자 관련 설정
