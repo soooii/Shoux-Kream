@@ -30,6 +30,7 @@ public class ItemService {
         this.brandRepository = brandRepository;
     }
 
+    // 새로운 상품을 등록하고 저장된 상품 정보를 반환
     @Transactional
     public ItemResponse save(ItemSaveRequest itemSaveRequest) {
         Brand brand = findBrandById(itemSaveRequest.brandId());
@@ -45,12 +46,14 @@ public class ItemService {
                 savedItem.getItemInfo());
     }
 
+    // 주어진 id에 해당하는 상품을 조회하고 dto 로 변환하여 반환
     public ItemResponse findById(Long id) {
         Item item = findItemById(id);
 
         return ItemResponse.fromEntity(item);
     }
 
+    // 주어진 상품 이름에 해당하는 상품을 조회하고 dto 로 변환하여 반환
     public ItemResponse findByName(String itemName) {
         Item item = itemRepository.findByName(itemName)
                 .orElseThrow(() -> new EntityNotFoundException("상품을 찾을 수 없습니다."));
@@ -58,6 +61,7 @@ public class ItemService {
         return ItemResponse.fromEntity(item);
     }
 
+    // 기존 상품 정보를 수정하고, 수정된 정보를 반환
     @Transactional
     public ItemUpdateResponse update(ItemUpdateRequest itemUpdateRequest) {
         Brand brand = findBrandById(itemUpdateRequest.brandId());
@@ -76,17 +80,29 @@ public class ItemService {
         );
     }
 
+    // 주어진 id에 해당하는 상품을 삭제 (존재하지 않으면 예외 발생)
+    @Transactional
+    public void delete(Long id) {
+        if (!itemRepository.existsById(id)) {
+            throw new KreamException(ErrorCode.INVALID_ID);
+        }
+        itemRepository.deleteById(id);
+    }
+
+    // 모든 상품의 목록을 조회하고 dto 리스트로 반환
     public List<ItemResponse> findAll() {
         return itemRepository.findAll().stream()
                 .map(ItemResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 
+    // 주어진 id에 해당하는 브랜드를 내부적으로 조회 (없으면 예외 발생)
     private Brand findBrandById(Long id) {
         return brandRepository.findById(id)
                 .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
     }
 
+    // 주어진 id에 해당하는 상품을 내부적으로 조회 (없으면 예외 발생)
     private Item findItemById(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
