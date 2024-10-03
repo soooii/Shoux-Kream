@@ -66,11 +66,12 @@ public class ItemService {
     public ItemUpdateResponse update(ItemUpdateRequest itemUpdateRequest) {
         Brand brand = findBrandById(itemUpdateRequest.brandId());
 
-        itemRepository.updateItemInfo(
-                itemUpdateRequest.brandId(),
-                itemUpdateRequest.itemName(),
-                itemUpdateRequest.color(),
-                itemUpdateRequest.modelNumber());
+        //TODO 박유찬 repository query문 해결 후 활성화
+//        itemRepository.updateItemInfo(
+//                itemUpdateRequest.brandId(),
+//                itemUpdateRequest.itemName(),
+//                itemUpdateRequest.color(),
+//                itemUpdateRequest.modelNumber());
 
         return new ItemUpdateResponse(
                 brand.getName(),
