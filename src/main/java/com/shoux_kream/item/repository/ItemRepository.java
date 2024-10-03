@@ -21,12 +21,14 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     // Item 정보를 업데이트하는 쿼리, brandId, name, color 를 업데이트함
     // @Modifying 은 데이터 변경을 나타내며, clearAutomatically = true 는 자동으로 캐시를 정리
-    @Modifying(clearAutomatically = true)
-    @Query("update Item i " +
-            "set i.brand.id = :brandId, i.name = :name, i.productInfo.color = :color " +
-            "where i.productInfo.modelNumber = :modelNumber")
-    void updateItemInfo(@Param("brandId") Long brandId,
-                        @Param("name") String name,
-                        @Param("color") String color,
-                        @Param("modelNumber") String modelNumber);
+
+    //TODO 박유찬 에러 나므로 수정 필요.
+//    @Modifying(clearAutomatically = true)
+//    @Query("update Item i " +
+//            "set i.brand.id = :brandId, i.name = :name, i.productInfo.color = :color " +
+//            "where i.productInfo.modelNumber = :modelNumber")
+//    void updateItemInfo(@Param("brandId") Long brandId,
+//                        @Param("name") String name,
+//                        @Param("color") String color,
+//                        @Param("modelNumber") String modelNumber);
 }
