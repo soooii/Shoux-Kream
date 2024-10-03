@@ -39,12 +39,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/users/signup",
-                                "/api/users/login"
-                        ).permitAll()  // 위 경로는 인증 없이 접근 가능
-                        .anyRequest().authenticated())
+                //TODO 개발, 릴리즈 분리해서 FilterChain 적용할 방법 고안
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(
+//                                "/api/users/signup",
+//                                "/api/users/login"
+//                        ).permitAll()  // 위 경로는 인증 없이 접근 가능
+//                        .anyRequest().authenticated())
+                //TODO 개발 전용 permitAll
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
