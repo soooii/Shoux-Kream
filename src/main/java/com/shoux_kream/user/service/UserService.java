@@ -15,6 +15,7 @@ import com.shoux_kream.user.entity.Role;
 import com.shoux_kream.user.entity.User;
 import com.shoux_kream.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,7 @@ public class UserService {
                 .updatedAt(LocalDateTime.now())
                 .role(Role.USER)
                 .build()).getId();
+
     }
 
     public JwtTokenDto login(JwtTokenLoginRequest request) {
