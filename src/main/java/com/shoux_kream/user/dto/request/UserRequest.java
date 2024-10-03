@@ -1,5 +1,6 @@
 package com.shoux_kream.user.dto.request;
 
+import com.shoux_kream.user.controller.UserController;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,5 @@ public class UserRequest {
     private String password;
     private String name;
     private String nickname;
+
 }
