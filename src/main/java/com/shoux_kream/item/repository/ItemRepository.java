@@ -19,7 +19,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("select i from Item i where i.name =:itemName and i.brand.name = :brandName")
     List<Item> findAllByNameAndBrand(@Param("itemName") String itemName, @Param("brandName") String brandName);
 
-    // TODO 상품 레파지토리 productInfo -> itemInfo 로 수정
+    //TODO 상품 레파지토리 productInfo -> itemInfo 로 수정
 
     // Item 정보를 업데이트하는 쿼리, brandId, name, color 를 업데이트함
     // @Modifying 은 데이터 변경을 나타내며, clearAutomatically = true 는 자동으로 캐시를 정리
