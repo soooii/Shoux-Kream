@@ -80,10 +80,10 @@ public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
     }
 
     @Override
-    public AuthTokenImpl createAccessToken(String jti, Role role, Map<String, Object> claims) {
+    public AuthTokenImpl createAccessToken(String sub, Role role, Map<String, Object> claims) {
         claims.put("type", ACCESS_TOKEN_TYPE_VALUE);
         return new AuthTokenImpl(
-                jti,
+                sub,
                 role,
                 key,
                 new DefaultClaims(claims),
@@ -92,10 +92,10 @@ public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
     }
 
     @Override
-    public AuthTokenImpl createRefreshToken(String jti, Role role, Map<String, Object> claims) {
+    public AuthTokenImpl createRefreshToken(String sub, Role role, Map<String, Object> claims) {
         claims.put("type", REFRESH_TOKEN_TYPE_VALUE);
         return new AuthTokenImpl(
-                jti,
+                sub,
                 role,
                 key,
                 new DefaultClaims(claims),
