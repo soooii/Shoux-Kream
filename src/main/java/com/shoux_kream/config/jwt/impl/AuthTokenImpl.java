@@ -21,18 +21,18 @@ public class AuthTokenImpl implements AuthToken<Claims> {
     private final String token;
     private final Key key; //jwt 토큰 암호화 키
 
-    public AuthTokenImpl(String jti,
+    public AuthTokenImpl(String sub,
                          Role role,
                          Key key,
                          Claims claims,
                          Date expiredDate
     ) {
         this.key = key;
-        this.token = createJwtToken(jti,role,claims,expiredDate).get();
+        this.token = createJwtToken(sub,role,claims,expiredDate).get();
     }
 
     private Optional<String> createJwtToken(
-            String jti,
+            String sub,
             Role role,
             Map<String, Object> claimsMap,
             Date expiredDate
@@ -41,7 +41,7 @@ public class AuthTokenImpl implements AuthToken<Claims> {
         claims.put(AUTHORITIES_TOKEN_KEY, role);
 
         return Optional.ofNullable(Jwts.builder()
-                .setSubject(jti)
+                .setSubject(sub)
                 .addClaims(claims)
                 .signWith(SignatureAlgorithm.HS256, key)
                 .setExpiration(expiredDate)
