@@ -1,14 +1,10 @@
 package com.shoux_kream.item.entity;
 
 import com.shoux_kream.category.entity.Category;
-
+import com.shoux_kream.timestamp.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -17,7 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "items")
 @NoArgsConstructor(access = PROTECTED)
-public class Item {
+public class Item extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,16 +42,6 @@ public class Item {
 
     @Column(name = "description", nullable = false, length = 255)
     private String description;
-
-    //일반적으로 웹사이트(크림)에서 상품의 생성시간과 수정시간을 사이트에 명시하지 않음
-    //언제 구매 했는지 정보 확인은 유저란에서 하면 될 것 같음
-//    @CreatedDate
-//    @Column(name = "created_at", updatable = false)
-//    private LocalDateTime createdAt;
-//
-//    @LastModifiedDate
-//    @Column(name = "updated_at")
-//    private LocalDateTime updatedAt;
 
     // Review와의 연관 관계 설정 (OneToMany)
     // 아직 리뷰 엔티티 구현 안돼서 주석처리
