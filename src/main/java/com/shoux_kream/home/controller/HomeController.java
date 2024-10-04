@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class HomeController {
 
-    // 홈 화면이동
+    // 홈 화면 이동
     @GetMapping("/")
     public String getHome(Model model) {
-        String staticPath = "/static/home";
-        model.addAttribute("staticPath", staticPath);
         return "home/home";
     }
 }
