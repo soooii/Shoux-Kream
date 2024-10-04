@@ -4,6 +4,7 @@ package com.shoux_kream.user.service;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.shoux_kream.config.jwt.impl.AuthTokenImpl;
@@ -11,12 +12,11 @@ import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
 import com.shoux_kream.user.dto.JwtTokenDto;
 import com.shoux_kream.user.dto.request.JwtTokenLoginRequest;
 import com.shoux_kream.user.dto.request.UserRequest;
+import com.shoux_kream.user.dto.response.UserResponse;
 import com.shoux_kream.user.entity.Role;
 import com.shoux_kream.user.entity.User;
 import com.shoux_kream.user.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +44,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Long save(UserRequest dto) {
+    //회원가입
+    public Long signup(UserRequest dto) {
         return userRepository.save(User.builder()
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .email(dto.getEmail())
@@ -54,10 +55,10 @@ public class UserService {
                 .updatedAt(LocalDateTime.now())
                 .role(Role.USER)
                 .build()).getId();
-
     }
 
-    public Long updateProfile(String email, UserRequest dto) {
+    //회원정보 수정
+    public UserResponse updateProfile(String email, UserRequest dto) {
         log.info(email);
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -73,9 +74,18 @@ public class UserService {
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .build();
 
-        return userRepository.save(updatedUser).getId();
+        userRepository.save(updatedUser);
+        return new UserResponse(updatedUser.getId(), updatedUser.getEmail());
     }
 
+    //회원정보 삭제
+    public void deleteUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        userRepository.delete(user);
+    }
+
+    //로그인
     public JwtTokenDto login(JwtTokenLoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
@@ -84,19 +94,21 @@ public class UserService {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
+        String jti = UUID.randomUUID().toString();
         Map<String, Object> claims = new HashMap<>();
         claims.put("accountId", user.getId());
         claims.put("role", user.getRole());
+        claims.put("jti", jti);
 
-        String jti = UUID.randomUUID().toString();
+        String sub = request.getEmail();
         AuthTokenImpl accessToken = jwtProvider.createAccessToken(
-                jti,
+                sub,
                 user.getRole(),
                 claims
         );
 
         AuthTokenImpl refreshToken = jwtProvider.createRefreshToken(
-                jti,
+                sub,
                 user.getRole(),
                 claims
         );
@@ -106,4 +118,5 @@ public class UserService {
                 .refreshToken(refreshToken.getToken())
                 .build();
     }
+
 }
