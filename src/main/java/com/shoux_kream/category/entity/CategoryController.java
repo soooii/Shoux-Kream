@@ -15,15 +15,14 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping //카테고리 추가
-    public ResponseEntity<CategoryDto> createCategory(@ResponseBody CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
         CategoryDto createdCategory = categoryService.createCategory(categoryDto);
         return ResponseEntity.ok(createdCategory);
     }
-
     @GetMapping //카테고리 목록 조회
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        List<CategoryDto> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+         List<CategoryDto> categories = categoryService.getAllCategories();
+         return ResponseEntity.ok(categories);
     }
 
     @PutMapping("/{id}") //카테고리 수정

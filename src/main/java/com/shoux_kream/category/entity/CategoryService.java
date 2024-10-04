@@ -20,6 +20,13 @@ public class CategoryService {
         return new CategoryDto(savedCategory);
     }
 
+    @Transactional // 카테고리 전체 조회
+    public List<CategoryDto> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(CategoryDto::new)
+                .collect(Collectors.toList());
+    }
 
 
     @Transactional //카테고리 수정
