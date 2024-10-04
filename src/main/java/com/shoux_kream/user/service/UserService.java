@@ -15,12 +15,14 @@ import com.shoux_kream.user.entity.Role;
 import com.shoux_kream.user.entity.User;
 import com.shoux_kream.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -53,6 +55,25 @@ public class UserService {
                 .role(Role.USER)
                 .build()).getId();
 
+    }
+
+    public Long updateProfile(String email, UserRequest dto) {
+        log.info(email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        User updatedUser = User.builder()
+                .id(user.getId())
+                .email(dto.getEmail())
+                .name(dto.getName())
+                .nickname(dto.getNickname())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(LocalDateTime.now())
+                .role(user.getRole())
+                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
+                .build();
+
+        return userRepository.save(updatedUser).getId();
     }
 
     public JwtTokenDto login(JwtTokenLoginRequest request) {

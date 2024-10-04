@@ -6,6 +6,8 @@ import com.shoux_kream.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +25,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
-    /*
-    @PostMapping("/signup")
-    public String signup(@ModelAttribute UserRequest form){
-        userService.save(form);
-        return "redirect:/";
-    }*/
+    @GetMapping("/me")
+    public ResponseEntity<String> me(@AuthenticationPrincipal User principal) {
+        return ResponseEntity.ok("my userEmail is " + principal.getUsername());
+    }
+
+    @PatchMapping("/me/profile")
+    public ResponseEntity<Boolean> updateProfile(@AuthenticationPrincipal User principal, @RequestBody UserRequest userRequest) {
+        Long userId = userService.updateProfile(principal.getUsername(), userRequest);
+        return ResponseEntity.ok(userId != null);
+    }
+
 
 
 
