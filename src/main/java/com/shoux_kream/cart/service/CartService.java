@@ -35,7 +35,7 @@ public class CartService {
 
         Cart cart = cartRepository.findByItemAndUser(item, user).orElse(null);
 
-        if (cart != null) { // 객체가 이미 있을 경우 총 수량 변경
+        if (cart != null) { // 객체가 이미 있을 경우 총 수량 변경(이미 장바구니에 담은 상품인 경우 수량 증가)
             cart.setQuantity(cart.getQuantity() + cartRequestDto.getQuantity());
             cartRepository.save(cart);
             return cart.getId();
@@ -57,7 +57,7 @@ public class CartService {
                 .collect(Collectors.toList());
     }
 
-    // 장바구니 수정 -> 수량 수정은 추가에서 가능
+    // 장바구니 수정 -> 장바구니에서 수량 및 옵션 수정으로 사용
 //    @Transactional
 //    public CartResponseDto updateCart(CartRequestDto cartRequestDto, Long cartId) {
 //        User user = userRepository.findById(cartRequestDto.getUserId())
