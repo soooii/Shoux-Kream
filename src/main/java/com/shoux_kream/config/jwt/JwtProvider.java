@@ -8,6 +8,6 @@ import java.util.Map;
 public interface JwtProvider <T> {
     T convertAuthToken(String token);
     Authentication getAuthentication(T authToken);
-    T createAccessToken(String jti, Role role, Map<String,Object> claims);
-    T createRefreshToken(String jti, Role role, Map<String,Object> claims);
+    T createAccessToken(String sub, Role role, Map<String,Object> claims);
+    T createRefreshToken(String sub, Role role, Map<String,Object> claims);
 }
