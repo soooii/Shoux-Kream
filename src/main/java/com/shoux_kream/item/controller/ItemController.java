@@ -10,11 +10,12 @@ import com.shoux_kream.item.entity.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/items")
 public class ItemController {
 
@@ -26,18 +27,23 @@ public class ItemController {
 
     // 모든 인증된 사용자가 접근 가능 (유저 및 관리자) - 모든 상품의 목록을 조회하여 응답
     @GetMapping
-    public ResponseEntity<ItemsGetResponse> getItems() {
+    public String getItems() {
         List<ItemResponse> itemList = itemService.findAll();
+        return "item/item-list";
+    }
 
-        return ResponseEntity.ok(new ItemsGetResponse(itemList.size(), itemList));
+    // 상품을 클릭했을때 나오는 상세 페이지(ex.발매가, 사이즈 선택)
+    @GetMapping("/item-detail")
+    public String getItemPage() {
+        List<ItemResponse> itemList = itemService.findAll();
+        return "item/item-detail";
     }
 
     // 관리자 권한 필요 - 새로운 상품을 등록하고, 등록된 상품 정보를 응답으로 반환
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
+    @PostMapping //item-add
     public ResponseEntity<ItemResponse> saveItem(@RequestBody ItemSaveRequest itemSaveRequest) {
         ItemResponse savedItemResponse = itemService.save(itemSaveRequest);
-
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedItemResponse);
     }
@@ -47,7 +53,6 @@ public class ItemController {
     @PatchMapping
     public ResponseEntity<ItemUpdateResponse> updateItem(@RequestBody ItemUpdateRequest itemUpdateRequest) {
         ItemUpdateResponse itemUpdateResponse = itemService.update(itemUpdateRequest);
-
         return ResponseEntity.ok().body(itemUpdateResponse);
     }
 
