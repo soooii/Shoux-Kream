@@ -2,20 +2,18 @@ package com.shoux_kream.cart.controller;
 
 import com.shoux_kream.cart.dto.CartRequestDto;
 import com.shoux_kream.cart.dto.CartResponseDto;
-import com.shoux_kream.cart.entity.Cart;
 import com.shoux_kream.cart.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/c/carts")
+@RequestMapping("/api/c/cart")
 @RequiredArgsConstructor
-public class CartContorller {
+public class CartApiContorller {
 
     private final CartService cartService;
 
@@ -30,7 +28,7 @@ public class CartContorller {
     }
 
     // 장바구니 조회
-    @GetMapping("/get/{userId}")
+    @GetMapping("/summary/{userId}")
     public ResponseEntity<List<CartResponseDto>> allCarts(@PathVariable("userId") Long userId) {
         List<CartResponseDto> carts = cartService.allCarts(userId);
 
@@ -38,7 +36,7 @@ public class CartContorller {
                 .body(carts);
     }
 
-    // 장바구니 수정
+    // 장바구니 수정 -> 장바구니에서 수량 및 옵션 수정으로 사용
 //    @PatchMapping("/edit/{cartId}")
 //    public ResponseEntity<CartResponseDto> updateCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("cartId") Long cartId) {
 //        CartResponseDto cart = cartService.updateCart(cartRequestDto, cartId);
@@ -50,11 +48,11 @@ public class CartContorller {
     
     // 장바구니 삭제
     // 장바구니 일괄 삭제
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<Void> deleteCarts(@PathVariable("userId") Long userId) {
-        cartService.deleteAllCarts(userId);
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteCarts(@RequestBody List<Long> cartIds) {
+        cartService.deleteAllCarts(cartIds);
 
-        return ResponseEntity.noContent()
+        return ResponseEntity.ok()
                 .build();
     }
     
