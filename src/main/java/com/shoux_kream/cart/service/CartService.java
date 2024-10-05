@@ -78,8 +78,10 @@ public class CartService {
     // 장바구니 삭제
     // 장바구니 일괄 삭제
     @Transactional
-    public void deleteAllCarts(Long userId) {
-        cartRepository.deleteAllByUserId(userId);
+    public void deleteAllCarts(List<Long> cartIds) {
+        for (Long cartId : cartIds) {
+            cartRepository.deleteById(cartId);
+        }
     }
 
     // 장바구니 개별 삭제

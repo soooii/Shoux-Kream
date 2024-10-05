@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/c/carts")
+@RequestMapping("/api/c/cart")
 @RequiredArgsConstructor
 public class CartApiContorller {
 
@@ -48,11 +48,11 @@ public class CartApiContorller {
     
     // 장바구니 삭제
     // 장바구니 일괄 삭제
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<Void> deleteCarts(@PathVariable("userId") Long userId) {
-        cartService.deleteAllCarts(userId);
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteCarts(@RequestBody List<Long> cartIds) {
+        cartService.deleteAllCarts(cartIds);
 
-        return ResponseEntity.noContent()
+        return ResponseEntity.ok()
                 .build();
     }
     

@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/carts")
+@RequestMapping("/cart")
 public class CartViewController {
 
     private final CartService cartService;
