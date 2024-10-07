@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/checkout")
@@ -22,8 +19,32 @@ public class CheckOutApiController {
     public ResponseEntity<CheckOutResponseDto> getCheckOut(@RequestBody CheckOutRequestDto checkOutRequestDto){
         Model model = null;
         // user id 를 얻어서 카트를 얻음
-
+        CheckOutResponseDto checkOutResponseDto = new CheckOutResponseDto();
         //혹은 url에서 id값 박아넣어서
-        return ResponseEntity.ok();
+        return ResponseEntity.ok(checkOutResponseDto);
+    }
+    @PostMapping
+    public ResponseEntity<CheckOutResponseDto> saveCheckOut(@RequestBody CheckOutRequestDto checkOutRequestDto){
+        Model model = null;
+        // user id 를 얻어서 카트를 얻음
+        CheckOutResponseDto checkOutResponseDto = new CheckOutResponseDto();
+        //혹은 url에서 id값 박아넣어서
+        return ResponseEntity.ok(checkOutResponseDto);
+    }
+    @PatchMapping
+    public ResponseEntity<CheckOutResponseDto> patchCheckOut(@RequestBody CheckOutRequestDto checkOutRequestDto){
+        Model model = null;
+        // user id 를 얻어서 카트를 얻음
+        CheckOutResponseDto checkOutResponseDto = new CheckOutResponseDto();
+        //혹은 url에서 id값 박아넣어서
+        return ResponseEntity.ok(checkOutResponseDto);
+    }
+    @DeleteMapping
+    public ResponseEntity<CheckOutResponseDto> deleteCheckOut(@RequestBody CheckOutRequestDto checkOutRequestDto){
+        Model model = null;
+        // user id 를 얻어서 카트를 얻음
+        CheckOutResponseDto checkOutResponseDto = new CheckOutResponseDto();
+        //혹은 url에서 id값 박아넣어서
+        return ResponseEntity.ok(checkOutResponseDto);
     }
 }
