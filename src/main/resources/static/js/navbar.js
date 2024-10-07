@@ -30,7 +30,7 @@ export const createNavbar = () => {
       addNavElements("admin register login account logout");
       break;
     case "/category/add/":
-      addNavElements("admin account productAdd logout");
+      addNavElements("admin account itemAdd logout");
       break;
     case "/login/":
       addNavElements("register");
@@ -41,13 +41,13 @@ export const createNavbar = () => {
     case "/order/":
       addNavElements("admin account logout");
       break;
-    case "/product/add/":
+    case "/item/add/":
       addNavElements("admin account logout");
       break;
-    case "/product/detail/":
+    case "/item/detail/":
       addNavElements("admin register login account logout");
       break;
-    case "/product/list/":
+    case "/item/list/":
       addNavElements("admin register login account logout");
       break;
     case "/register/":
@@ -76,7 +76,7 @@ const addNavElements = (keyString) => {
   const itemsAfterLogin = {
     account: '<li><a href="/account">계정관리</a></li>',
     logout: '<li><a href="#" id="logout">로그아웃</a></li>',
-    productAdd: '<li><a href="/product/add">제품 추가</a></li>',
+    itemAdd: '<li><a href="/item/add">제품 추가</a></li>',
     categoryAdd: '<li><a href="/category/add">카테고리 추가</a></li>',
   };
 
