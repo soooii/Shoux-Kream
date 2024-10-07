@@ -11,12 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/items")
+@RequestMapping("/item")
 public class ItemController {
 
     private final ItemService itemService;
@@ -46,6 +47,13 @@ public class ItemController {
         ItemResponse savedItemResponse = itemService.save(itemSaveRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedItemResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/item-add")
+    public String itemForm(Model model){
+//        model.addAttribute("itemFormDto", new ItemFormDto());
+        return "item/item-add";
     }
 
     // 관리자 권한 필요 - 기존 상품 정보를 수정하고, 수정된 정보를 응답으로 반환
