@@ -13,19 +13,31 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class CheckOutRequestDto {
+    private String summaryTitle;
+    private int totalPrice;
+    private String address;
+    //배송요청사항
+    private String request;
 
-    private Long Id;
     List<Cart> carts;
     Receipt receipt;
-
     @Builder
-    public CheckOutRequestDto(Long id, List<Cart> carts, Receipt receipt) {
-        Id = id;
+    public CheckOutRequestDto(String summaryTitle, int totalPrice, String address, String request, List<Cart> carts, Receipt receipt) {
+        this.summaryTitle = summaryTitle;
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.request = request;
         this.carts = carts;
         this.receipt = receipt;
     }
 
-    public CheckOut toEntity(Receipt receipt, List<Cart> carts){
-        return CheckOut.builder().receipt(receipt).carts(carts).build();
+
+    public CheckOut toEntity(){
+        return CheckOut.builder()
+                .summaryTitle(summaryTitle)
+                .totalPrice(totalPrice)
+                .address(address)
+                .request(request)
+                .build();
     }
 }

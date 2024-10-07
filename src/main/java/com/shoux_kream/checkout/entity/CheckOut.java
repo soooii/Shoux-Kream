@@ -16,6 +16,12 @@ public class CheckOut extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
+    private String summaryTitle;
+    private int totalPrice;
+    private String address;
+    //배송요청사항
+    private String request;
+
     @OneToMany
     @JoinColumn(name = "cart_id")
     List<Cart> carts;
@@ -25,8 +31,13 @@ public class CheckOut extends BaseEntity {
     Receipt receipt;
 
     @Builder
-    public CheckOut(Receipt receipt, List<Cart> carts) {
-        this.receipt = receipt;
+    public CheckOut(Long id, String summaryTitle, int totalPrice, String address, String request, List<Cart> carts, Receipt receipt) {
+        Id = id;
+        this.summaryTitle = summaryTitle;
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.request = request;
         this.carts = carts;
+        this.receipt = receipt;
     }
 }
