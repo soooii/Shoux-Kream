@@ -1,5 +1,6 @@
 package com.shoux_kream.checkout.service;
 
+import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.checkout.entity.CheckOut;
 import com.shoux_kream.checkout.repository.CheckOutRepository;
@@ -31,6 +32,13 @@ public class CheckOutService {
                 .carts(checkOut.getCarts())
                 .receipt(checkOut.getReceipt())
                 .build();
+        return checkOutResponseDto;
+    }
+
+    public CheckOutResponseDto save(CheckOutRequestDto checkOutRequestDto) {
+        // 저장한 뒤 id값이 포함된 값을 반환
+        CheckOutResponseDto checkOutResponseDto = checkOutRepository.save(checkOutRequestDto.toEntity());
+
         return checkOutResponseDto;
     }
 }
