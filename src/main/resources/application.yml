@@ -5,6 +5,8 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
   datasource:
     url: jdbc:h2:mem:testdb
     username: sa
@@ -12,3 +14,8 @@ spring:
     console:
       enabled: true
 
+jwt:
+  secret: "ZB67NHMI84Y20zQVFSf8nZfChJoG6rZ+16x8HgzWuw8=" #base64 32byte
+  token:
+    refresh-expires: 7200000 #2시간
+    access-expires: 7200000

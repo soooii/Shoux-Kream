@@ -2,6 +2,16 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id "org.sonarqube" version "4.4.1.3373"
+}
+
+sonar {
+	properties {
+		// sonar.projectKey - SonarQube에서 프로젝트 식별명
+		property "sonar.projectKey", "sonarpilot"
+		// sonar.projectName - SonarQube 대시보드에서 프로젝트 표기명
+		property "sonar.projectName", "sonarpilot"
+	}
 }
 
 group = 'com'
@@ -47,7 +57,10 @@ dependencies {
 
 
 	// JWT(JSON Web Token) 생성 및 파싱을 위한 라이브러리로, 토큰 기반 인증에 사용
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	//implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 
 	// XML 처리 및 바인딩을 위한 JAXB(Java Architecture for XML Binding) API
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
