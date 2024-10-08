@@ -17,7 +17,7 @@ public class CategoryService {
     public CategoryDto createCategory(CategoryDto categoryDto) {
         Category category = categoryDto.toEntity();
         Category savedCategory = categoryRepository.save(category);
-        return new CategoryDto(savedCategory);
+        return new CategoryDto(savedCategory); // 저장된 카테고리를 dto로 변환, 반환
     }
 
     @Transactional // 카테고리 전체 조회
@@ -33,7 +33,10 @@ public class CategoryService {
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
-        category.updateCategory(categoryDto.getName());
+        category.updateCategory(categoryDto.getName()
+                categoryDto.getDescription(),
+                categoryDto.getThemeClass());
+
         return new CategoryDto(category);
     }
 
