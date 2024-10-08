@@ -1,6 +1,28 @@
 // 옵션 수정
+const editButtons = document.querySelectorAll('.edit-button');
+
+editButtons.forEach(button => {
+    button.addEventListener('click', event => {
+        // 클릭한 항목의 정보를 가져옵니다.
+        const cartItem = event.target.closest('.cart-product-item');
+        const cartId = cartItem.querySelector('input[type="hidden"][id^="cart-id"]').value;
+        const userId = cartItem.querySelector('input[type="hidden"][id^="user-id"]').value;
+        const itemPrice = cartItem.querySelector('.fw-bold.text-primary').innerText; // 가격
+        const quantity = cartItem.querySelector('input[name="quantity"]').value; // 수량
+
+        // 모달에 필요한 데이터 설정
+        const editButton = document.getElementById('edit-submit-btn');
+        editButton.setAttribute('data-cart-id', cartId);
+        editButton.setAttribute('data-user-id', userId);
+
+        // 모달의 가격 및 수량 필드 업데이트
+        document.getElementById('quantity').value = quantity; // 수량 업데이트
+        document.querySelector('.modal-body .fw-bold.text-primary').innerText = itemPrice; // 가격 업데이트
+    });
+});
+
 // 옵션 모달창 수량 증감버튼 작동 이벤트 추가
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const cartQuantity = document.getElementById('quantity'); // 수량을 표시하는 input
     const increaseBtn = document.getElementById('increaseBtn'); // 증가 버튼
     const decreaseBtn = document.getElementById('decreaseBtn'); // 감소 버튼
@@ -21,47 +43,64 @@ document.addEventListener('DOMContentLoaded', function() {
     // 수정 버튼 클릭 이벤트 -> 백엔드로 정보 전송
     if (editButton) {
         editButton.addEventListener('click', event => {
-            const cartIdElement = document.getElementById('cart-id');
-            const userIdElement = document.getElementById('user-id');
-            const quantityElement = document.getElementById('quantity');
+            const cartId = editButton.getAttribute('data-cart-id');
+            const userId = editButton.getAttribute('data-user-id');
+            const quantity = parseInt(document.getElementById('quantity').value);
 
-            // 요소 존재 여부 확인
-            if (cartIdElement && userIdElement && quantityElement) {
-                let cartId = cartIdElement.value;
-                let userId = userIdElement.value;
-                let quantity = quantityElement.value;
-
-                fetch(`/api/cart/edit/${cartId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ quantity: quantity })
+            fetch(`/api/cart/edit/${cartId}`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ quantity: quantity })
+            })
+                .then(() => {
+                    alert('변경이 완료되었습니다.');
+                    location.replace(`/cart/summary/${userId}`);
                 })
-                    .then(() => {
-                        alert('변경이 완료되었습니다.');
-                        location.replace(`/cart/summary/${userId}`);
-                    });
-            } else {
-                console.error("One or more elements are missing in the DOM.");
-            }
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     }
 });
 
-// 개별 삭제
+// cart-product-item 내의 각 삭제 버튼을 가져옴
+const deleteButtons = document.querySelectorAll('.delete-button');
+
+// 각 삭제 버튼에 클릭 이벤트 추가
+deleteButtons.forEach(button => {
+    button.addEventListener('click', event => {
+        // 선택한 상품의 cartId와 userId를 모달의 삭제 버튼에 설정
+        const cartId = event.target.closest('.cart-product-item').querySelector('input[type="hidden"][id^="cart-id"]').value;
+        const userId = event.target.closest('.cart-product-item').querySelector('input[type="hidden"][id^="user-id"]').value;
+
+        // 모달 내 삭제 버튼에 cartId와 userId를 설정
+        const deleteButton = document.getElementById('delete-btn');
+        deleteButton.setAttribute('data-cart-id', cartId);
+        deleteButton.setAttribute('data-user-id', userId);
+    });
+});
+
+// 모달 내 삭제 버튼 클릭 시 동작
 const deleteButton = document.getElementById('delete-btn');
 
 if (deleteButton) {
     deleteButton.addEventListener('click', event => {
-        let cartId = document.getElementById('cart-id').value;
-        let userId = document.getElementById('user-id').value;
-        fetch(`/api/cart/${cartId}`, {
+        // data-cart-id와 data-user-id에서 값을 가져옴
+        const cartId = deleteButton.getAttribute('data-cart-id');
+        const userId = deleteButton.getAttribute('data-user-id');
+
+        // 실제 삭제 요청 보내기
+        fetch(`/api/cart/${cartId}?userId=${userId}`, {
             method: 'DELETE'
         })
             .then(() => {
                 alert('삭제가 완료되었습니다.');
                 location.replace(`/cart/summary/${userId}`);
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
     });
 }
