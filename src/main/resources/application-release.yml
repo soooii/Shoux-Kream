@@ -16,7 +16,8 @@ spring:
   h2:
     console:
       enabled: true
-  profiles: release
+      # 시스템 설정이라 바꿔줘야함
+  on-profiles: release
 # 배포 서버용 세팅
 server:
   port: 80
