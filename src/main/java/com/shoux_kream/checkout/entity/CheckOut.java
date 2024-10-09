@@ -30,8 +30,8 @@ public class CheckOut extends BaseEntity {
 
     private String request;
 
-    //이름 ? mappedBy 이름 문제인가?
-    @OneToMany(mappedBy = "check_out", cascade = CascadeType.ALL)
+    //TODO 이름 ? mappedBy 이름 문제인가? => 필드 이름 매핑! 테이블이름 X
+    @OneToMany(mappedBy = "checkOut", cascade = CascadeType.ALL)
     private List<CheckOutItem> checkOutItems;
 
     @Builder

@@ -20,8 +20,9 @@ public class CheckOutItem {
     private int quantity;
     private int totalPrice;
 
+    //TODO table 이름이 check_out이기 때문에 여기에 _id 추가해야함
     @ManyToOne
-    @JoinColumn(name = "checkout_id")
+    @JoinColumn(name = "check_out_id")
     private CheckOut checkOut;
 
     @Builder
