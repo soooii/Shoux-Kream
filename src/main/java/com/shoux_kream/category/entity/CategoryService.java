@@ -33,7 +33,10 @@ public class CategoryService {
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
-        category.updateCategory(categoryDto.getName()
+
+        // 엔티티의 필드 업데이트
+        category.updateCategory(
+                categoryDto.getName(),
                 categoryDto.getDescription(),
                 categoryDto.getThemeClass());
 
