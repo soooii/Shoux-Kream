@@ -28,6 +28,14 @@ repositories {
 }
 
 dependencies {
+	// Mapstruct 사용을 위한 의존성 추가
+	// requestDto => entity 변환, DTO getter entity setter필요(build 대체)
+	// entity => responseDTO 변환 entity getter DTO필요 setter(build 대체)
+	implementation 'org.mapstruct:mapstruct:1.6.2'
+
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
+
+
 	// RESTful API를 포함한 웹 애플리케이션을 개발하기 위한 Spring Boot 스타터
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
