@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Entity
-@Builder
 @Getter
 public class CheckOutItem {
 
@@ -15,19 +14,20 @@ public class CheckOutItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    //TODO 테이블 이름이 items!
+    @JoinColumn(name = "items_id")
     private Item item;
 
     private int quantity;
     private int totalPrice;
 
+    //TODO table 이름이 check_out이기 때문에 여기에 _id 추가해야함
     @ManyToOne
-    @JoinColumn(name = "checkout_id")
+    @JoinColumn(name = "check_out_id")
     private CheckOut checkOut;
 
     @Builder
-    public CheckOutItem(Long id, Item item, int quantity, int totalPrice, CheckOut checkOut) {
-        this.id = id;
+    public CheckOutItem(Item item, int quantity, int totalPrice, CheckOut checkOut) {
         this.item = item;
         this.quantity = quantity;
         this.totalPrice = totalPrice;

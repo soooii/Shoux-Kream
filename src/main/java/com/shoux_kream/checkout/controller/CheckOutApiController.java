@@ -23,9 +23,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CheckOutApiController {
     
-    private CheckOutService checkOutService;
-    private UserService userService;
-    private CartService cartService;
+    private final CheckOutService checkOutService;
+    private final UserService userService;
+    private final CartService cartService;
 
 //    //TODO 결제 요약 정보 삽입
 //    @GetMapping("/checkout/summary")
