@@ -13,23 +13,18 @@ import java.util.List;
 @NoArgsConstructor
 public class CheckOutResponseDto {
 
-    private Long Id;
     private String summaryTitle;
     private int totalPrice;
-    private String address;
-    //배송요청사항
+    private UserDeliveryInfoResponseDto address;
     private String request;
-    List<Cart> carts;
-    Receipt receipt;
 
-    @Builder
-    public CheckOutResponseDto(Long id, String summaryTitle, int totalPrice, String address, String request, List<Cart> carts, Receipt receipt) {
-        Id = id;
-        this.summaryTitle = summaryTitle;
-        this.totalPrice = totalPrice;
-        this.address = address;
-        this.request = request;
-        this.carts = carts;
-        this.receipt = receipt;
-    }
+    // Method to convert Entity to Response DTO
+//    public static CheckoutResponseDto fromEntity(Checkout checkout) {
+//        return CheckoutResponseDto.builder()
+//                .summaryTitle(checkout.getSummaryTitle())
+//                .totalPrice(checkout.getTotalPrice())
+//                .address(UserDeliveryInfoResponseDto.fromEntity(checkout.getAddress()))
+//                .request(checkout.getRequest())
+//                .build();
+//    }
 }
