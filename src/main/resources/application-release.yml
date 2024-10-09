@@ -16,14 +16,14 @@ spring:
   h2:
     console:
       enabled: true
-
+  profiles: release
 # 배포 서버용 세팅
 server:
   port: 80
 
 # 환경변수 설정으로 세팅
 jwt:
-  secret: "ZB67NHMI84Y20zQVFSf8nZfChJoG6rZ+16x8HgzWuw8=" #base64 32byte
+  secret: ${JWT_SECRET_KEY} #base64 32byte
   token:
     refresh-expires: 7200000 #2시간
     access-expires: 7200000
