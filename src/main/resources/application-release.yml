@@ -17,7 +17,10 @@ spring:
     console:
       enabled: true
       # 시스템 설정이라 바꿔줘야함
-  on-profiles: release
+
+  config:
+      activate:
+        on-profile: release
 # 배포 서버용 세팅
 server:
   port: 80
