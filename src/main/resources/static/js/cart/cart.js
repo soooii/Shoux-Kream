@@ -17,7 +17,7 @@ editButtons.forEach(button => {
 
         // 모달의 가격 및 수량 필드 업데이트
         document.getElementById('quantity').value = quantity; // 수량 업데이트
-        document.querySelector('.modal-body .fw-bold.text-primary').innerText = itemPrice; // 가격 업데이트
+        document.querySelector('.modal-body .fw-bold.text-primary').innerText = itemPrice * quantity; // 가격 업데이트
     });
 });
 
@@ -27,16 +27,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const increaseBtn = document.getElementById('increaseBtn'); // 증가 버튼
     const decreaseBtn = document.getElementById('decreaseBtn'); // 감소 버튼
     const editButton = document.getElementById('edit-submit-btn'); // 수정 버튼
+    const cartItemPrice = document.querySelector('.modal-body .fw-bold.text-primary');
 
     // 수량 증가
     increaseBtn.addEventListener('click', function () {
+        const initialPrice = parseInt(cartItemPrice.innerText) / cartQuantity.value // 초기 가격을 저장
         cartQuantity.value = parseInt(cartQuantity.value) + 1;
+        cartItemPrice.innerText = parseInt(cartItemPrice.innerText) + initialPrice;
     });
 
     // 수량 감소
     decreaseBtn.addEventListener('click', function () {
         if (parseInt(cartQuantity.value) > 1) {
+            const initialPrice = parseInt(cartItemPrice.innerText) / cartQuantity.value
             cartQuantity.value = parseInt(cartQuantity.value) - 1;
+            cartItemPrice.innerText = parseInt(cartItemPrice.innerText) - initialPrice;
         }
     });
 
