@@ -23,3 +23,16 @@ jwt:
   token:
     refresh-expires: 7200000 #2시간
     access-expires: 7200000
+
+# S3
+cloud:
+  aws:
+    credentials:
+      accessKey:
+      secretKey:
+    s3:
+      bucket:
+    region:
+      static:
+    stack:
+      auto-:
