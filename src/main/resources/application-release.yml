@@ -13,6 +13,8 @@ spring:
   h2:
     console:
       enabled: true
+
+#배포서버 포트
 server:
   port: 80
 
