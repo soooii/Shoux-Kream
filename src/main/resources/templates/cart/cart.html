@@ -220,12 +220,12 @@
                 <div class="info">
                   <p>상품수</p>
                   <p id="productsCount" th:unless="${carts.isEmpty()}" th:text="${#aggregates.sum(carts.![quantity]) + '개'}"></p>
-                  <p id="productsCount" th:if="${carts.isEmpty()}">0개</p>
+                  <p id="productsCountZero" th:if="${carts.isEmpty()}">0개</p>
                 </div>
                 <div class="info">
                   <p>상품금액</p>
                   <p id="productsTotal" th:unless="${carts.isEmpty()}" th:text="${#numbers.formatInteger(#aggregates.sum(carts.![totalPrice]), 3, 'COMMA') + '원'}"></p>
-                  <p id="productsCount" th:if="${carts.isEmpty()}">0원</p>
+                  <p id="productsTotalZero" th:if="${carts.isEmpty()}">0원</p>
                 </div>
                 <div class="info">
                   <p>배송비</p>
