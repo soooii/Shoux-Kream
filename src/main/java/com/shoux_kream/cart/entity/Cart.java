@@ -34,4 +34,9 @@ public class Cart extends BaseEntity {
         this.item = item;
         this.quantity = quantity;
     }
+
+    // 수량 변경
+    public void updateQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

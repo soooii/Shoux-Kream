@@ -10,12 +10,10 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CartRequestDto {
     private Long userId;
-    private Long itemId;
     private int quantity;
 
     public CartRequestDto(Cart cart) {
         this.userId = cart.getUser().getId();
-        this.itemId = cart.getItem().getId();
         this.quantity = cart.getQuantity();
     }
 

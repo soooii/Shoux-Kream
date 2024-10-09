@@ -58,6 +58,9 @@ public class Item extends BaseEntity {
     @Column(name = "size")
     private int size;
 
+    @Column(name = "price")
+    private int price;
+
     //
     public Item(Brand brand, String name, ItemInfo itemInfo, int size) {
         this.brand = brand;
