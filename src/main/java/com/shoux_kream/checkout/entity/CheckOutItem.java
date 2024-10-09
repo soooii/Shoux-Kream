@@ -14,7 +14,8 @@ public class CheckOutItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    //TODO 테이블 이름이 items!
+    @JoinColumn(name = "items_id")
     private Item item;
 
     private int quantity;
