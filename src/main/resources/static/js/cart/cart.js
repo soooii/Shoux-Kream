@@ -128,7 +128,7 @@ if (partialDeleteLabel) {
         const confirmDelete = confirm('선택한 상품을 정말로 삭제하시겠습니까?');
 
         if (confirmDelete) {
-            fetch('/api/cart/delete', {
+            fetch('/api/cart/', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
