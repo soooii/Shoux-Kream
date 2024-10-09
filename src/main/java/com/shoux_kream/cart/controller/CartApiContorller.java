@@ -48,7 +48,7 @@ public class CartApiContorller {
     
     // 장바구니 삭제
     // 장바구니 일괄 삭제
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<Void> deleteCarts(@RequestBody List<Long> cartIds) {
         cartService.deleteAllCarts(cartIds);
 
