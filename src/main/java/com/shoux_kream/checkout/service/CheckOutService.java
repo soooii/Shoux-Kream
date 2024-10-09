@@ -1,9 +1,17 @@
 package com.shoux_kream.checkout.service;
 
+//import com.shoux_kream.checkout.CheckOutMapper;
+import com.shoux_kream.checkout.dto.CheckOutItemRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.checkout.entity.CheckOut;
+import com.shoux_kream.checkout.entity.CheckOutItem;
+import com.shoux_kream.checkout.repository.AddressRepository;
+import com.shoux_kream.checkout.repository.CheckOutItemRepository;
 import com.shoux_kream.checkout.repository.CheckOutRepository;
+import com.shoux_kream.item.entity.Item;
+import com.shoux_kream.item.repository.ItemRepository;
+import com.shoux_kream.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,31 +22,35 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CheckOutService {
-    private final CheckOutRepository checkOutRepository;
+    //TODO Mapper 이용 리팩토링 고려
+//    private final CheckOutMapper mapper = CheckOutMapper.INSTANCE;
+    private final CheckOutRepository checkoutRepository;
+    private final CheckOutItemRepository checkoutItemRepository;
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
 
-    // List타입 회원 주문조회 리스트 반환(다중조회)
-    @Transactional
-    public List<CheckOutResponseDto> getCheckOuts(Long id) {
-        List<CheckOutResponseDto> checkOutResponseDtos = new ArrayList<>();
-        return checkOutResponseDtos;
+    public Long createCheckout(CheckOutRequestDto checkOutRequestDto) {
+        return checkoutRepository.save(checkOutRequestDto.toEntity()).getId();
     }
 
-    // 단건 정보 조회
-    @Transactional
-    public CheckOutResponseDto getCheckOut(Long id) {
-        CheckOut checkOut = checkOutRepository.getReferenceById(id);
-        CheckOutResponseDto checkOutResponseDto = CheckOutResponseDto.builder()
-                .id(checkOut.getId())
-                .carts(checkOut.getCarts())
-                .receipt(checkOut.getReceipt())
+    public List<CheckOut> getCheckoutsByUserId(Long userId) {
+        return checkoutRepository.findByUserId(userId);
+    }
+
+    public void addCheckOutItem(CheckOutItemRequestDto checkoutItemRequestDto) {
+        CheckOut checkOut = checkoutRepository.findById(checkoutItemRequestDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid checkout ID"));
+
+        CheckOutItem checkOutItem = CheckOutItem.builder()
+                .checkOut(checkOut)
+                .item(checkoutItemRequestDto.getCheckOutItem().getItem())
+                .quantity(checkoutItemRequestDto.getCheckOutItem().getQuantity())
+                .totalPrice(checkoutItemRequestDto.getCheckOutItem().getTotalPrice())
                 .build();
-        return checkOutResponseDto;
+
+        checkoutItemRepository.save(checkOutItem);
     }
 
-    public CheckOutResponseDto save(CheckOutRequestDto checkOutRequestDto) {
-        // 저장한 뒤 id값이 포함된 값을 반환
-        CheckOutResponseDto checkOutResponseDto = checkOutRepository.save(checkOutRequestDto.toEntity());
-
-        return checkOutResponseDto;
-    }
+    // More methods for updating, deleting checkout and checkout items
 }

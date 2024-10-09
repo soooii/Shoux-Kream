@@ -1,78 +1,113 @@
 package com.shoux_kream.checkout.controller;
 
+import com.shoux_kream.cart.dto.CartResponseDto;
+import com.shoux_kream.cart.service.CartService;
+import com.shoux_kream.checkout.dto.CheckOutItemRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
+import com.shoux_kream.checkout.dto.UserDeliveryInfoRequestDto;
 import com.shoux_kream.checkout.service.CheckOutService;
+import com.shoux_kream.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/checkout")
+//@RequestMapping("/api/checkout")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class CheckOutApiController {
-    private final CheckOutService checkOutService;
+    
+    private CheckOutService checkOutService;
+    private UserService userService;
+    private CartService cartService;
 
-    //TODO UserId를 얻어서 checkout 전체 정보 반환 정보 조회용 api,
-    // 페이지를 바꿀 필요가 없는가 yes
-    // UserID => session 정보 변환 필수
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<CheckOutResponseDto>> getCheckOut(@RequestParam("userId") Long id){
-        List<CheckOutResponseDto> checkOutResponseDto = checkOutService.getCheckOuts(id);
-        return ResponseEntity.ok(checkOutResponseDto);
+//    //TODO 결제 요약 정보 삽입
+//    @GetMapping("/checkout/summary")
+//    public ResponseEntity<Map<String, Object>> getcheckOutSummary() {
+//        try {
+//            Map<String, Object> checkOutSummary = checkOutService.getcheckOutSummary();
+//
+//            if (checkOutSummary == null || checkOutSummary.get("ids").isEmpty()) {
+//                return ResponseEntity.badRequest().body(Map.of("message", "구매할 제품이 없습니다."));
+//            }
+//
+//            return ResponseEntity.ok(checkOutSummary);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(500).body(Map.of("message", e.getMessage()));
+//        }
+//    }
+
+    // 전체 주문 등록
+    @PostMapping("/checkout")
+    public ResponseEntity<String> processCheckout(@RequestBody CheckOutRequestDto checkOutRequestDto) {
+        try {
+            Long checkoutId = checkOutService.createCheckout(checkOutRequestDto);
+            return ResponseEntity.ok("결제 및 주문이 완료되었습니다. Checkout ID: " + checkoutId);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("결제 중 문제가 발생했습니다: " + e.getMessage());
+        }
     }
 
-    //TODO checkout id를 얻어서 checkout 세부 정보 반환 => 프론트에서 js로 정보를 요청해서 받음, 동일한 기능을 프론트 view에서 해야함
-    // 수정하자
-    @GetMapping("/{checkOutId}")
-    public String getCheckOutDetail(@RequestParam Long id){
-        Model model = null;
-        model.addAttribute(checkOutService.getCheckOut(id));
-        CheckOutResponseDto checkOutResponseDto = new CheckOutResponseDto();
-        //혹은 url에서 id값 박아넣어서
-        return "checkout/checkoutcomplete";
+    // 제품별 주문 아이템 등록
+    @PostMapping("/checkoutitem")
+    public ResponseEntity<String> addCheckoutItem(@RequestBody CheckOutItemRequestDto checkOutItemRequestDto) {
+        try {
+            checkOutService.addCheckOutItem(checkOutItemRequestDto);
+            return ResponseEntity.ok("주문 아이템이 정상적으로 등록되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("주문 아이템 등록 중 문제가 발생했습니다: " + e.getMessage());
+        }
     }
 
-    //전체 주문 등록
-    @PostMapping
-    public ResponseEntity<CheckOutResponseDto> saveCheckOut(@RequestBody CheckOutRequestDto checkOutRequestDto){
-
-        CheckOutResponseDto checkOutResponseDto = checkOutService.save(checkOutRequestDto);
-        return ResponseEntity.ok(checkOutResponseDto);
+    // 배송지 정보 등록
+    @PostMapping("/user/deliveryinfo")
+    public ResponseEntity<String> saveUserDeliveryInfo(@RequestBody UserDeliveryInfoRequestDto deliveryInfo) {
+        try {
+//            userService.updateDeliveryInfo(deliveryInfo);
+            return ResponseEntity.ok("배송지 정보가 정상적으로 저장되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("배송지 정보 저장 중 문제가 발생했습니다: " + e.getMessage());
+        }
     }
 
-    @PatchMapping
-    public ResponseEntity<CheckOutResponseDto> patchCheckOut(@RequestBody CheckOutRequestDto checkOutRequestDto){
-        Model model = null;
-        // user id 를 얻어서 카트를 얻음
-        CheckOutResponseDto checkOutResponseDto = new CheckOutResponseDto();
-        //혹은 url에서 id값 박아넣어서
-        return ResponseEntity.ok(checkOutResponseDto);
-    }
-    @DeleteMapping
-    public ResponseEntity<CheckOutResponseDto> deleteCheckOut(@RequestBody CheckOutRequestDto checkOutRequestDto){
-        Model model = null;
-        // user id 를 얻어서 카트를 얻음
-        CheckOutResponseDto checkOutResponseDto = new CheckOutResponseDto();
-        //혹은 url에서 id값 박아넣어서
-        return ResponseEntity.ok(checkOutResponseDto);
+    // 장바구니에서 제품 제거 (deleteFromDb 대체)
+    @DeleteMapping("/cart/{productId}")
+    public ResponseEntity<String> removeFromCart(@PathVariable Long itemId) {
+        try {
+            cartService.deleteCart(itemId);
+            return ResponseEntity.ok("제품이 장바구니에서 제거되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("장바구니에서 제품 제거 중 문제가 발생했습니다: " + e.getMessage());
+        }
     }
 
-    /*
-    주문내역을 확인해서 json값으로 반환하는 컨트롤러
-    @RequestMapping(value = "/read/{userid}", method = RequestMethod.GET)
-	public String read(@PathVariable("userid") String userid, Model model) {
+    // 장바구니 또는 체크아웃 데이터 가져오기 (getFromDb 대체)
+    @GetMapping("/cart/{id}")
+    public ResponseEntity<List<CartResponseDto>> getCartData(@PathVariable Long id) {
+        try {
+            //TODO Map<String, Object> json에 담을거면 이렇게 만들자
+            List<CartResponseDto> data = cartService.allCarts(id);
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
 
-		MemberVO vo = memberService.read(userid);
-		model.addAttribute("userInfo", vo);
-
-        List<OrderDTO> orderList = orderService.myOrderList(userid);
-		model.addAttribute("orderList", orderList);
-//        주문 내역을 list로 가져와서 view로 넘겨준다
-		return "member/read";
-
-     */
+    //TODO
+//    // 장바구니 또는 체크아웃 데이터 업데이트 (putToDb 대체)
+//    @PutMapping("/checkout/summary")
+//    public ResponseEntity<String> updateCheckOutSummary(@RequestBody checkOutSummaryUpdateRequest updateRequest) {
+//        try {
+//            checkOutService.updateCheckOutSummary(updateRequest);
+//            return ResponseEntity.ok("체크아웃 요약이 업데이트되었습니다.");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(500).body("체크아웃 요약 업데이트 중 문제가 발생했습니다: " + e.getMessage());
+//        }
+//    }
 }
