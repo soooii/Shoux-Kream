@@ -30,7 +30,8 @@ public class CheckOut extends BaseEntity {
 
     private String request;
 
-    @OneToMany(mappedBy = "checkOut", cascade = CascadeType.ALL)
+    //이름 ? mappedBy 이름 문제인가?
+    @OneToMany(mappedBy = "check_out", cascade = CascadeType.ALL)
     private List<CheckOutItem> checkOutItems;
 
     @Builder
