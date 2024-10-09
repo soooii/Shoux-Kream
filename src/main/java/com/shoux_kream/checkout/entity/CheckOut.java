@@ -2,6 +2,7 @@ package com.shoux_kream.checkout.entity;
 
 import com.shoux_kream.cart.entity.Cart;
 import com.shoux_kream.timestamp.BaseEntity;
+import com.shoux_kream.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,30 +15,32 @@ import java.util.List;
 public class CheckOut extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private String summaryTitle;
     private int totalPrice;
-    private String address;
-    //배송요청사항
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+
     private String request;
 
-    @OneToMany
-    @JoinColumn(name = "cart_id")
-    List<Cart> carts;
-
-    @OneToOne
-    @JoinColumn(name = "receipt_id")
-    Receipt receipt;
+    @OneToMany(mappedBy = "checkout", cascade = CascadeType.ALL)
+    private List<CheckOutItem> checkoutItems;
 
     @Builder
-    public CheckOut(Long id, String summaryTitle, int totalPrice, String address, String request, List<Cart> carts, Receipt receipt) {
-        Id = id;
-        this.summaryTitle = summaryTitle;
-        this.totalPrice = totalPrice;
-        this.address = address;
+    public CheckOut(List<CheckOutItem> checkOutItems, String request, Address address, User user, int totalPrice, String summaryTitle, Long id) {
+        this.checkoutItems = checkOutItems;
         this.request = request;
-        this.carts = carts;
-        this.receipt = receipt;
+        this.address = address;
+        this.user = user;
+        this.totalPrice = totalPrice;
+        this.summaryTitle = summaryTitle;
+        this.id = id;
     }
 }
