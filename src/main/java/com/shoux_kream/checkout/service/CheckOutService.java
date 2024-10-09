@@ -43,7 +43,6 @@ public class CheckOutService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid checkout ID"));
 
         CheckOutItem checkOutItem = CheckOutItem.builder()
-                .checkOut(checkOut)
                 .item(checkoutItemRequestDto.getCheckOutItem().getItem())
                 .quantity(checkoutItemRequestDto.getCheckOutItem().getQuantity())
                 .totalPrice(checkoutItemRequestDto.getCheckOutItem().getTotalPrice())
