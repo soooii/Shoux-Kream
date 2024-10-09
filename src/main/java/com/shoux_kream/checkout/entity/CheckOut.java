@@ -30,7 +30,7 @@ public class CheckOut extends BaseEntity {
 
     private String request;
 
-    @OneToMany(mappedBy = "checkout", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<CheckOutItem> checkoutItems;
 
     @Builder
