@@ -20,10 +20,10 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false);
+    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false);
+    @Column(nullable = false)
     private String themeClass;
 
     @CreatedDate
@@ -32,14 +32,14 @@ public class Category {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Category(String name, String description, Strhing themeClass) {
+    public Category(String name, String description, String themeClass) {
         this.name = name;
         this.description = description;
         this.themeClass = themeClass;
     }
 
 
-    public void updateCategory(String name, String description, Strhing themeClass) { // 카테고리 정보 수정 메서드
+    public void updateCategory(String name, String description, String themeClass) { // 카테고리 정보 수정 메서드
         this.name = name;
         this.description = description;
         this.themeClass = themeClass;
