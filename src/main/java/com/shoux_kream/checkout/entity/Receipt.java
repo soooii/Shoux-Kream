@@ -1,6 +1,7 @@
 package com.shoux_kream.checkout.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Table(name = "receipt")

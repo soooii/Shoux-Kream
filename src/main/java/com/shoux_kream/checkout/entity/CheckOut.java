@@ -30,12 +30,13 @@ public class CheckOut extends BaseEntity {
 
     private String request;
 
-    @OneToMany(mappedBy = "checkout", cascade = CascadeType.ALL)
-    private List<CheckOutItem> checkoutItems;
+    //TODO 이름 ? mappedBy 이름 문제인가? => 필드 이름 매핑! 테이블이름 X
+    @OneToMany(mappedBy = "checkOut", cascade = CascadeType.ALL)
+    private List<CheckOutItem> checkOutItems;
 
     @Builder
     public CheckOut(List<CheckOutItem> checkOutItems, String request, Address address, User user, int totalPrice, String summaryTitle, Long id) {
-        this.checkoutItems = checkOutItems;
+        this.checkOutItems = checkOutItems;
         this.request = request;
         this.address = address;
         this.user = user;

@@ -23,9 +23,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CheckOutApiController {
     
-    private CheckOutService checkOutService;
-    private UserService userService;
-    private CartService cartService;
+    private final CheckOutService checkOutService;
+    private final UserService userService;
+    private final CartService cartService;
 
 //    //TODO 결제 요약 정보 삽입
 //    @GetMapping("/checkout/summary")
@@ -76,16 +76,17 @@ public class CheckOutApiController {
         }
     }
 
+    // TODO
     // 장바구니에서 제품 제거 (deleteFromDb 대체)
-    @DeleteMapping("/cart/{productId}")
-    public ResponseEntity<String> removeFromCart(@PathVariable Long itemId) {
-        try {
-            cartService.deleteCart(itemId);
-            return ResponseEntity.ok("제품이 장바구니에서 제거되었습니다.");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("장바구니에서 제품 제거 중 문제가 발생했습니다: " + e.getMessage());
-        }
-    }
+//    @DeleteMapping("/cart/{productId}")
+//    public ResponseEntity<String> removeFromCart(@PathVariable Long itemId) {
+//        try {
+//            cartService.deleteCart(itemId);
+//            return ResponseEntity.ok("제품이 장바구니에서 제거되었습니다.");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(500).body("장바구니에서 제품 제거 중 문제가 발생했습니다: " + e.getMessage());
+//        }
+//    }
 
     // 장바구니 또는 체크아웃 데이터 가져오기 (getFromDb 대체)
     @GetMapping("/cart/{id}")

@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface CheckOutItemRepository extends JpaRepository<CheckOutItem, Long> {
-    List<CheckOutItem> findByCheckoutId(Long checkoutId);
+    //어떤 목적인지 확실히 할 필요 있음
+//    List<CheckOutItem> findByCheckoutId(Long checkoutId);
 }
