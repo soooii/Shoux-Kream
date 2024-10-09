@@ -30,12 +30,12 @@ public class CheckOut extends BaseEntity {
 
     private String request;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    private List<CheckOutItem> checkoutItems;
+    @OneToMany(mappedBy = "checkOut", cascade = CascadeType.ALL)
+    private List<CheckOutItem> checkOutItems;
 
     @Builder
     public CheckOut(List<CheckOutItem> checkOutItems, String request, Address address, User user, int totalPrice, String summaryTitle, Long id) {
-        this.checkoutItems = checkOutItems;
+        this.checkOutItems = checkOutItems;
         this.request = request;
         this.address = address;
         this.user = user;

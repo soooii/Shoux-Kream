@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Entity
-@Builder
 @Getter
 public class CheckOutItem {
 
@@ -21,12 +20,16 @@ public class CheckOutItem {
     private int quantity;
     private int totalPrice;
 
+    @ManyToOne
+    @JoinColumn(name = "checkout_id")
+    private CheckOut checkOut;
+
     @Builder
-    public CheckOutItem(Long id, Item item, int quantity, int totalPrice) {
-        this.id = id;
+    public CheckOutItem(Item item, int quantity, int totalPrice, CheckOut checkOut) {
         this.item = item;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
+        this.checkOut = checkOut;
     }
 
     // Getters and setters
