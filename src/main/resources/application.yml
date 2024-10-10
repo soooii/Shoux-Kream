@@ -6,8 +6,7 @@ spring:
         format_sql: true
         use_sql_comments: true
         generate_statistics: true
-    #defer-datasource-initialization: true 설정 => data.sql 초기화 필요시 사용
-#    defer-datasource-initialization: true
+    defer-datasource-initialization: true # data.sql 초기화 필요시 사용
     hibernate:
       ddl-auto: update
   datasource:
