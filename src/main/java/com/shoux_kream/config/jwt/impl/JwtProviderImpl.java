@@ -19,10 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Key;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.shoux_kream.config.jwt.AuthToken.AUTHORITIES_TOKEN_KEY;
 import static com.shoux_kream.config.jwt.UserConstants.ACCESS_TOKEN_TYPE_VALUE;
@@ -56,7 +53,7 @@ public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
     @Override
     public Authentication getAuthentication(AuthTokenImpl authToken) {
         if(authToken.validate()){
-            Claims claims = authToken.getDate();
+            Claims claims = authToken.getDate().getClaims();
             if(!claims.get("type").equals(ACCESS_TOKEN_TYPE_VALUE)){
                 throw new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED,
@@ -81,6 +78,7 @@ public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
 
     @Override
     public AuthTokenImpl createAccessToken(String sub, Role role, Map<String, Object> claims) {
+        claims.put("jti",UUID.randomUUID().toString());
         claims.put("type", ACCESS_TOKEN_TYPE_VALUE);
         return new AuthTokenImpl(
                 sub,
@@ -91,8 +89,12 @@ public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
         );
     }
 
+
+
+
     @Override
     public AuthTokenImpl createRefreshToken(String sub, Role role, Map<String, Object> claims) {
+        claims.put("jti",UUID.randomUUID().toString());
         claims.put("type", REFRESH_TOKEN_TYPE_VALUE);
         return new AuthTokenImpl(
                 sub,
