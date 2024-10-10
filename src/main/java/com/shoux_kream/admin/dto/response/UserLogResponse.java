@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class UserLogResponse {
+    private Long userLogId;
     private String userName;
     private String requestUrl;
     private String requestMethod;
@@ -16,6 +17,7 @@ public class UserLogResponse {
     private LocalDateTime requestTime;
 
     public UserLogResponse(UserLog entity) {
+        this.userLogId = entity.getUserLogId();
         this.userName = entity.getUserName();
         this.requestUrl = entity.getRequestUrl();
         this.requestMethod = entity.getRequestMethod();
