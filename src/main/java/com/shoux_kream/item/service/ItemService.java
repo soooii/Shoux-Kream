@@ -1,15 +1,16 @@
 package com.shoux_kream.item.service;
-
+import com.shoux_kream.category.entity.Category;
+import com.shoux_kream.category.repository.CategoryRepository;
 import com.shoux_kream.exception.ErrorCode;
 import com.shoux_kream.exception.KreamException;
 import com.shoux_kream.item.dto.request.ItemSaveRequest;
 import com.shoux_kream.item.dto.request.ItemUpdateRequest;
-import com.shoux_kream.item.dto.response.BrandResponse;
+//import com.shoux_kream.item.dto.response.BrandResponse;
 import com.shoux_kream.item.dto.response.ItemResponse;
 import com.shoux_kream.item.dto.response.ItemUpdateResponse;
-import com.shoux_kream.item.entity.Brand;
+//import com.shoux_kream.item.entity.Brand;
 import com.shoux_kream.item.entity.Item;
-import com.shoux_kream.item.repository.BrandRepository;
+//import com.shoux_kream.item.repository.BrandRepository;
 import com.shoux_kream.item.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -23,58 +24,78 @@ import java.util.stream.Collectors;
 public class ItemService {
 
     private final ItemRepository itemRepository;
-    private final BrandRepository brandRepository;
+//    private final BrandRepository brandRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ItemService(ItemRepository productRepository, BrandRepository brandRepository) {
-        this.itemRepository = productRepository;
-        this.brandRepository = brandRepository;
+    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository) {
+        this.itemRepository = itemRepository;
+//        this.brandRepository = brandRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     // 새로운 상품을 등록하고 저장된 상품 정보를 반환
     @Transactional
     public ItemResponse save(ItemSaveRequest itemSaveRequest) {
-        Brand brand = findBrandById(itemSaveRequest.brandId());
+//        Brand brand = findBrandById(itemSaveRequest.brandId());
+//        Category category = findCategoryById(itemSaveRequest.categoryId());
+//        Category category = categoryRepository.findByName("미지정")
+//                .orElseThrow(() -> new RuntimeException("Default '미지정' category not found"));
+        String searchKeywords = String.join(",", itemSaveRequest.searchKeywords());
 
-        //
-        Item item = new Item(brand, itemSaveRequest.name(), itemSaveRequest.itemInfo(), itemSaveRequest.size());
+        Item item = new Item(
+//                brand,
+                itemSaveRequest.title(),
+//                category, // Category 엔티티 사용
+                itemSaveRequest.manufacturer(),
+                itemSaveRequest.shortDescription(),
+                itemSaveRequest.detailDescription(),
+                itemSaveRequest.imageKey(),
+                itemSaveRequest.inventory(),
+                itemSaveRequest.price(),
+                searchKeywords
+        );
+
         Item savedItem = itemRepository.save(item);
 
         return new ItemResponse(
                 savedItem.getId(),
-                new BrandResponse(savedItem.getBrand().getId(), savedItem.getBrand().getName()),
-                savedItem.getName(),
-                savedItem.getItemInfo());
+//                new BrandResponse(savedItem.getBrand().getId(), savedItem.getBrand().getTitle()),
+                savedItem.getTitle(),
+//                savedItem.getCategory(), // Category 엔티티 사용
+                savedItem.getManufacturer(),
+                savedItem.getShortDescription(),
+                savedItem.getDetailDescription(),
+                savedItem.getImageKey(),
+                savedItem.getInventory(),
+                savedItem.getPrice(),
+                savedItem.getSearchKeywords()
+        );
     }
 
     // 주어진 id에 해당하는 상품을 조회하고 dto 로 변환하여 반환
     public ItemResponse findById(Long id) {
-        Item item = findItemById(id);
-
-        return ItemResponse.fromEntity(item);
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 상품을 찾을 수 없습니다."));
+        return ItemResponse.fromEntity(item); // Entity를 ItemResponse로 변환 후 반환
     }
 
     // 주어진 상품 이름에 해당하는 상품을 조회하고 dto 로 변환하여 반환
-    public ItemResponse findByName(String itemName) {
-        Item item = itemRepository.findByName(itemName)
+    public ItemResponse findByName(String itemTitle) {
+        Item item = itemRepository.findByTitle(itemTitle)
                 .orElseThrow(() -> new EntityNotFoundException("상품을 찾을 수 없습니다."));
-
         return ItemResponse.fromEntity(item);
     }
 
     // 기존 상품 정보를 수정하고, 수정된 정보를 반환
     @Transactional
     public ItemUpdateResponse update(ItemUpdateRequest itemUpdateRequest) {
-        Brand brand = findBrandById(itemUpdateRequest.brandId());
+//        Brand brand = findBrandById(itemUpdateRequest.brandId());
 
-        //TODO 박유찬 repository query문 해결 후 활성화
-//        itemRepository.updateItemInfo(
-//                itemUpdateRequest.brandId(),
-//                itemUpdateRequest.itemName(),
-//                itemUpdateRequest.color(),
-//                itemUpdateRequest.modelNumber());
+        // TODO: repository query문 해결 후 활성화
+        // itemRepository.updateItemInfo(itemUpdateRequest.brandId(), itemUpdateRequest.itemName(), itemUpdateRequest.color(), itemUpdateRequest.modelNumber());
 
         return new ItemUpdateResponse(
-                brand.getName(),
+//                brand.getTitle(),
                 itemUpdateRequest.itemName(),
                 itemUpdateRequest.color(),
                 itemUpdateRequest.modelNumber()
@@ -98,8 +119,14 @@ public class ItemService {
     }
 
     // 주어진 id에 해당하는 브랜드를 내부적으로 조회 (없으면 예외 발생)
-    private Brand findBrandById(Long id) {
-        return brandRepository.findById(id)
+//    private Brand findBrandById(Long id) {
+//        return brandRepository.findById(id)
+//                .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
+//    }
+
+    // 주어진 id에 해당하는 카테고리를 내부적으로 조회 (없으면 예외 발생)
+    private Category findCategoryById(Long id) {
+        return categoryRepository.findById(id)
                 .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
     }
 

@@ -29,21 +29,23 @@ public class ItemController {
 
     // 모든 인증된 사용자가 접근 가능 (유저 및 관리자) - 모든 상품의 목록을 조회하여 응답
     @GetMapping("/item-list")
-    public String getItems() {
-        List<ItemResponse> itemList = itemService.findAll();
+    public String getItems(Model model) {
+        List<ItemResponse> items = itemService.findAll();
+        model.addAttribute("items", items);
         return "item/item-list";
     }
 
     // 상품을 클릭했을때 나오는 상세 페이지(ex.발매가, 사이즈 선택)
-    @GetMapping("/item-detail")
-    public String getItemPage() {
-        List<ItemResponse> itemList = itemService.findAll();
+    @GetMapping("/item-detail/{id}")
+    public String getItemPage(@PathVariable Long id, Model model) {
+        ItemResponse item = itemService.findById(id); // 특정 ID의 상품을 조회
+        model.addAttribute("item", item);
         return "item/item-detail";
     }
 
     // 관리자 권한 필요 - 새로운 상품을 등록하고, 등록된 상품 정보를 응답으로 반환
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping //item-add
+    @PostMapping("/item-add") //item-add
     public ResponseEntity<ItemResponse> saveItem(@RequestBody ItemSaveRequest itemSaveRequest) {
         ItemResponse savedItemResponse = itemService.save(itemSaveRequest);
         return ResponseEntity.status(HttpStatus.CREATED)

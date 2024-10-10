@@ -1,46 +1,41 @@
 package com.shoux_kream.item.dto;
 
-import com.shoux_kream.item.entity.Item;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
 public class ItemFormDTO {
 
-    private Long id;
+//    @NotNull(message = "브랜드 ID는 필수 입력 값입니다.")
+//    private Long brandId;
 
     @NotBlank(message = "상품명은 필수 입력 값입니다.")
-    private String itemNm;
+    private String title;
 
-    @NotNull(message = "가격은 필수 입력 값입니다.")
-    private Integer price;
+//    @NotNull(message = "카테고리 ID는 필수 입력 값입니다.")
+//    private Long categoryId;
 
-    @NotBlank(message = "이름은 필수 입력 값입니다.")
-    private String itemDetail;
+    @NotBlank(message = "제조사는 필수 입력 값입니다.")
+    private String manufacturer;
 
-    @NotNull(message = "재고는 필수 입력 값입니다.")
-    private Integer stockNumber;
+    @NotBlank(message = "짧은 설명은 필수 입력 값입니다.")
+    private String shortDescription;
 
-    // 상품 판매 상태
-//    private ItemSellStatus itemSellStatus;
+    private String detailDescription;
 
-//    private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+    @NotBlank(message = "이미지 키는 필수 입력 값입니다.")
+    private String imageKey;
 
-    private List<Long> itemImgIds = new ArrayList<>();
+    @Positive(message = "재고 수량은 양수여야 합니다.")
+    private int inventory;
 
-//    private static ModelMapper modelMapper = new ModelMapper();
-//
-//    public Item createItem() {
-//        return modelMapper.map(this, Item.class);
-//    }
-//
-//    public static ItemFormDTO of(Item item){
-//        return modelMapper.map(item,ItemFormDTO.class);
-//    }
+    @Positive(message = "가격은 양수여야 합니다.")
+    private double price;
+
+    private String searchKeywords;
 }
