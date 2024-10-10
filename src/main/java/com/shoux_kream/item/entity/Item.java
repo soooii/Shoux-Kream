@@ -11,7 +11,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @Entity
-@Table(name = "items")
+@Table(name = "item")
 @NoArgsConstructor(access = PROTECTED)
 public class Item extends BaseEntity {
 
@@ -20,63 +20,82 @@ public class Item extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
-//    관리자만 제품을 등록하고 관리하며, 일반 사용자는 구매만 하기 때문에,
-//    제품(Item) 엔티티에 사용자(user_id)와 직접적인 연결이 필요하지 않음
-//    @Column(name = "user_id", nullable = false)
-//    private Integer userId;
-
-    @Column(name = "item_name", nullable = false, length = 255)
-    private String name;
-
-    // itemInfo 에서 발매가를 관리하고 있기 때문에 삭제
-//    @Column(name = "price", nullable = false)
-//    private Integer price;
+    @Column(nullable = false)
+    private String title; // 상품명
 
     // Category와의 연관 관계 설정 (ManyToOne)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", insertable = false, updatable = false)
-    private Category category;
+    // TODO 카테고리 비활성화, 10/9
+//    @ManyToOne
+//    @JoinColumn(name = "category_id", nullable = false) // nullable=true로 설정
+//    private Category category; // 카테고리 ID
 
-    @Column(name = "image_path", nullable = false, length = 255)
-    private String imagePath;
+    @Column(nullable = false)
+    private String manufacturer; // 제조사
 
-    @Column(name = "description", nullable = false, length = 255)
-    private String description;
+    @Column(length = 255)
+    private String shortDescription; // 짧은 설명
+
+    @Column(columnDefinition = "TEXT")
+    private String detailDescription; // 상세 설명
+
+    @Column(nullable = false)
+    private String imageKey; // 이미지 키 (S3에 저장된 이미지 키)
+
+    @Column(nullable = false)
+    private int inventory; // 재고 수량
+
+    @Column(nullable = false)
+    private double price; // 가격
+
+    private String searchKeywords; // 검색 키워드
+
+    // 비활성화
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "brand_id")
+//    private Brand brand;
+
+    // 비활성화
+//    @Embedded
+//    private ItemInfo itemInfo;
 
     // Review와의 연관 관계 설정 (OneToMany)
     // 아직 리뷰 엔티티 구현 안돼서 주석처리
 //    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Review> reviews;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
+    // 비활성화
+//    @Column(name = "size")
+//    private int size;
 
-    @Embedded
-    private ItemInfo itemInfo;
+    //    관리자만 제품을 등록하고 관리하며, 일반 사용자는 구매만 하기 때문에,
+//    제품(Item) 엔티티에 사용자(user_id)와 직접적인 연결이 필요하지 않음
+//    @Column(name = "user_id", nullable = false)
+//    private Integer userId;
 
-    @Column(name = "size")
-    private int size;
-
-    @Column(name = "price")
-    private int price;
-
-    //
-    public Item(Brand brand, String name, ItemInfo itemInfo, int size) {
-        this.brand = brand;
-        this.name = name;
-//        this.imagePath = imagePath;
-//        this.description = description;
-        this.itemInfo = itemInfo;
-        this.size = size;
+    public Item(String title, String manufacturer, String shortDescription,
+                String detailDescription, String imageKey, int inventory, double price, String searchKeywords) {
+//        this.brand = brand;
+        this.title = title;
+//        this.category = category;
+        this.manufacturer = manufacturer;
+        this.shortDescription = shortDescription;
+        this.detailDescription = detailDescription;
+        this.imageKey = imageKey;
+        this.inventory = inventory;
+        this.price = price;
+        this.searchKeywords = searchKeywords;
     }
 
-    // 사이즈는 보통 한번 입력하고 나면 따로 수정하지 않음(신발 250 ~ 300, 옷 xs, s, m, l, xl 으로 설정)
-    public void update(Brand brand, String name, String imagePath, String description, ItemInfo itemInfo) {
-        this.brand = brand;
-        this.name = name;
-        this.imagePath = imagePath;
-        this.description = description;
-        this.itemInfo = itemInfo;
+    public void update(String title, String manufacturer, String shortDescription,
+                       String detailDescription, String imageKey, int inventory, double price, String searchKeywords) {
+        this.title = title;
+//        this.category = category;
+        this.manufacturer = manufacturer;
+        this.shortDescription = shortDescription;
+        this.detailDescription = detailDescription;
+        this.imageKey = imageKey;
+        this.inventory = inventory;
+        this.price = price;
+        this.searchKeywords = searchKeywords;
     }
 }
