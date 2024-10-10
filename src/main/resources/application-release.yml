@@ -37,8 +37,8 @@ jwt:
 cloud:
   aws:
     credentials:
-      accessKey: ${S3_SHOUXKREAM_ACCESS_KEY}
-      secretKey: ${S3_SHOUXKREAM_SECRET_KEY}
+      access-key: ${S3_SHOUXKREAM_ACCESS_KEY}
+      secret-key: ${S3_SHOUXKREAM_SECRET_KEY}
     s3:
       bucket: ${S3_SHOUXKREAM_BUCKET}
     region:
