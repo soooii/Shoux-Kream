@@ -20,6 +20,7 @@ public class CartResponseDto {
     private int quantity;
 
     private String itemName;
+    private int itemSize;
     private Long itemPrice;
 
     private Long totalPrice;

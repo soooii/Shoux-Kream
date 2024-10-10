@@ -95,7 +95,7 @@
             <div class="box cart-products-container" id="cartProductsContainer">
               <div class="cart-products-header">
                 <label class="checkbox">
-                  <input type="checkbox" id="allSelectCheckbox" />
+                  <input type="checkbox" class="checkbox-input" id="allSelectCheckbox" />
                   <p class="help">전체선택</p>
                 </label>
                 <label class="seperator">
@@ -105,18 +105,19 @@
                   <p class="help">선택삭제</p>
                 </label>
               </div>
-
               <!-- 장바구니에 담긴 상품들의 html 요소(카드 형태)가 주입되는 곳 -->
               <div
                       th:unless="${carts.isEmpty()}"
                       th:each="cart : ${carts}"
               >
                 <div class="cart-product-item">
-                  <input type="checkbox" class="cart-checkbox" value="${cart.cartId}">
-                  <input type="hidden" id="cart-id" th:value="${cart.cartId}">
-                  <input type="hidden" id="user-id" th:value="${cart.userId}">
+                  <input type="checkbox" class="cart-checkbox checkbox-input" th:value="${cart.cartId}">
+                  <input type="hidden" th:id="|cart-id-${cart.cartId}|" th:value="${cart.cartId}">
+                  <input type="hidden" th:id="|user-id-${cart.userId}|" th:value="${cart.userId}">
                   <p class="content" th:text="${cart?.itemName}">상품 이름</p>
-                  <span class="quantity" th:text="${cart?.quantity}">1</span>
+                  <span class="quantity" th:text="${cart?.itemSize} + ' / ' + ${cart?.quantity} + '개'">사이즈 / 수량</span>
+                  <p class="content" th:text="${#numbers.formatInteger(cart?.totalPrice, 3, 'COMMA') + '원'}">상품 금액</p>
+                  <p class="content">배송비</p>
 
                   <!--옵션/수량 변경 버튼 클릭 시 모달창 실행되도록 모달창에서 옵션/수량 변경 후 확인 & 반영-->
                   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -127,11 +128,24 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          <form>
-                            content
-                          </form>
+                          <div class="d-flex align-items-center justify-content-between">
+                            <div class="mb-3">
+                              <div class="fw-semibold">구매가격</div>
+                              <!--자바스크립트로 가격 동적처리 필요-->
+                              <div class="fw-bold text-primary" th:text="${cart?.itemPrice}">3000원</div>
+                            </div>
+                          <div class="d-flex align-items-center justify-content-end">
+                            <button class="btn btn-outline-dark btn-custom" type="button" id="decreaseBtn"> - </button>
+                            <div class="input-group" style="width: 100px;">
+                              <label for="quantity" class="form-label">수량</label>
+                              <input type="text" class="form-control text-center" id="quantity" name="quantity" th:value="${cart.quantity}" readonly>
+                            </div>
+                            <button class="btn btn-outline-dark btn-custom" type="button" id="increaseBtn"> + </button>
+                            <br />
+                          </div>
+                         </div>
                           <div class="d-grid gap-2">
-                            <button type="button" class="btn btn-primary btn-lg">확인</button>
+                            <button type="button" class="btn btn-dark btn-lg" id="edit-submit-btn">확인</button>
                           </div>
                         </div>
                       </div>
@@ -155,10 +169,9 @@
                           <h1 class="modal-title fs-5" id="staticDeleteBackdropLabel">상품 삭제</h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                          <form>
-                            content
-                          </form>
+                        <div class="modal-body text-center">
+                          <p>상품을 삭제하시겠습니까?</p>
+                          <br />
                           <div class="col-lg-15 col-sm-12 text-center">
                             <button
                                     type="button"
@@ -206,11 +219,13 @@
               <div class="order-info">
                 <div class="info">
                   <p>상품수</p>
-                  <p id="productsCount"></p>
+                  <p id="productsCount" th:unless="${carts.isEmpty()}" th:text="${#aggregates.sum(carts.![quantity]) + '개'}"></p>
+                  <p id="productsCount" th:if="${carts.isEmpty()}">0개</p>
                 </div>
                 <div class="info">
                   <p>상품금액</p>
-                  <p id="productsTotal"></p>
+                  <p id="productsTotal" th:unless="${carts.isEmpty()}" th:text="${#numbers.formatInteger(#aggregates.sum(carts.![totalPrice]), 3, 'COMMA') + '원'}"></p>
+                  <p id="productsCount" th:if="${carts.isEmpty()}">0원</p>
                 </div>
                 <div class="info">
                   <p>배송비</p>

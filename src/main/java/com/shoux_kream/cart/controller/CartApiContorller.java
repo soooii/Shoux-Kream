@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/c/cart")
+@RequestMapping("/api/cart")
 @RequiredArgsConstructor
 public class CartApiContorller {
 
@@ -37,18 +37,18 @@ public class CartApiContorller {
     }
 
     // 장바구니 수정 -> 장바구니에서 수량 및 옵션 수정으로 사용
-//    @PatchMapping("/edit/{cartId}")
-//    public ResponseEntity<CartResponseDto> updateCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("cartId") Long cartId) {
-//        CartResponseDto cart = cartService.updateCart(cartRequestDto, cartId);
-//
-//        return ResponseEntity.ok()
-//                .body(cart);
-//
-//    }
+    @PatchMapping("/edit/{cartId}")
+    public ResponseEntity<CartResponseDto> updateCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("cartId") Long cartId) {
+        CartResponseDto cart = cartService.updateCart(cartRequestDto, cartId);
+
+        return ResponseEntity.ok()
+                .body(cart);
+
+    }
     
     // 장바구니 삭제
     // 장바구니 일괄 삭제
-    @DeleteMapping("/delete")
+    @DeleteMapping("/")
     public ResponseEntity<Void> deleteCarts(@RequestBody List<Long> cartIds) {
         cartService.deleteAllCarts(cartIds);
 
