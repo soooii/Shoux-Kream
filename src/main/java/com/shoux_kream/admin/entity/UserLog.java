@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 public class UserLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "admin_log_id")
-    private Long adminLogId;
+    @Column(name = "user_log_id")
+    private Long userLogId;
     @Column(name = "user_name")
     private String userName;
     @Column(name = "request_url")
@@ -32,6 +32,26 @@ public class UserLog {
     private LocalDateTime responseTime;
     @Column(name = "request_time")
     private LocalDateTime requestTime;
+
+    // 추가 dto
+    public UserLog(String requestUrl, String requestMethod, String clientIp, int responseStatus) {
+        this.requestUrl = requestUrl;
+        this.requestMethod = requestMethod;
+        this.clientIp = clientIp;
+        this.responseStatus = responseStatus;
+    }
+
+    public void setRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
+    }
+
+    public void setRequestMethod(String requestMethod) {
+        this.requestMethod = requestMethod;
+    }
+
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
+    }
 
     public void setResponseStatus(int responseStatus) {
         this.responseStatus = responseStatus;

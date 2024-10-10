@@ -6,8 +6,7 @@ spring:
         format_sql: true
         use_sql_comments: true
         generate_statistics: true
-    #defer-datasource-initialization: true 설정 => data.sql 초기화 필요시 사용
-#    defer-datasource-initialization: true
+    defer-datasource-initialization: true # data.sql 초기화 필요시 사용
     hibernate:
       ddl-auto: update
   datasource:
@@ -23,3 +22,16 @@ jwt:
   token:
     refresh-expires: 7200000 #2시간
     access-expires: 7200000
+
+# S3
+cloud:
+  aws:
+    credentials:
+      accessKey:
+      secretKey:
+    s3:
+      bucket:
+    region:
+      static:
+    stack:
+      auto-:
