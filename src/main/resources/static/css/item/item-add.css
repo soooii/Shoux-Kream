@@ -1,0 +1,30 @@
+console.log("CSS 로드 성공");
+.account-header {
+  display: block;
+  border-bottom: #ddd 1px solid;
+  padding-bottom: 0.7rem;
+}
+
+.register-item-form-container {
+  display: flex;
+  justify-content: center;
+}
+
+.register-item-form-box {
+  width: 40rem;
+}
+
+.register-item-form-box .title {
+  text-align: center;
+}
+
+.register-item-form-box .button {
+  font-weight: bold;
+}
+
+.register-item-form-box .input:focus,
+.register-item-form-box .textarea:focus,
+.register-item-form-box select:focus {
+  border-color: #00d1b2;
+  box-shadow: 0 0 0 0.125em rgba(0, 209, 178, 0.25);
+}
