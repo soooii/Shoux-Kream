@@ -29,7 +29,16 @@ public enum ErrorCode {
     BIDDING_NOT_LIVE(BAD_REQUEST, BAD_REQUEST.value(), "Bidding is not live. please transact other bidding."),
     BIDDING_NOT_IN_TRANSACTION(BAD_REQUEST, BAD_REQUEST.value(), "Bidding is not in transaction. please check yout bidding id again."),
     BIDDING_NOT_DEPOSIT(BAD_REQUEST, BAD_REQUEST.value(), "Bidding is not deposited yet. please send money first."),
-    BIDDING_ABUSING(BAD_REQUEST, BAD_REQUEST.value(), "cannot transact bidding for same owner")
+    BIDDING_ABUSING(BAD_REQUEST, BAD_REQUEST.value(), "cannot transact bidding for same owner"),
+
+    //JWT 에러코드
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, -106, "JWT token has expired."),
+    INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED, -107, "Invalid JWT signature."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, -108, "Invalid JWT token."),
+    UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, -109, "Unsupported JWT token."),
+    INVALID_FORMAT(HttpStatus.UNAUTHORIZED, -110, "JWT token compact of handler are invalid."),
+    UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, -111, "Unknown error occurred.");
+
     ;
 
     private final HttpStatus httpStatus;
