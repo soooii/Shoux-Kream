@@ -115,7 +115,7 @@
                   <input type="hidden" th:id="|cart-id-${cart.cartId}|" th:value="${cart.cartId}">
                   <input type="hidden" th:id="|user-id-${cart.userId}|" th:value="${cart.userId}">
                   <p class="content" th:text="${cart?.itemName}">상품 이름</p>
-                  <span class="quantity" th:text="${cart?.itemSize} + ' / ' + ${cart?.quantity} + '개'">사이즈 / 수량</span>
+                  <span class="quantity" th:text="${cart?.quantity} + '개'">수량</span>
                   <p class="content" th:text="${#numbers.formatInteger(cart?.totalPrice, 3, 'COMMA') + '원'}">상품 금액</p>
                   <p class="content">배송비</p>
 
