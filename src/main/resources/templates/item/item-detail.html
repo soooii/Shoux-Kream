@@ -1,0 +1,110 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <meta charset="utf-8" />-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1" />-->
+<!--    <title>상품 목록</title>-->
+<!--    <link-->
+<!--            rel="stylesheet"-->
+<!--            href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"-->
+<!--    />-->
+<!--    <script src="/js/item/item-detail.js" defer></script>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<section class="section">-->
+<!--    <div class="container">-->
+<!--        <h1 class="title">상품 목록</h1>-->
+<!--        <div id="item-list" class="columns is-multiline"></div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>상품 상세 정보</title>
+    <!-- bulma css -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <!-- 폰트 어썸: 아이콘 -->
+    <script
+            defer
+            src="https://kit.fontawesome.com/9daa42bcef.js"
+            crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+
+<!-- 네비게이션 바 -->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="container mt-3">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <img src="/img/elice-rabbit.png" width="30" height="30" />
+                <span class="has-text-link">Shopping Mall</span>
+            </a>
+
+            <a
+                    role="button"
+                    class="navbar-burger"
+                    aria-label="menu"
+                    aria-expanded="false"
+                    data-target="navbarBasicExample"
+            >
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
+            <ul id="navbar">
+                <li>
+                    <a href="/cart" aria-current="page">
+                <span class="icon">
+                  <i class="fas fa-cart-shopping"></i>
+                </span>
+                        <span>카트</span>
+                    </a>
+                    <a href="/users/login">
+            <span class="icon">
+              <i class="fa fa-sign-in" aria-hidden="true"></i>
+            </span>
+                        <span>로그인</span>
+                    </a>
+                    <a href="api/admin" aria-current="page">
+            <span class="icon">
+              <i class="fa fa-address-book-o" aria-hidden="true"></i>
+            </span>
+                        <span>관리자</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 상품 상세 정보 -->
+<section>
+    <h1>상품 상세 정보</h1>
+    <div>
+        <h2 th:text="${item.title}">상품 제목</h2>
+        <p><strong>제조사:</strong> <span th:text="${item.manufacturer}">제조사 예시</span></p>
+        <p><strong>짧은 설명:</strong> <span th:text="${item.shortDescription}">짧은 설명 예시</span></p>
+        <p><strong>상세 설명:</strong> <span th:text="${item.detailDescription}">상세 설명 예시</span></p>
+        <p><strong>가격:</strong> <span th:text="${item.price}">50000</span></p>
+        <p><strong>재고:</strong> <span th:text="${item.inventory}">100</span></p>
+        <p><strong>이미지 경로:</strong> <span th:text="${item.imageKey}">이미지 경로/키</span></p>
+        <p><strong>검색 키워드:</strong> <span th:text="${item.searchKeywords}">키워드1, 키워드2</span></p>
+    </div>
+</section>
+
+</body>
+</html>

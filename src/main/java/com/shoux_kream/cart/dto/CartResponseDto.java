@@ -30,8 +30,8 @@ public class CartResponseDto {
         this.itemId = cart.getItem().getId();
         this.createdAt = cart.getCreatedAt();
         this.quantity = cart.getQuantity();
-        this.itemName = cart.getItem().getName();
-        this.itemPrice = cart.getItem().getItemInfo().getReleasePrice();
+        this.itemName = cart.getItem().getTitle();
+        this.itemPrice = (long) cart.getItem().getPrice();
         this.totalPrice = this.quantity * this.itemPrice;
     }
 

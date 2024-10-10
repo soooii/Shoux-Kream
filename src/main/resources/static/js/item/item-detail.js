@@ -1,12 +1,12 @@
 import { getImageUrl } from "/js/aws-s3.js";
-import * as Api from "/js/api.js";
+//import * as Api from "/js/api.js";
 import {
   getUrlParams,
   addCommas,
   checkUrlParams,
   createNavbar,
 } from "/js/useful-functions.js";
-import { addToDb, putToDb } from "/js/indexed-db.js";
+//import { addToDb, putToDb } from "/js/indexed-db.js";
 
 // 요소(element), input 혹은 상수
 const itemImageTag = document.querySelector("#itemImageTag");
