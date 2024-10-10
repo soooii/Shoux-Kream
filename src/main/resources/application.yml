@@ -27,8 +27,8 @@ jwt:
 cloud:
   aws:
     credentials:
-      accessKey:
-      secretKey:
+      access-key:
+      secret-key:
     s3:
       bucket:
     region:
