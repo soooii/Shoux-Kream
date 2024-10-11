@@ -45,7 +45,7 @@ public class Item extends BaseEntity {
     private int inventory; // 재고 수량
 
     @Column(nullable = false)
-    private double price; // 가격
+    private int price; // 가격
 
     private String searchKeywords; // 검색 키워드
 
@@ -73,7 +73,7 @@ public class Item extends BaseEntity {
 //    private Integer userId;
 
     public Item(String title, String manufacturer, String shortDescription,
-                String detailDescription, String imageKey, int inventory, double price, String searchKeywords) {
+                String detailDescription, String imageKey, int inventory, int price, String searchKeywords) {
 //        this.brand = brand;
         this.title = title;
 //        this.category = category;
@@ -87,7 +87,7 @@ public class Item extends BaseEntity {
     }
 
     public void update(String title, String manufacturer, String shortDescription,
-                       String detailDescription, String imageKey, int inventory, double price, String searchKeywords) {
+                       String detailDescription, String imageKey, int inventory, int price, String searchKeywords) {
         this.title = title;
 //        this.category = category;
         this.manufacturer = manufacturer;
