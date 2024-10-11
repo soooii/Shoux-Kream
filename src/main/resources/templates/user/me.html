@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <!--<script src="/js/user/me1.js" defer></script>-->
+    <title>마이페이지</title>
+</head>
+<body>
+<h1>마이페이지</h1>
+<div id="user-info"></div>
+<p id="Id"></p>
+</body>
+
+<script>
+    window.onload = function() {
+        const token = sessionStorage.getItem('accessToken');
+        fetch('/api/users/me', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('user-info').innerHTML =`<p>Your email: ${data.email}</p>`;
+                document.getElementById('Id').innerHTML=`<p>Your id:${data.userId}</p>`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = '/login';
+            });
+    };
+</script>
+</html>
