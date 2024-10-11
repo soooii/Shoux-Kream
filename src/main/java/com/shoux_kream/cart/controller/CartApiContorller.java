@@ -48,11 +48,19 @@ public class CartApiContorller {
 
     // 장바구니 수정 -> 장바구니에서 수량 및 옵션 수정으로 사용
     @PatchMapping("/edit/{cartId}")
-    public ResponseEntity<CartResponseDto> updateCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("cartId") Long cartId) {
+    public ResponseEntity updateCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("cartId") Long cartId, @AuthenticationPrincipal User principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = principal.getUsername();
+
+        if(!cartService.validateCartItem(cartId, email)){
+            return new ResponseEntity<String>("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+
         CartResponseDto cart = cartService.updateCart(cartRequestDto, cartId);
 
-        return ResponseEntity.ok()
-                .body(cart);
+        return ResponseEntity.ok(cart);
 
     }
     
@@ -64,6 +72,10 @@ public class CartApiContorller {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String email = principal.getUsername();
+
+        for (Long cartId : cartIds) {
+            cartService.validateCartItem(cartId, email);
+        }
 
         cartService.deleteCarts(cartIds);
 
@@ -80,7 +92,7 @@ public class CartApiContorller {
         String email = principal.getUsername();
 
         if(!cartService.validateCartItem(cartId, email)){
-            return new ResponseEntity<String>("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("삭제 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
         cartService.deleteCart(cartId);

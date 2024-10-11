@@ -1,5 +1,6 @@
 let cartId; // cart Id 저장
 let quantityCheck;
+let priceCheck;
 
 window.onload = function () {
     const token = sessionStorage.getItem('accessToken');
@@ -43,7 +44,8 @@ window.onload = function () {
 
                 const checkbox = document.createElement('input'); // 체크박스 요소 생성
                 checkbox.type = 'checkbox'; // 체크박스 타입 설정
-
+                checkbox.name = `checkbox`;
+                checkbox.value = id;
                 checkbox.checked = true;
 
                 itemName.classList.add('content'); // 클래스 추가
@@ -60,6 +62,7 @@ window.onload = function () {
                 deleteButton.classList.add('delete-button');
                 deleteButton.setAttribute('data-bs-toggle', 'modal');
                 deleteButton.setAttribute('data-bs-target', '#staticDeleteBackdrop'); // 모달 ID 설정
+                // 개별 삭제를 위한 모달 실행 시 id 저장
                 deleteButton.addEventListener('click', () => {
                     cartId = id; // 선택된 cartId 저장
                 });
@@ -70,9 +73,39 @@ window.onload = function () {
                 editButton.classList.add('edit-button');
                 editButton.setAttribute('data-bs-toggle', 'modal');
                 editButton.setAttribute('data-bs-target', '#staticBackdrop');
+                // 모달창 실행
                 editButton.addEventListener('click', () => {
                     cartId = id; // 선택된 cartId 저장
                     quantityCheck = `${item.quantity}`;
+                    priceCheck = `${item.itemPrice}`;
+
+                    const increaseBtn = document.getElementById('increaseBtn'); // 증가 버튼
+                    const decreaseBtn = document.getElementById('decreaseBtn'); // 감소 버튼
+                    const cartQuantity = document.getElementById('quantity'); // 수량을 표시하는 input
+                    const cartItemPrice = document.querySelector('.modal-body .fw-bold.text-primary');
+
+                    cartQuantity.value = quantityCheck;
+                    cartItemPrice.innerText = (priceCheck * quantityCheck).toLocaleString() + '원';
+
+                    // 수량 증가
+                    increaseBtn.addEventListener('click', function () {
+                        let currentQuantity = parseInt(cartQuantity.value); // 현재 수량을 정수로 변환
+                        currentQuantity++;
+                        cartQuantity.value = currentQuantity;
+                        cartItemPrice.innerText = (priceCheck * currentQuantity).toLocaleString() + '원'; // 가격 업데이트
+                        quantityCheck = currentQuantity;
+                    });
+
+                    // 수량 감소
+                    decreaseBtn.addEventListener('click', function () {
+                        let currentQuantity = parseInt(cartQuantity.value); // 현재 수량을 정수로 변환
+                        if (currentQuantity > 1) {
+                            currentQuantity--;
+                            cartQuantity.value = currentQuantity;
+                            cartItemPrice.innerText = (priceCheck * currentQuantity).toLocaleString() + '원'; // 가격 업데이트
+                            quantityCheck = currentQuantity;
+                        }
+                    });
                 });
 
                 // 목록에 내용 추가
@@ -95,6 +128,7 @@ window.onload = function () {
                     checkbox.checked = allSelectCheckbox.checked;
                 });
             });
+            const checkedCheckboxes = cartContainer.querySelectorAll("input[type='checkbox']:checked");
         })
         .catch(error => {
             console.error('Error:', error);
@@ -102,7 +136,6 @@ window.onload = function () {
         });
 };
 
-// TODO 옵션/수량 수정
 // 옵션/수량 수정
 const editButton = document.getElementById('edit-submit-btn');
 
@@ -119,7 +152,7 @@ if (editButton) {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(quantityCheck)
+            body: JSON.stringify({quantity: quantityCheck})
         })
             .then(() => {
                 alert('변경이 완료되었습니다.');
@@ -158,16 +191,23 @@ if (deleteButton) {
     });
 }
 
-// TODO 선택 삭제
 // 선택 삭제
 const partialDeleteLabel = document.getElementById('partialDeleteLabel');
 
 if (partialDeleteLabel) {
     partialDeleteLabel.addEventListener('click', event => {
+        const token = sessionStorage.getItem('accessToken');
+        if (token == null) {
+            window.location.href = '/cart/summary';
+        }
         // 선택된 체크박스
-        const selectedCheckboxes = document.querySelectorAll('.cart-checkbox:checked');
-        const cartIds = Array.from(selectedCheckboxes).map((checkbox) => checkbox.value);
-
+        const checkedCheckboxes = document.querySelectorAll("input[type='checkbox']:checked:not(#allSelectCheckbox)");
+        const cartIds = []; // cartIds 리스트 초기화
+        checkedCheckboxes.forEach(checkbox => {
+            cartIds.push(checkbox.value); // 각 체크박스의 value 값을 cartIds 리스트에 추가
+            console.log(cartIds);
+        });
+        console.log(cartIds);
         if (cartIds.length == 0) {
             alert('삭제할 상품을 선택하세요.');
             return;
