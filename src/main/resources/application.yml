@@ -18,7 +18,7 @@ spring:
 
 # 환경변수 설정으로 세팅
 jwt:
-  secret: "ZB67NHMI84Y20zQVFSf8nZfChJoG6rZ+16x8HgzWuw8=" #base64 32byte
+  secret: ${JWT_SECRET_KEY} #base64 32byte
   token:
     refresh-expires: 7200000 #2시간
     access-expires: 7200000
@@ -27,11 +27,11 @@ jwt:
 cloud:
   aws:
     credentials:
-      access-key:
-      secret-key:
+      access-key: ${S3_SHOUXKREAM_ACCESS_KEY}
+      secret-key: ${S3_SHOUXKREAM_SECRET_KEY}
     s3:
-      bucket:
+      bucket: ${S3_SHOUXKREAM_BUCKET}
     region:
-      static:
+      static: ap-northeast-2
     stack:
-      auto-:
+      auto-: false
