@@ -1,7 +1,6 @@
 package com.shoux_kream.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ItemFormDTO {
+public class ItemDto {
 
 //    @NotNull(message = "브랜드 ID는 필수 입력 값입니다.")
 //    private Long brandId;
