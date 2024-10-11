@@ -1,5 +1,5 @@
 let cartId; // cart Id 저장
-let quantity;
+let quantityCheck;
 
 window.onload = function () {
     const token = sessionStorage.getItem('accessToken');
@@ -72,7 +72,7 @@ window.onload = function () {
                 editButton.setAttribute('data-bs-target', '#staticBackdrop');
                 editButton.addEventListener('click', () => {
                     cartId = id; // 선택된 cartId 저장
-                    quantity = item.quantity;
+                    quantityCheck = `${item.quantity}`;
                 });
 
                 // 목록에 내용 추가
@@ -119,7 +119,7 @@ if (editButton) {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(quantity)
+            body: JSON.stringify(quantityCheck)
         })
             .then(() => {
                 alert('변경이 완료되었습니다.');
