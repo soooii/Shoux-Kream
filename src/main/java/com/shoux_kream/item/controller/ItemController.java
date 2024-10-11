@@ -1,20 +1,21 @@
 package com.shoux_kream.item.controller;
 
-import com.shoux_kream.item.dto.ItemFormDTO;
+import com.shoux_kream.config.s3.S3Uploader;
+import com.shoux_kream.item.dto.ItemDto;
 import com.shoux_kream.item.dto.request.ItemSaveRequest;
 import com.shoux_kream.item.dto.request.ItemUpdateRequest;
 import com.shoux_kream.item.dto.response.ItemResponse;
 import com.shoux_kream.item.dto.response.ItemUpdateResponse;
-import com.shoux_kream.item.dto.response.ItemsGetResponse;
 import com.shoux_kream.item.service.ItemService;
-import com.shoux_kream.item.entity.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -22,9 +23,11 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final S3Uploader s3Uploader;
 
-    public ItemController(ItemService itemService) {
+    public ItemController(ItemService itemService, S3Uploader s3Uploader) {
         this.itemService = itemService;
+        this.s3Uploader = s3Uploader;
     }
 
     // 모든 인증된 사용자가 접근 가능 (유저 및 관리자) - 모든 상품의 목록을 조회하여 응답
@@ -46,8 +49,9 @@ public class ItemController {
     // 관리자 권한 필요 - 새로운 상품을 등록하고, 등록된 상품 정보를 응답으로 반환
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/item-add") //item-add
-    public ResponseEntity<ItemResponse> saveItem(@RequestBody ItemSaveRequest itemSaveRequest) {
-        ItemResponse savedItemResponse = itemService.save(itemSaveRequest);
+    public ResponseEntity<ItemResponse> saveItem(@ModelAttribute ItemSaveRequest itemSaveRequest,
+                                                 @RequestParam("imageKey") MultipartFile imageKey) throws IOException {
+        ItemResponse savedItemResponse = itemService.save(itemSaveRequest, imageKey);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedItemResponse);
     }

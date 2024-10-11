@@ -33,12 +33,12 @@ public class KreamExceptionHandler {
                 .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
-        logger.error("Unhandled exception occurred: {}", exception.getMessage(), exception);
-
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "something went wrong on server"));
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
+//        logger.error("Unhandled exception occurred: {}", exception.getMessage(), exception);
+//
+//        return ResponseEntity
+//                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "something went wrong on server"));
+//    }
 }
