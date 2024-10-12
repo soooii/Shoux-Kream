@@ -48,15 +48,12 @@ public class CheckOutService {
     }
 
     public void addCheckOutItem(CheckOutItemRequestDto checkoutItemRequestDto) {
-        CheckOut checkOut = checkOutRepository.findById(checkoutItemRequestDto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid checkout ID"));
-
         CheckOutItem checkOutItem = CheckOutItem.builder()
-                .item(checkoutItemRequestDto.getCheckOutItem().getItem())
-                .quantity(checkoutItemRequestDto.getCheckOutItem().getQuantity())
-                .totalPrice(checkoutItemRequestDto.getCheckOutItem().getTotalPrice())
+                .item(itemRepository.findById(checkoutItemRequestDto.getItemId()).orElseThrow(() -> new IllegalArgumentException("itemId not found")))
+                .quantity(checkoutItemRequestDto.getQuantity())
+                .totalPrice(checkoutItemRequestDto.getTotalPrice())
+                .checkOut(checkOutRepository.findById(checkoutItemRequestDto.getCheckOutId()).orElseThrow(() -> new IllegalArgumentException("checkoutId not found")))
                 .build();
-
         checkOutItemRepository.save(checkOutItem);
     }
 

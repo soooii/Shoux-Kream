@@ -76,18 +76,18 @@ public class CheckOutApiController {
 
      */
     @PostMapping("/checkout") //TODO userId로 체크아웃 정보를 저장함, 저장한 entity를 id값을 포함해 반환
-    public ResponseEntity<String> processCheckOut(@AuthenticationPrincipal User principal,@RequestBody CheckOutRequestDto checkOutRequestDto) {
+    public ResponseEntity<CheckOutResponseDto> processCheckOut(@AuthenticationPrincipal User principal,@RequestBody CheckOutRequestDto checkOutRequestDto) {
         String email = principal.getUsername();
         UserResponse userResponse = userService.getUser(email);
         CheckOutResponseDto checkOutResponseDto = checkOutService.createCheckout(userResponse.getUserId(), checkOutRequestDto);
-        return ResponseEntity.ok("void");
+        return ResponseEntity.ok(checkOutResponseDto);
     }
     @GetMapping("/checkouts") //userEmail로 checkout 정보 받기
-    public ResponseEntity<String> getCheckOuts(@AuthenticationPrincipal User principal) {
+    public ResponseEntity<List<CheckOut>> getCheckOuts(@AuthenticationPrincipal User principal) {
         String email = principal.getUsername();
         UserResponse userResponse = userService.getUser(email);
         List<CheckOut> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
-        return ResponseEntity.ok("void");
+        return ResponseEntity.ok(checkOuts);
     }
     @GetMapping("/checkoutdetail") //TODO param에 정보를 받을 checkoutdetail 번호를 입력받아야함, user의 토큰 권한도 확인
     public ResponseEntity<String> getCheckOut(@RequestParam Long checkoutId) {
