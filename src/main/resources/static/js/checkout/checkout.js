@@ -25,8 +25,8 @@ const customRequestInput = document.querySelector("#customRequest");
 const itemsTitleElem = document.querySelector("#itemsTitle");
 const itemsTotalElem = document.querySelector("#itemsTotal");
 const deliveryFeeElem = document.querySelector("#deliveryFee");
-const checkoutTotalElem = document.querySelector("#checkoutTotal");
-const checkoutButton = document.querySelector("#checkoutButton");
+const checkOutTotalElem = document.querySelector("#checkOutTotal");
+const checkOutButton = document.querySelector("#checkOutButton");
 
 const requestOption = {
   1: "직접 수령하겠습니다.",
@@ -45,7 +45,7 @@ addAllEvents();
 // html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 function addAllElements() {
   createNavbar();
-  insertcheckoutSummary();
+  insertCheckOutSummary();
   insertUserData();
 }
 
@@ -54,7 +54,7 @@ function addAllEvents() {
   subtitleCart.addEventListener("click", navigate("/cart"));
   searchAddressButton.addEventListener("click", searchAddress);
   requestSelectBox.addEventListener("change", handleRequestChange);
-  checkoutButton.addEventListener("click", doCheckout);
+  checkOutButton.addEventListener("click", doCheckOut);
 }
 
 // Daum 주소 API (사용 설명 https://postcode.map.daum.net/guide)
@@ -97,7 +97,7 @@ function searchAddress() {
 
 // TODO API로 교체 필요, 카트에서 구매하기 보낼때 selectedIds 정보도 받아야함(cartrepository.findbyslected(userid))
 // 페이지 로드 시 실행되며, 결제정보에 값을 삽입함.
-async function insertcheckoutSummary() {
+async function insertCheckOutSummary() {
 
   
   //ids 배열값 저장 > api에 들어가있는 principal로 userid 검증
@@ -116,7 +116,7 @@ async function insertcheckoutSummary() {
 
   // 구매할 아이템이 없다면 다른 페이지로 이동시킴
   const hasItemInCart = ids.length !== 0;
-  const hasItemToCheckout = selectedIds.length !== 0;
+  const hasItemToCheckOut = selectedIds.length !== 0;
 
   // 카트 아이템 개수가 아예 0 이어서 false라면 => true category중에서 아무곳으로 보냄
   if (!hasItemInCart) {
@@ -130,7 +130,7 @@ async function insertcheckoutSummary() {
   }
 
   // 선택제품이 없다면 확인
-  if (!hasItemToCheckout) {
+  if (!hasItemToCheckOut) {
     alert("구매할 제품이 없습니다. 장바구니에서 선택해 주세요.");
 
     //principal 통해서 id값 가져오기
@@ -158,12 +158,12 @@ async function insertcheckoutSummary() {
   itemsTitleElem.innerText = itemsTitle;
   itemsTotalElem.innerText = `${addCommas(itemsTotal)}원`;
 
-  if (hasItemToCheckout) {
+  if (hasItemToCheckOut) {
     deliveryFeeElem.innerText = `3,000원`;
-    checkoutTotalElem.innerText = `${addCommas(itemsTotal + 3000)}원`;
+    checkOutTotalElem.innerText = `${addCommas(itemsTotal + 3000)}원`;
   } else {
     deliveryFeeElem.innerText = `0원`;
-    checkoutTotalElem.innerText = `0원`;
+    checkOutTotalElem.innerText = `0원`;
   }
 
   receiverNameInput.focus();
@@ -212,7 +212,7 @@ function handleRequestChange(e) {
 }
 
 // 결제 진행
-async function doCheckout() {
+async function doCheckOut() {
   const receiverName = receiverNameInput.value;
   const receiverPhoneNumber = receiverPhoneNumberInput.value;
   const postalCode = postalCodeInput.value;
@@ -221,7 +221,7 @@ async function doCheckout() {
   const requestType = requestSelectBox.value;
   const customRequest = customRequestInput.value;
   const summaryTitle = itemsTitleElem.innerText;
-  const totalPrice = convertToNumber(checkoutTotalElem.innerText);
+  const totalPrice = convertToNumber(checkOutTotalElem.innerText);
   const selectedIds = await Api.get("/api/cart/selected",""); 
 
   if (!receiverName || !receiverPhoneNumber || !postalCode || !address2) {
@@ -253,7 +253,7 @@ async function doCheckout() {
   try {
     // 전체 주문을 등록함
     // 응답값에 id 포함되어야함
-    const checkoutData = await Api.post("/api/checkout", {
+    const checkOutData = await Api.post("/api/checkout", {
       summaryTitle,
       totalPrice,
       address,
@@ -261,7 +261,7 @@ async function doCheckout() {
       request,
     });
 
-    const checkoutId = checkoutData._id;
+    const checkOutId = checkOutData._id;
 
     //TODO 위에서 한번에 받은 정보를 통해 정리
     // 제품별로 주문아이템을 등록함
@@ -271,7 +271,7 @@ async function doCheckout() {
       const totalPrice = quantity * price;
 
       await Api.post("/api/checkoutitem", {
-        checkoutId,
+        checkOutId,
         itemId,
         quantity,
         totalPrice,
