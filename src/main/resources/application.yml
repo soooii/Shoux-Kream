@@ -32,6 +32,6 @@ cloud:
     s3:
       bucket: ${S3_SHOUXKREAM_BUCKET}
     region:
-      static: ap-northeast-2
+      static: ap-southeast-2
     stack:
-      auto-: false
+      auto: false

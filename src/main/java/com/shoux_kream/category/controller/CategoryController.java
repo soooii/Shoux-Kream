@@ -1,5 +1,7 @@
-package com.shoux_kream.category.entity;
+package com.shoux_kream.category.controller;
 
+import com.shoux_kream.category.dto.CategoryDto;
+import com.shoux_kream.category.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

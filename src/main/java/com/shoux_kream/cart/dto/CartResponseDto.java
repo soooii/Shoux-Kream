@@ -20,10 +20,10 @@ public class CartResponseDto {
     private int quantity;
 
     private String itemName;
-    private int itemSize;
-    private Long itemPrice;
+//    private int itemSize;
+    private double itemPrice;
 
-    private Long totalPrice;
+    private double totalPrice;
 
     public CartResponseDto(Cart cart) {
         this.cartId = cart.getId();
@@ -32,7 +32,7 @@ public class CartResponseDto {
         this.createdAt = cart.getCreatedAt();
         this.quantity = cart.getQuantity();
         this.itemName = cart.getItem().getTitle();
-        this.itemPrice = (long) cart.getItem().getPrice();
+        this.itemPrice = cart.getItem().getPrice();
         this.totalPrice = this.quantity * this.itemPrice;
     }
 

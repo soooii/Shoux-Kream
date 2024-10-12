@@ -1,5 +1,8 @@
-package com.shoux_kream.category.entity;
+package com.shoux_kream.category.service;
 
+import com.shoux_kream.category.entity.Category;
+import com.shoux_kream.category.dto.CategoryDto;
+import com.shoux_kream.category.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

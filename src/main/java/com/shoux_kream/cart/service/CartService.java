@@ -77,9 +77,9 @@ public class CartService {
 
 
     // 장바구니 삭제
-    // 장바구니 일괄 삭제
+    // 장바구니 선택 삭제
     @Transactional
-    public void deleteAllCarts(List<Long> cartIds) {
+    public void deleteCarts(List<Long> cartIds) {
         for (Long cartId : cartIds) {
             cartRepository.deleteById(cartId);
         }
@@ -89,6 +89,24 @@ public class CartService {
     @Transactional
     public void deleteCart(Long cartId) {
         cartRepository.deleteById(cartId);
+    }
+
+    // 로그인한 회원의 카트 아이템이 맞는지 확인
+    @Transactional(readOnly = true)
+    public boolean validateCartItem(Long cartId, String email) {
+        // 현재 로그인한 회원
+        Optional<User> user = userRepository.findByEmail(email);
+
+        // 장바구니 상품을 저장한 회원
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new NoSuchElementException("Cart not found"));
+        Long savedUser = cart.getUser().getId();
+
+        // 로그인한 회원과 저장한 회원이 다를 경우 false
+        if (!user.get().getId().equals(savedUser)) {
+            return false;
+        }
+        return true;
     }
 
 }

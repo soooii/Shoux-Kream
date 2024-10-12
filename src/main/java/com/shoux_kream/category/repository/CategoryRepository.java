@@ -1,5 +1,6 @@
-package com.shoux_kream.category.entity;
+package com.shoux_kream.category.repository;
 
+import com.shoux_kream.category.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
