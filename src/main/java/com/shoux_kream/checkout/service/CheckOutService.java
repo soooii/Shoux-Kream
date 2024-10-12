@@ -24,22 +24,29 @@ import java.util.List;
 public class CheckOutService {
     //TODO Mapper 이용 리팩토링 고려
 //    private final CheckOutMapper mapper = CheckOutMapper.INSTANCE;
-    private final CheckOutRepository checkoutRepository;
-    private final CheckOutItemRepository checkoutItemRepository;
+    private final CheckOutRepository checkOutRepository;
+    private final CheckOutItemRepository checkOutItemRepository;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
 
-    public Long createCheckout(CheckOutRequestDto checkOutRequestDto) {
-        return checkoutRepository.save(checkOutRequestDto.toEntity()).getId();
+    public CheckOutResponseDto createCheckout(Long userId, CheckOutRequestDto checkOutRequestDto) {
+        CheckOut checkOut = CheckOut.builder()
+                .summaryTitle(checkOutRequestDto.getSummaryTitle())
+                .totalPrice(checkOutRequestDto.getTotalPrice())
+                .address(checkOutRequestDto.getAddress().toEntity())
+                .request(checkOutRequestDto.getRequest())
+                .build();
+        checkOutRepository.save(checkOut);
+        return checkOut.toDto();
     }
 
     public List<CheckOut> getCheckoutsByUserId(Long userId) {
-        return checkoutRepository.findByUserId(userId);
+        return checkOutRepository.findByUserId(userId);
     }
 
     public void addCheckOutItem(CheckOutItemRequestDto checkoutItemRequestDto) {
-        CheckOut checkOut = checkoutRepository.findById(checkoutItemRequestDto.getUserId())
+        CheckOut checkOut = checkOutRepository.findById(checkoutItemRequestDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid checkout ID"));
 
         CheckOutItem checkOutItem = CheckOutItem.builder()
@@ -48,7 +55,11 @@ public class CheckOutService {
                 .totalPrice(checkoutItemRequestDto.getCheckOutItem().getTotalPrice())
                 .build();
 
-        checkoutItemRepository.save(checkOutItem);
+        checkOutItemRepository.save(checkOutItem);
+    }
+
+    public List<CheckOut> getCheckOuts(Long userId) {
+        return checkOutRepository.findByUserId(userId);
     }
 
     // More methods for updating, deleting checkout and checkout items
