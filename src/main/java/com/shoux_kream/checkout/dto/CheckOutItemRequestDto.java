@@ -11,7 +11,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class CheckOutItemRequestDto {
-    private Long userId; // Assuming you have a user entity
-    private CheckOutItem checkOutItem; // List of items to checkout
-    private String paymentMethod; // Payment method (e.g., credit card, PayPal)
+    private Long checkOutId;
+    private Long itemId; // Assuming you have a user entity
+    private int quantity; // List of items to checkout
+    private int totalPrice; // Payment method (e.g., credit card, PayPal)
 }
