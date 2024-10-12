@@ -97,7 +97,6 @@ public class CartApiContorller {
 
         cartService.deleteCart(cartId);
 
-        return ResponseEntity.ok()
-                .build();
+        return ResponseEntity.ok(cartId);
     }
 }
