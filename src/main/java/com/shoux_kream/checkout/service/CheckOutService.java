@@ -6,19 +6,15 @@ import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.checkout.entity.CheckOut;
 import com.shoux_kream.checkout.entity.CheckOutItem;
-import com.shoux_kream.checkout.repository.AddressRepository;
 import com.shoux_kream.checkout.repository.CheckOutItemRepository;
 import com.shoux_kream.checkout.repository.CheckOutRepository;
-import com.shoux_kream.item.entity.Item;
 import com.shoux_kream.item.repository.ItemRepository;
 import com.shoux_kream.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +25,8 @@ public class CheckOutService {
     private final CheckOutItemRepository checkOutItemRepository;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
 
+    @Transactional
     public CheckOutResponseDto createCheckout(Long userId, CheckOutRequestDto checkOutRequestDto) {
         CheckOut checkOut = CheckOut.builder()
                 .summaryTitle(checkOutRequestDto.getSummaryTitle())
@@ -47,6 +43,7 @@ public class CheckOutService {
         return checkOutRepository.findByUserId(userId);
     }
 
+    @Transactional
     public void addCheckOutItem(CheckOutItemRequestDto checkoutItemRequestDto) {
         CheckOutItem checkOutItem = CheckOutItem.builder()
                 .item(itemRepository.findById(checkoutItemRequestDto.getItemId()).orElseThrow(() -> new IllegalArgumentException("itemId not found")))
