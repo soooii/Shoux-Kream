@@ -40,9 +40,9 @@ VALUES
     ('admin@example.com', 'hashed_password_3', 'Admin User', 'admin', 'ADMIN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 카트 추가
-INSERT INTO cart (quantity, users_id, items_id)
+INSERT INTO cart (quantity, users_id, items_id, selected)
 VALUES
-    (2, 1, 1),
-    (3, 2, 2),
-    (1, 1, 3),
-    (4, 1, 2);
+    (2, 1, 1, true),
+    (3, 2, 2, true),
+    (1, 1, 3, false),
+    (4, 1, 2, true);
