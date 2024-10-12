@@ -9,10 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -43,4 +40,17 @@ public class JwtController {
                 .build()
         );
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        // 쿠키 삭제를 위한 설정
+        Cookie refreshTokenCookie = new Cookie("refreshToken", null); // 쿠키 값을 null로 설정
+        refreshTokenCookie.setHttpOnly(true); // HttpOnly 속성 설정
+        refreshTokenCookie.setMaxAge(0); // 쿠키 유효 기간을 0으로 설정
+        refreshTokenCookie.setPath("/");
+        response.addCookie(refreshTokenCookie); // 응답에 쿠키 추가
+
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -31,6 +31,7 @@ export const addCommas = (n) => {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+/*
 // 로그인 여부(토큰 존재 여부) 확인
 export const checkLogin = () => {
   const token = sessionStorage.getItem("token");
@@ -42,7 +43,7 @@ export const checkLogin = () => {
     // 로그인 후 다시 지금 페이지로 자동으로 돌아가도록 하기 위한 준비작업임.
     window.location.replace(`/login?previouspage=${pathname + search}`);
   }
-};
+};*/
 
 // 관리자 여부 확인
 export const checkAdmin = async () => {
@@ -148,3 +149,10 @@ export const randomPick = (items) => {
 
 // 주변 다른 파일 것도 여기서 일괄 export 함
 export { createNavbar } from "./navbar.js";
+
+
+
+
+
+
+

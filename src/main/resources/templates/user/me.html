@@ -11,6 +11,7 @@
 <p id="Id"></p>
 </body>
 
+<!--
 <script>
     window.onload = function() {
         const token = sessionStorage.getItem('accessToken');
@@ -29,5 +30,53 @@
                 window.location.href = '/login';
             });
     };
+</script>-->
+
+<!-- 토큰 재발급 받기 수정 중 -->
+<!--
+<script>
+    window.onload = function fetchUserData() {
+        const token = sessionStorage.getItem('accessToken');
+        console.log('Access Token:', token); // 토큰 확인
+        fetch('/api/users/me', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Error:', response.status);
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const newAccessToken = response.headers.get('Authorization');
+                console.log('New Access Token:', newAccessToken); // 새로운 토큰 확인
+                if (newAccessToken) {
+                    alert("새로운 Access Token이 발급되었습니다.");
+                    sessionStorage.setItem('accessToken', newAccessToken.split(' ')[1]);
+                    return fetchUserData();
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                console.log('User Data:', data); // 사용자 데이터 확인
+                document.getElementById('user-info').innerHTML = `<p>Your email: ${data.email}</p>`;
+                document.getElementById('Id').innerHTML = `<p>Your id: ${data.userId}</p>`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`오류가 발생했습니다: ${error.message}`);
+                window.location.href = '/users/login';
+            });
+    }
+-->
+
+
 </script>
+
+
 </html>
