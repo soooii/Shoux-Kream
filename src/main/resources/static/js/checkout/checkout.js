@@ -1,6 +1,6 @@
 import * as Api from "../api.js";
 import {
-  // checkLogin,
+  checkLogin,
   addCommas,
   convertToNumber,
   navigate,
@@ -37,8 +37,7 @@ const requestOption = {
   6: "직접 입력",
 };
 
-// TODO 유저 로그인 기능이 정리되면 해제
-// checkLogin();
+checkLogin();
 addAllElements();
 addAllEvents();
 
@@ -101,16 +100,7 @@ async function insertCheckOutSummary() {
 
   
   //ids 배열값 저장 > api에 들어가있는 principal로 userid 검증
-  const ids = await Api.get("/api/cart/summary",""); 
-  // console.log(`%c ids: ${ids.length} `, "color: #a25cd1;");
-  // for (const id of ids) {
-  //   var title = id.itemName;
-  //   var quantity = id.quantity;
-  //   var price = id.itemPrice;
-  //   console.log(`%c title: ${title} `, "color: #a25cd1;");
-  //   console.log(`%c quantity: ${quantity} `, "color: #a25cd1;");
-  //   console.log(`%c price: ${price} `, "color: #a25cd1;");
-  // }
+  const ids = await Api.get("/api/cart/summary","");
 
   const selectedIds = await Api.get("/api/cart/selected",""); 
 
@@ -213,8 +203,8 @@ function handleRequestChange(e) {
 
 // 결제 진행
 async function doCheckOut() {
-  const receiverName = receiverNameInput.value;
-  const receiverPhoneNumber = receiverPhoneNumberInput.value;
+  const recipientName = receiverNameInput.value;
+  const recipientPhone = receiverPhoneNumberInput.value;
   const postalCode = postalCodeInput.value;
   const address1 = address1Input.value;
   const address2 = address2Input.value;
@@ -246,8 +236,8 @@ async function doCheckOut() {
     postalCode,
     address1,
     address2,
-    receiverName,
-    receiverPhoneNumber,
+    recipientName,
+    recipientPhone,
   };
 
   try {
@@ -261,13 +251,15 @@ async function doCheckOut() {
       request,
     });
 
-    const checkOutId = checkOutData._id;
+    const checkOutId = checkOutData.id;
 
     //TODO 위에서 한번에 받은 정보를 통해 정리
     // 제품별로 주문아이템을 등록함
     for (const id of selectedIds) {
+      const itemId = id.itemId;
+      console.log(`%c itemId 콘솔 ${itemId}`)
       var quantity = id.quantity;
-      var price = id.price;
+      var price = id.itemPrice;
       const totalPrice = quantity * price;
 
       await Api.post("/api/checkoutitem", {
@@ -277,16 +269,9 @@ async function doCheckOut() {
         totalPrice,
       });
 
-      const cartId = id._Id;
-      // indexedDB에서 해당 제품 관련 데이터를 제거함
-      await Api.delete("/api/cart/"+cartId, cartId);
-      //이부분 indexed db용 삭제 스크립트라 없어도 됨
-      // await putToDb("checkout", "summary", (data) => {
-      //   data.ids = data.ids.filter((id) => id !== itemId);
-      //   data.selectedIds = data.selectedIds.filter((id) => id !== itemId);
-      //   data.itemsCount -= 1;
-      //   data.itemsTotal -= totalPrice;
-      // });
+      const cartId = id.cartId;
+      await Api.delete("/api/cart", cartId);
+
     }
 
 
