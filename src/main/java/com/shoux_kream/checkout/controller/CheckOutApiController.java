@@ -29,14 +29,13 @@ public class CheckOutApiController {
     private final UserService userService;
     private final CartService cartService;
 
-// TODO cart selected api 구현
+// cart selected api 구현
     @GetMapping("/cart/selected")
-    //TODO principal user는 userDetail의 user임!
+    //principal user는 userDetail의 user임!
     public ResponseEntity<List<CartResponseDto>> getSelectedCarts(@AuthenticationPrincipal User principal){
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        // TODO stream처리로 각자 titles, quantities, selectedid 배열 반환
         // principal의 unique값인 이메일로 특정
         String email = principal.getUsername();
         UserResponse userResponse = userService.getUser(email);
@@ -47,7 +46,7 @@ public class CheckOutApiController {
 
     @GetMapping("/users/userAddress")
     public ResponseEntity<List<UserAddressDto>> getUserAddress(@AuthenticationPrincipal User principal){
-        //TODO  recipientName, recipientPhone, postalCode, address1, address2 user에서 얻어오기
+        //recipientName, recipientPhone, postalCode, address1, address2 user에서 얻어오기
         String email = principal.getUsername();
         List<UserAddressDto> userAddresses = userService.getUserAddresses(email);
         return ResponseEntity.ok(userAddresses);

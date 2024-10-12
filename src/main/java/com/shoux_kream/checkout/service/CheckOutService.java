@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ public class CheckOutService {
         CheckOut checkOut = CheckOut.builder()
                 .summaryTitle(checkOutRequestDto.getSummaryTitle())
                 .totalPrice(checkOutRequestDto.getTotalPrice())
+                .user(userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("userId not found")))
                 .address(checkOutRequestDto.getAddress().toEntity())
                 .request(checkOutRequestDto.getRequest())
                 .build();
