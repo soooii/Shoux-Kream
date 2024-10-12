@@ -5,7 +5,7 @@ const checkoutDetailButton = document.querySelector("#checkoutDetailButton");
 const shoppingButton = document.querySelector("#shoppingButton");
 
 //TODO 유저 로그인 기능이 결합되면 정리할 것
-// checkLogin();
+checkLogin();
 addAllElements();
 addAllEvents();
 
@@ -16,6 +16,6 @@ function addAllElements() {
 
 // addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 function addAllEvents() {
-  checkoutDetailButton.addEventListener("click", navigate("/account/checkouts"));
+  checkoutDetailButton.addEventListener("click", navigate("/me/checkouts"));
   shoppingButton.addEventListener("click", navigate("/"));
 }

@@ -75,6 +75,8 @@ public class CheckOutApiController {
     await Api.post("/api/user/recentdelivery", data);
 
      */
+
+    //TODO 검증 필요!
     @PostMapping("/checkout") //TODO userId로 체크아웃 정보를 저장함, 저장한 entity를 id값을 포함해 반환
     public ResponseEntity<CheckOutResponseDto> processCheckOut(@AuthenticationPrincipal User principal,@RequestBody CheckOutRequestDto checkOutRequestDto) {
         String email = principal.getUsername();
@@ -111,13 +113,15 @@ public class CheckOutApiController {
         totalPrice,
       });
      */
+
+    //TODO 검증 필요!
     @PostMapping("/checkoutitem") //checkoutItem의 checkoutId로 checkout과 1:N연관관계를 맺음
-    public ResponseEntity<String> addCheckoutItem(@RequestBody CheckOutItemRequestDto checkOutItemRequestDto) {
+    public ResponseEntity addCheckoutItem(@RequestBody CheckOutItemRequestDto checkOutItemRequestDto) {
         try {
             checkOutService.addCheckOutItem(checkOutItemRequestDto);
-            return ResponseEntity.ok("주문 아이템이 정상적으로 등록되었습니다.");
+            return ResponseEntity.ok().body(checkOutItemRequestDto.getCheckOutId());
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("주문 아이템 등록 중 문제가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.status(500).body("주문 아이템 오류" + e.getMessage());
         }
     }
 }
