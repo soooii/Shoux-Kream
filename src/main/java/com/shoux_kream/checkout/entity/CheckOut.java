@@ -9,12 +9,14 @@ import com.shoux_kream.user.entity.UserAddress;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Table(name="check_out")
 @Entity
 @Getter
+@NoArgsConstructor
 public class CheckOut extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +29,10 @@ public class CheckOut extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id")
+
+    //TODO hibernate 오류 해결하기 위한 cascadetype all
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "addresses_id")
     private UserAddress address;
 
     private String request;
