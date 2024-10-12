@@ -46,6 +46,21 @@ public class CartApiContorller {
         return ResponseEntity.ok(carts);
     }
 
+    // 선택한 cart의 값 조회
+    @GetMapping("/selected")
+    //principal user는 userDetail의 user!
+    public ResponseEntity<List<CartResponseDto>> getSelectedCarts(@AuthenticationPrincipal User principal){
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        // principal의 unique값인 이메일로 특정
+        String email = principal.getUsername();
+        UserResponse userResponse = userService.getUser(email);
+        List<CartResponseDto> selectedCarts = cartService.selectedCarts(userResponse.getUserId());
+
+        return ResponseEntity.ok(selectedCarts);
+    }
+
     // 장바구니 수정 -> 장바구니에서 수량 및 옵션 수정으로 사용
     @PatchMapping("/edit/{cartId}")
     public ResponseEntity updateCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("cartId") Long cartId, @AuthenticationPrincipal User principal) {
@@ -97,7 +112,6 @@ public class CartApiContorller {
 
         cartService.deleteCart(cartId);
 
-        return ResponseEntity.ok()
-                .build();
+        return ResponseEntity.ok(cartId);
     }
 }

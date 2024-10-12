@@ -109,4 +109,11 @@ public class CartService {
         return true;
     }
 
+    public List<CartResponseDto> selectedCarts(Long userId) {
+        List<Cart> selectedCarts = cartRepository.findBySelectedTrueAndUserId(userId);
+
+        return selectedCarts.stream()
+                .map(cart -> new CartResponseDto(cart))
+                .collect(Collectors.toList());
+    }
 }
