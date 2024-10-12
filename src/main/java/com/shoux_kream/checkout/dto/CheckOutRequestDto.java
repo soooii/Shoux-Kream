@@ -1,14 +1,10 @@
 package com.shoux_kream.checkout.dto;
 
-import com.shoux_kream.cart.entity.Cart;
 import com.shoux_kream.checkout.entity.CheckOut;
-import com.shoux_kream.checkout.entity.Receipt;
-import jakarta.persistence.*;
-import lombok.Builder;
+import com.shoux_kream.user.dto.response.UserAddressDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +12,7 @@ import java.util.List;
 public class CheckOutRequestDto {
     private String summaryTitle;
     private int totalPrice;
-    private UserDeliveryInfoRequestDto address;
+    private UserAddressDto address;
     private String request;
 
     // Method to convert Request DTO to Entity
