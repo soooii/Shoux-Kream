@@ -1,6 +1,7 @@
 package com.shoux_kream.user.controller;
 
 import com.shoux_kream.user.dto.request.UserRequest;
+import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
 import com.shoux_kream.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -55,7 +58,12 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-
-
+    @GetMapping("/userAddress")
+    public ResponseEntity<List<UserAddressDto>> getUserAddress(@AuthenticationPrincipal User principal){
+        //recipientName, recipientPhone, postalCode, address1, address2 user에서 얻어오기
+        String email = principal.getUsername();
+        List<UserAddressDto> userAddresses = userService.getUserAddresses(email);
+        return ResponseEntity.ok(userAddresses);
+    }
 
 }

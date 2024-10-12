@@ -27,53 +27,10 @@ public class CheckOutApiController {
     
     private final CheckOutService checkOutService;
     private final UserService userService;
-    private final CartService cartService;
 
-// cart selected api 구현
-    @GetMapping("/cart/selected")
-    //principal user는 userDetail의 user임!
-    public ResponseEntity<List<CartResponseDto>> getSelectedCarts(@AuthenticationPrincipal User principal){
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        // principal의 unique값인 이메일로 특정
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
-        List<CartResponseDto> selectedCarts = cartService.selectedCarts(userResponse.getUserId());
-
-        return ResponseEntity.ok(selectedCarts);
-    }
-
-    @GetMapping("/users/userAddress")
-    public ResponseEntity<List<UserAddressDto>> getUserAddress(@AuthenticationPrincipal User principal){
-        //recipientName, recipientPhone, postalCode, address1, address2 user에서 얻어오기
-        String email = principal.getUsername();
-        List<UserAddressDto> userAddresses = userService.getUserAddresses(email);
-        return ResponseEntity.ok(userAddresses);
-    }
-    // 전체 주문 등록
     /*
-       const checkoutData = await Api.post("/api/checkout", {
-      summaryTitle,
-      totalPrice,
-      address,
-      //배송요청사항
-      request,
-    });
-    // 장바구니 또는 체크아웃 데이터 가져오기 (getFromDb 대체)
-
-    // 입력된 배송지정보를 유저db에 등록함
-    const data = {
-      phoneNumber: receiverPhoneNumber,
-      address: {
-        postalCode,
-        address1,
-        address2,
-      },
-    };
     //TODO 최근주소지 정보에 등록하는 API=> checkout에 통합
     await Api.post("/api/user/recentdelivery", data);
-
      */
 
     //TODO 검증 필요!
@@ -103,16 +60,6 @@ public class CheckOutApiController {
     public ResponseEntity<String> deleteCheckOut(@RequestParam Long checkoutId) {
         return ResponseEntity.ok("void");
     }
-
-    // 제품별 주문 아이템 등록
-    /*
-    await Api.post("/api/checkoutitem", {
-        checkoutId,
-        itemId,
-        quantity,
-        totalPrice,
-      });
-     */
 
     //TODO 검증 필요!
     @PostMapping("/checkoutitem") //checkoutItem의 checkoutId로 checkout과 1:N연관관계를 맺음
