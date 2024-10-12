@@ -1,4 +1,5 @@
-function checkLogin() {
+// 로그인/로그아웃 버튼 변경 함수
+function checkLoginButton() {
     const token = sessionStorage.getItem('accessToken');
 
     if (token) {
@@ -12,17 +13,24 @@ function checkLogin() {
     }
 }
 
-window.onload = checkLogin;
+window.onload = checkLoginButton;
 
-//로그아웃
+//로그인 상태 확인 함수는 useful-function.js 존재
+
+// 로그아웃
 function logout() {
+    const token = sessionStorage.getItem('accessToken');
+
     fetch('/api/users/logout', {
         method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}` // Authorization 헤더에 토큰 추가
+        }
     })
         .then(response => {
             if (response.ok) {
-                sessionStorage.removeItem('accessToken');
-                window.location.href = '/';
+                sessionStorage.removeItem('accessToken');  // accessToken 삭제
+                window.location.href = '/';  // 메인 페이지로 리디렉션
             } else {
                 console.error('로그아웃에 실패했습니다.');
             }
