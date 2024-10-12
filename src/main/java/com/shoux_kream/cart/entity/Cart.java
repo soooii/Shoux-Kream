@@ -18,6 +18,10 @@ public class Cart extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //TODO 선택정보 반영 => true값 외 false or null
+    @Column(name = "selected")
+    private boolean selected;
+
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
