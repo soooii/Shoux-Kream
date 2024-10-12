@@ -1,6 +1,7 @@
 package com.shoux_kream.user.controller;
 
 import com.shoux_kream.user.dto.request.UserRequest;
+import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
 import com.shoux_kream.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
+    //회원가입
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> signup(@RequestBody UserRequest userRequest) {
         Long userId = userService.signup(userRequest);
@@ -27,11 +31,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<String> me(@AuthenticationPrincipal User principal) {
-        return ResponseEntity.ok("my userEmail is " + principal.getUsername());
-    }
-
+    //계정 관리 페이지
     @PatchMapping("/me/profile")
     public ResponseEntity<UserResponse> updateProfile(@AuthenticationPrincipal User principal, @RequestBody UserRequest userRequest) {
         log.info(principal.getUsername());
@@ -39,6 +39,7 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
+    //회원 탈퇴
     @DeleteMapping("/me")
     public ResponseEntity<String> delete(@AuthenticationPrincipal User principal) {
         userService.deleteUser(principal.getUsername());
@@ -46,7 +47,23 @@ public class UserController {
     }
 
 
+    //마이페이지
+    @GetMapping({"/me"})
+    public ResponseEntity<UserResponse> myPage(@AuthenticationPrincipal User principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = principal.getUsername();
+        UserResponse userResponse = userService.getUser(email);
+        return ResponseEntity.ok(userResponse);
+    }
 
-
+    @GetMapping("/userAddress")
+    public ResponseEntity<List<UserAddressDto>> getUserAddress(@AuthenticationPrincipal User principal){
+        //recipientName, recipientPhone, postalCode, address1, address2 user에서 얻어오기
+        String email = principal.getUsername();
+        List<UserAddressDto> userAddresses = userService.getUserAddresses(email);
+        return ResponseEntity.ok(userAddresses);
+    }
 
 }
