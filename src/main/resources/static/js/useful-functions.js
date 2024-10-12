@@ -31,19 +31,19 @@ export const addCommas = (n) => {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-/*
+
 // 로그인 여부(토큰 존재 여부) 확인
 export const checkLogin = () => {
-  const token = sessionStorage.getItem("token");
+  const token = sessionStorage.getItem("accessToken");
   if (!token) {
     // 현재 페이지의 url 주소 추출하기
     const pathname = window.location.pathname;
     const search = window.location.search;
 
     // 로그인 후 다시 지금 페이지로 자동으로 돌아가도록 하기 위한 준비작업임.
-    window.location.replace(`/login?previouspage=${pathname + search}`);
+    window.location.replace(`/users/login?previouspage=${pathname + search}`);
   }
-};*/
+};
 
 // 관리자 여부 확인
 export const checkAdmin = async () => {
