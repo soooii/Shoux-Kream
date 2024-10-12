@@ -1,6 +1,6 @@
 import * as Api from "../api.js";
 import {
-  checkLogin,
+  // checkLogin,
   addCommas,
   convertToNumber,
   navigate,
@@ -98,21 +98,21 @@ function searchAddress() {
 // TODO API로 교체 필요, 카트에서 구매하기 보낼때 selectedIds 정보도 받아야함(cartrepository.findbyslected(userid))
 // 페이지 로드 시 실행되며, 결제정보에 값을 삽입함.
 async function insertcheckoutSummary() {
-  // const { ids, selectedIds, itemsTotal } = await getFromDb(
-  //   "checkout", 저장소 이름(클래스 이름)
-  //   "summary" (찾을 key값)
-  // );
-// getFromDb = async (storeName, key = "") => {
 
-
-  // get(endpoint, params = "")
-  //cart에서 dto로 List ids, list seletedid, itemstotal 받기
-
+  
   //ids 배열값 저장 > api에 들어가있는 principal로 userid 검증
-  const ids = await Api.get("/api/cart/summary/",); 
+  const ids = await Api.get("/api/cart/summary",""); 
+  // console.log(`%c ids: ${ids.length} `, "color: #a25cd1;");
+  // for (const id of ids) {
+  //   var title = id.itemName;
+  //   var quantity = id.quantity;
+  //   var price = id.itemPrice;
+  //   console.log(`%c title: ${title} `, "color: #a25cd1;");
+  //   console.log(`%c quantity: ${quantity} `, "color: #a25cd1;");
+  //   console.log(`%c price: ${price} `, "color: #a25cd1;");
+  // }
 
-  //백엔드에서 카트 아이템 가격들 받음
-  const selectedIds = await Api.get("/api/cart/selected",); 
+  const selectedIds = await Api.get("/api/cart/selected",""); 
 
   // 구매할 아이템이 없다면 다른 페이지로 이동시킴
   const hasItemInCart = ids.length !== 0;
@@ -144,9 +144,9 @@ async function insertcheckoutSummary() {
   // 선택된 id의 list값에서 for문으로 id개별 삽입, get으로 단품조회 => (경로, params)
   // TODO cart 전체조회에서 받은 값 가지고 가공
   for (const id of selectedIds) {
-    var title = id.title;
+    var title = id.itemName;
     var quantity = id.quantity;
-    var price = id.price;
+    var price = id.itemPrice;
     // 첫 제품이 아니라면, 다음 줄에 출력되도록 \n을 추가함
     if (itemsTitle) {
       itemsTitle += "\n";
@@ -172,7 +172,9 @@ async function insertcheckoutSummary() {
 //유저정보 받기
 async function insertUserData() {
   const userData = await Api.get("/api/users/userAddress");
-  const { recipientName, recipientPhone, postalCode, address1, address2 } = userData;
+
+  //TODO 일단 0번 데이터만 등록
+  const { id, recipientName, recipientPhone, postalCode, address1, address2 } = userData[0];
 
   // 만약 db에 데이터 값이 있었다면, 배송지정보에 삽입
   if (recipientName) {
@@ -220,7 +222,7 @@ async function doCheckout() {
   const customRequest = customRequestInput.value;
   const summaryTitle = itemsTitleElem.innerText;
   const totalPrice = convertToNumber(checkoutTotalElem.innerText);
-  const selectedIds = await Api.get("/api/cart/selected",); 
+  const selectedIds = await Api.get("/api/cart/selected",""); 
 
   if (!receiverName || !receiverPhoneNumber || !postalCode || !address2) {
     return alert("배송지 정보를 모두 입력해 주세요.");
@@ -239,6 +241,7 @@ async function doCheckout() {
     request = requestOption[requestType];
   }
 
+  // TODO 백엔드에서 이 address 주소 최근주소지 등록 await Api.post("/api/user/recentdelivery", data); 대체
   const address = {
     postalCode,
     address1,
@@ -286,17 +289,6 @@ async function doCheckout() {
       // });
     }
 
-    // 입력된 배송지정보를 유저db에 등록함
-    const data = {
-      phoneNumber: receiverPhoneNumber,
-      address: {
-        postalCode,
-        address1,
-        address2,
-      },
-    };
-    //TODO 최근주소지 정보에 등록하는 API로 변경 필요
-    await Api.post("/api/user/recentdelivery", data);
 
     alert("결제 및 주문이 정상적으로 완료되었습니다.\n감사합니다.");
     window.location.href = "/checkout/complete";
