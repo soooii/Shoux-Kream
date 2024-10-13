@@ -12,13 +12,18 @@ form.addEventListener('submit', function(e) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(loginData)
     })
-    .then(response => {
-        if (response.ok) {
-            console.log('로그인 성공')
-            window.location.href = '/';
-        } else {
-            alert('이메일 또는 비밀번호를 확인해주세요');}
+        .then(response =>{
+            if(response.ok){
+                return response.json();
+            }else{
+                alert('이메일 또는 비밀번호를 확인해주세요');
+            }
         })
-});
+        .then(data => {
+            console.log('로그인 성공');
+            sessionStorage.setItem('accessToken',data.accessToken);
+            window.location.href='/';
+        });
 
+});
 
