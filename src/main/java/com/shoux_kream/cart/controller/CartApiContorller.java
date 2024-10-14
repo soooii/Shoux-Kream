@@ -25,7 +25,15 @@ public class CartApiContorller {
 
     // 장바구니 담기
     @PostMapping("/add/{itemId}")
-    public ResponseEntity<Long> addCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("itemId") Long itemId) {
+    public ResponseEntity addCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("itemId") Long itemId, @AuthenticationPrincipal User principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = principal.getUsername();
+        UserResponse userResponse = userService.getUser(email);
+        if (!userResponse.getUserId().equals(cartRequestDto.getUserId())) {
+            return new ResponseEntity<String>("상품 추가 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
 
         Long cartId = cartService.addCart(cartRequestDto, itemId);
 
