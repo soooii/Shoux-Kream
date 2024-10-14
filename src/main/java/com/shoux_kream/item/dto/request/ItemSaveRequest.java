@@ -2,6 +2,7 @@ package com.shoux_kream.item.dto.request;
 
 import com.shoux_kream.item.entity.Item;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,7 +13,8 @@ public record ItemSaveRequest(
         String manufacturer,
         String shortDescription,
         String detailDescription,
-        String imageKey,
+//        String imageKey,
+        MultipartFile image,
         Integer inventory,
         Integer price,
         List<String> searchKeywords, // 배열로 받기 위해 List<String> 사용
