@@ -1,9 +1,9 @@
 import { randomId } from "/js/useful-functions.js";
 
 // aws-s3 사이트에서의 설정값들
-const s3BucketName = "shoux-kream-shoppingmall";
+const s3BucketName = "shoux-kream";
 const bucketRegion = "ap-northeast-2"; // 한국은 항상 ap-northeast-2임.
-const IdentityPoolId = "ap-southeast-2:a2b60400-2561-4b2a-8561-a4906b164ea7";
+const IdentityPoolId = "ap-northeast-2:5bae1e97-e5b9-4cfb-a24f-46a122938ddf";
 
 // aws 공식문서 그대로 가져옴
 AWS.config.update({

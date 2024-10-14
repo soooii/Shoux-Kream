@@ -101,10 +101,10 @@
         <p><strong>상세 설명:</strong> <span th:text="${item.detailDescription}">상세 설명 예시</span></p>
         <p><strong>가격:</strong> <span th:text="${item.price}">50000</span></p>
         <p><strong>재고:</strong> <span th:text="${item.inventory}">100</span></p>
-        <p><strong>이미지 경로:</strong> <span th:text="${item.imageKey}">이미지 경로/키</span></p>
+        <p><strong>이미지:</strong></p>
+        <img th:src="${item.imageKey}" alt="Item Image" />
         <p><strong>검색 키워드:</strong> <span th:text="${item.searchKeywords}">키워드1, 키워드2</span></p>
     </div>
 </section>
-
 </body>
 </html>
