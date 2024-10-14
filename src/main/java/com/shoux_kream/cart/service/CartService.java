@@ -118,6 +118,7 @@ public class CartService {
     // cart에서 구매하기로 선택한 상품 변경
     @Transactional
     public void updateCartSelected(List<Long> cartIds, Long userId) {
+        cartRepository.deselectOldItems(userId, cartIds);
         cartRepository.updateCartSelected(userId, cartIds);
     }
 }

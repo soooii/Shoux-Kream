@@ -18,7 +18,12 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     List<Cart> findByUserId(Long userId);
     Optional<Cart> findByItemAndUser(Item item, User user);
     List<Cart> findBySelectedTrueAndUserId(Long userId);
-    
+
+    // 고객이 장바구니로 다시 돌아와 상품을 변경할 경우 selected를 false로 변경
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("UPDATE Cart c SET c.selected = false WHERE c.user.id = :userId AND c.selected = true AND c.id NOT IN :cartIds")
+    void deselectOldItems(@Param("userId") Long userId, @Param("cartIds") List<Long> cartIds);
+
     // Cart에서 구매하기로 선택한 상품들 확인
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE Cart c SET c.selected = true WHERE c.user.id = :userId AND c.id IN :cartIds")
