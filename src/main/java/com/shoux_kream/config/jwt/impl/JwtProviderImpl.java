@@ -9,6 +9,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import static com.shoux_kream.config.jwt.AuthToken.AUTHORITIES_TOKEN_KEY;
 import static com.shoux_kream.config.jwt.UserConstants.ACCESS_TOKEN_TYPE_VALUE;
 import static com.shoux_kream.config.jwt.UserConstants.REFRESH_TOKEN_TYPE_VALUE;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
@@ -32,17 +34,17 @@ public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
     private String secret;
 
     @Value("${jwt.token.access-expires}")
-    private long accessExpires;
+    private Long accessExpires;
 
     @Value("${jwt.token.refresh-expires}")
-    private long refreshExpires;
+    private Long refreshExpires;
 
     private Key key;
 
     @PostConstruct
     public void init() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
-        this.key= Keys.hmacShaKeyFor(keyBytes);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     @Override
@@ -50,11 +52,13 @@ public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
         return new AuthTokenImpl(token, key);
     }
 
+
     @Override
     public Authentication getAuthentication(AuthTokenImpl authToken) {
-        if(authToken.validate()){
-            Claims claims = authToken.getDate().getClaims();
-            if(!claims.get("type").equals(ACCESS_TOKEN_TYPE_VALUE)){
+        if (authToken.validate()) {
+            Claims claims = authToken.getDate();
+
+            if (!claims.get("type").equals(ACCESS_TOKEN_TYPE_VALUE)) {
                 throw new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED,
                         "Invalid token type"
@@ -66,42 +70,28 @@ public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
                             AUTHORITIES_TOKEN_KEY,
                             String.class)
                     ));
-
             User principal =
-                    new User(claims.getSubject(), "", authorities); // 사용자 정보 객체 생성
+                    new User(claims.getSubject(), "", authorities);
 
-            return new UsernamePasswordAuthenticationToken(principal,authToken,authorities);}
-        else {
+            return new UsernamePasswordAuthenticationToken(
+                    principal,
+                    authToken,
+                    authorities
+            );
+        } else {
             throw new JwtException("token Error");
         }
     }
 
     @Override
     public AuthTokenImpl createAccessToken(String sub, Role role, Map<String, Object> claims) {
-        claims.put("jti",UUID.randomUUID().toString());
         claims.put("type", ACCESS_TOKEN_TYPE_VALUE);
-        return new AuthTokenImpl(
-                sub,
-                role,
-                key,
-                new DefaultClaims(claims),
-                new Date(System.currentTimeMillis() + accessExpires)
-        );
+        return new AuthTokenImpl(sub, role, key, new DefaultClaims(claims), new Date(System.currentTimeMillis() + accessExpires));
     }
-
-
-
 
     @Override
     public AuthTokenImpl createRefreshToken(String sub, Role role, Map<String, Object> claims) {
-        claims.put("jti",UUID.randomUUID().toString());
         claims.put("type", REFRESH_TOKEN_TYPE_VALUE);
-        return new AuthTokenImpl(
-                sub,
-                role,
-                key,
-                new DefaultClaims(claims),
-                new Date(System.currentTimeMillis() + refreshExpires)
-        );
+        return new AuthTokenImpl(sub, role, key, new DefaultClaims(claims), new Date(System.currentTimeMillis() + refreshExpires));
     }
 }

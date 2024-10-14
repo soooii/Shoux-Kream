@@ -150,6 +150,24 @@ export const randomPick = (items) => {
 // 주변 다른 파일 것도 여기서 일괄 export 함
 export { createNavbar } from "./navbar.js";
 
+// AccessToken 재발급 함수
+export async function fetchNewAccessToken() {
+  const response = await fetch('/api/users/refresh', {
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    throw new Error('토큰 재발급에 실패했습니다.');
+  }
+
+  const data = await response.json();
+  console.log('Response json', data);
+  const newAccessToken = data.accessToken;
+  sessionStorage.setItem('accessToken', newAccessToken);
+  console.log('New Access Token:', newAccessToken);
+}
+
+
 
 
 
