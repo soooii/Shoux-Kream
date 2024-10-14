@@ -15,6 +15,9 @@ spring:
   h2:
     console:
       enabled: true
+  sql:
+    init:
+      encoding: UTF-8
 
 # 환경변수 설정으로 세팅
 jwt:

@@ -39,8 +39,6 @@ async function addImageCardsToSlider() {
       "beforeend",
       `
       <div class="card" id="category-${name}">
-          <div class="notification">
-          </div>
           <div class="card-image">
             <figure class="image">
               <img
