@@ -21,7 +21,7 @@ public class UserViewController {
 
     @GetMapping("/me")
     public String getUserPage() {
-        return "user/me";
+        return "user/mypage-main";
     }
 
 }
