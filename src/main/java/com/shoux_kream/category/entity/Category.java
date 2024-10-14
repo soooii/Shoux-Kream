@@ -15,19 +15,12 @@ import java.time.LocalDateTime;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
-    private String description;
-
-    @Column(nullable = false)
-    private String themeClass;
-
-    @Column(nullable = false)
-    private String imageKey;     // 이미지 키 (AWS S3)
+    private String imageUrl; //이미지 URL 추가
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -35,17 +28,14 @@ public class Category {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Category(String name, String description, String themeClass, String imageKey) {
+    public Category(String name, String imageUrl) {
         this.name = name;
-        this.description = description;
-        this.themeClass = themeClass;
-        this.imageKey = imageKey;
+        this.imageUrl = imageUrl;
     }
 
 
-    public void updateCategory(String name, String description, String themeClass) { // 카테고리 정보 수정 메서드
+    public void updateCategory(String name, String imageUrl) { // 카테고리 정보 수정 메서드
         this.name = name;
-        this.description = description;
-        this.themeClass = themeClass;
+        this.imageUrl = imageUrl;
     }
 }

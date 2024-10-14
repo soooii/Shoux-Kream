@@ -1,13 +1,15 @@
 package com.shoux_kream.category.service;
 
-import com.shoux_kream.category.entity.Category;
 import com.shoux_kream.category.dto.CategoryDto;
+import com.shoux_kream.category.entity.Category;
 import com.shoux_kream.category.repository.CategoryRepository;
-import jakarta.transaction.Transactional;
+import com.shoux_kream.config.s3.S3Uploader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,20 +20,24 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private S3Service s3Service; // S3 이미지 업로드 서비스
+    private S3Uploader s3Uploader; // S3Uploader 주입;
 
     @Transactional // 카테고리 추가
     public CategoryDto createCategory(CategoryDto categoryDto, MultipartFile imageFile) {
         // 이미지 파일을 S3에 업로드하고 이미지 키를 받아옴
-        String imageKey = s3Service.uploadFile(imageFile, "category");
-        categoryDto.setImageKey(imageKey); // DTO에 이미지 키 설정
+        try {
+            // 이미지 업로드 로직
+            String imageUrl = s3Uploader.upload(imageFile, "categories");
+            categoryDto.setImageUrl(imageUrl);
 
-        // DTO -> 엔티티로 변환 후 저장
-        Category category = categoryDto.toEntity();
-        Category savedCategory = categoryRepository.save(category);
+            Category category = categoryDto.toEntity();
+            Category savedCategory = categoryRepository.save(category);
 
-        // 저장된 카테고리를 DTO로 변환하여 반환
-        return new CategoryDto(savedCategory);
+            return new CategoryDto(savedCategory);
+        } catch (IOException e) {
+            // 예외 처리 로직
+            throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e);
+        }
     }
 
     @Transactional // 카테고리 전체 조회
@@ -44,20 +50,20 @@ public class CategoryService {
 
 
     @Transactional // 카테고리 수정
-    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
+    public CategoryDto updateCategory(Long id, CategoryDto categoryDto, MultipartFile imageFile) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
 
-        // 엔티티의 필드 업데이트
-        category.updateCategory(
-                categoryDto.getName(),
-                categoryDto.getDescription(),
-                categoryDto.getThemeClass()
-        );
+        try {
+            String imageUrl = s3Uploader.upload(imageFile, "categories"); // 이미지 업로드
+            category.updateCategory(categoryDto.getName(), imageUrl); // 이름과 이미지 URL로 카테고리 업데이트
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e); // 예외 처리
+        }
 
-        // 수정된 카테고리를 DTO로 변환하여 반환
         return new CategoryDto(category);
     }
+
 
     @Transactional // 카테고리 삭제
     public void deleteCategory(Long id) {

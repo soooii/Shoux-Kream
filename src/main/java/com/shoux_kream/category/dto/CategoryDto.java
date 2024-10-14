@@ -11,20 +11,16 @@ import lombok.Setter;
 public class CategoryDto {
     private Long id;
     private String name;
-    private String description;
-    private String themeClass; // 테마 클래스
-    private String imageKey;     // 이미지 키 (AWS S3)
+    private String imageUrl;
 
 
     public CategoryDto(Category category) { //엔티티 -> DTO로 변환하는 생성자
         this.id = category.getId();
         this.name = category.getName();
-        this.description = category.getDescription();
-        this.themeClass = category.getThemeClass();
-        this.imageKey = category.getImageKey();
+        this.imageUrl = category.getImageUrl();
     }
 
     public Category toEntity() { //DTO -> 엔티티로 변환하는 메서드
-        return new Category(name, description, themeClass, imageKey);
+        return new Category(name, imageUrl);
     }
 }
