@@ -50,8 +50,8 @@ public class ItemController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/item-add")
     public ResponseEntity<ItemResponse> saveItem(@ModelAttribute ItemSaveRequest itemSaveRequest,
-                                                 @RequestParam("imageKey") MultipartFile imageKey) throws IOException {
-        ItemResponse savedItemResponse = itemService.save(itemSaveRequest, imageKey);
+                                                 @RequestParam("imageKey") MultipartFile imageFile) throws IOException {
+        ItemResponse savedItemResponse = itemService.save(itemSaveRequest, imageFile);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedItemResponse);
     }
