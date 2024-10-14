@@ -4,7 +4,7 @@ let priceCheck;
 
 window.onload = function () {
     const token = sessionStorage.getItem('accessToken');
-    if (token == null) {
+    if (token === null) {
         window.location.href = '/users/login';
         alert('로그인이 필요합니다.');
     }
@@ -36,7 +36,7 @@ window.onload = function () {
             // 결제정보를 위한 변수 초기화
             let totalQuantity = 0;
             let totalPrice = 0;
-            let deliveryFee = 3000; // 배송비 (고정값 혹은 동적으로 설정할 수 있음)
+            let deliveryFee = 0; // 배송비 (고정값 혹은 동적으로 설정할 수 있음)
 
             data.forEach((item) => {
                 const id = item.cartId;
@@ -136,23 +136,23 @@ window.onload = function () {
             function updateOrderSummary() {
                 let selectedItemsTotalQuantity = 0;
                 let selectedItemsTotalPrice = 0;
-                let checkedDelivery = true;
 
                 const checkboxes = cartContainer.querySelectorAll('input[type="checkbox"]');
                 checkboxes.forEach((checkbox, index) => {
                     const itemPrice = data[index].totalPrice;
                     const itemQuantity = data[index].quantity;
+                    const allSelectCheckbox = document.getElementById('allSelectCheckbox');
 
                     if (checkbox.checked) {
                         selectedItemsTotalQuantity += itemQuantity;
                         selectedItemsTotalPrice += itemPrice;
-                        checkedDelivery = false;
+                        deliveryFee = 3000;
+                    } else {
+                        deliveryFee = 0; // 선택된 상품이 없을 경우 배달비 0원
+                        allSelectCheckbox.checked = false; // 전체선택 체크박스 해제
                     }
                 });
 
-                if (checkedDelivery) {
-                    deliveryFee = 0;
-                }
 
                 // 결제정보 업데이트
                 document.getElementById('productsCount').innerText = selectedItemsTotalQuantity + '개';
@@ -187,7 +187,7 @@ const editButton = document.getElementById('edit-submit-btn');
 if (editButton) {
     editButton.addEventListener('click', event => {
         const token = sessionStorage.getItem('accessToken');
-        if (token == null) {
+        if (token === null) {
             window.location.href = '/cart/summary';
         }
         // 실제 수정 요청 보내기
@@ -216,7 +216,7 @@ const deleteButton = document.getElementById('delete-btn');
 if (deleteButton) {
     deleteButton.addEventListener('click', event => {
         const token = sessionStorage.getItem('accessToken');
-        if (token == null) {
+        if (token === null) {
             window.location.href = '/cart/summary';
         }
         // 실제 삭제 요청 보내기
@@ -242,7 +242,7 @@ const partialDeleteLabel = document.getElementById('partialDeleteLabel');
 if (partialDeleteLabel) {
     partialDeleteLabel.addEventListener('click', event => {
         const token = sessionStorage.getItem('accessToken');
-        if (token == null) {
+        if (token === null) {
             window.location.href = '/cart/summary';
         }
         // 선택된 체크박스
@@ -252,7 +252,7 @@ if (partialDeleteLabel) {
             cartIds.push(checkbox.value); // 각 체크박스의 value 값을 cartIds 리스트에 추가
         });
 
-        if (cartIds.length == 0) {
+        if (cartIds.length === 0) {
             alert('삭제할 상품을 선택하세요.');
             return;
         }
