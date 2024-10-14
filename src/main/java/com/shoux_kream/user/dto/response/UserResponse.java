@@ -9,4 +9,5 @@ import lombok.*;
 public class UserResponse {
     private Long userId;
     private String email;
+    private String name;
 }
