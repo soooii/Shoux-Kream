@@ -15,6 +15,9 @@ spring:
   h2:
     console:
       enabled: true
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
 
 # 환경변수 설정으로 세팅
 jwt:

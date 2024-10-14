@@ -13,10 +13,10 @@ public record ItemSaveRequest(
         String shortDescription,
         String detailDescription,
         String imageKey,
-        int inventory,
-        int price,
+        Integer inventory,
+        Integer price,
         List<String> searchKeywords, // 배열로 받기 위해 List<String> 사용
         Long itemInfoId, // ItemInfo의 ID만 받도록 수정
-        int size
+        Integer size
 ) {
 }

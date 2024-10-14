@@ -13,8 +13,8 @@ public record ItemResponse(
         String shortDescription,
         String detailDescription,
         String imageKey,
-        int inventory,
-        int price,
+        Integer inventory,
+        Integer price,
         String searchKeywords
 ) {
     public static ItemResponse fromEntity(Item item) {

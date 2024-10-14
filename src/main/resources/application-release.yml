@@ -19,6 +19,9 @@ spring:
         web-allow-others: true
       enabled: true
       # 시스템 설정이라 바꿔줘야함
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
 
   config:
       activate:
