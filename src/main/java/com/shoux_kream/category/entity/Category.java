@@ -26,16 +26,20 @@ public class Category {
     @Column(nullable = false)
     private String themeClass;
 
+    @Column(nullable = false)
+    private String imageKey;     // 이미지 키 (AWS S3)
+
     @CreatedDate
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Category(String name, String description, String themeClass) {
+    public Category(String name, String description, String themeClass, String imageKey) {
         this.name = name;
         this.description = description;
         this.themeClass = themeClass;
+        this.imageKey = imageKey;
     }
 
 

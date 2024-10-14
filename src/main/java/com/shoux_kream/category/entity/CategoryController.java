@@ -3,6 +3,7 @@ package com.shoux_kream.category.entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,10 +16,14 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping //카테고리 추가
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
-        CategoryDto createdCategory = categoryService.createCategory(categoryDto);
+    public ResponseEntity<CategoryDto> createCategory(
+            @RequestPart("category") CategoryDto categoryDto,
+            @RequestPart("image") MultipartFile imageFile) { // 이미지 파일
+
+        CategoryDto createdCategory = categoryService.createCategory(categoryDto, imageFile);
         return ResponseEntity.ok(createdCategory);
     }
+
     @GetMapping //카테고리 목록 조회
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
          List<CategoryDto> categories = categoryService.getAllCategories();
@@ -29,6 +34,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> updateCategory(
             @PathVariable Long id,
             @RequestBody CategoryDto categoryDto) {
+
         CategoryDto updatedCategory = categoryService.updateCategory(id, categoryDto);
         return ResponseEntity.ok(updatedCategory);
     }

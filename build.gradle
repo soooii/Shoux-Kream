@@ -28,6 +28,11 @@ repositories {
 }
 
 dependencies {
+	// AWS S3 관련 의존성
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.300'
+	// 추가적으로 필요할 수 있는 AWS Common dependencies
+	implementation 'com.amazonaws:aws-java-sdk-core:1.12.524'
+
 	// RESTful API를 포함한 웹 애플리케이션을 개발하기 위한 Spring Boot 스타터
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
