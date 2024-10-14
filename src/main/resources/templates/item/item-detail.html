@@ -102,7 +102,7 @@
         <p><strong>가격:</strong> <span th:text="${item.price}">50000</span></p>
         <p><strong>재고:</strong> <span th:text="${item.inventory}">100</span></p>
         <p><strong>이미지:</strong></p>
-        <img th:src="'https://shoux-kream.s3.ap-northeast-2.amazonaws.com/item-images/' + ${item.imageKey}" alt="Item Image" />
+        <img th:src="${item.imageKey}" alt="Item Image" />
         <p><strong>검색 키워드:</strong> <span th:text="${item.searchKeywords}">키워드1, 키워드2</span></p>
     </div>
 </section>
