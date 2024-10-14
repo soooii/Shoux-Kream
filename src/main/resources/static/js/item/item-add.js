@@ -66,7 +66,7 @@ async function handleSubmit(e) {
     return alert("빈 칸 및 0이 없어야 합니다.");
   }
 
-  if (image && image.size > 3e6) {
+  if (image.size > 3e6) {
       return alert("사진은 최대 2.5MB 크기까지 가능합니다.");
   }
 
@@ -74,10 +74,12 @@ async function handleSubmit(e) {
 //  const index = categorySelectBox.selectedIndex;
 //  const categoryName = categorySelectBox[index].text;
 //  let categoryId = categorySelectBox.value === "default" ? null : categorySelectBox.value;
-
   try {
     console.log("이미지 업로드 시작...");
-    const imageKey = await addImageToS3(imageInput);
+    const albumName = "album";  // 여기에 S3에 저장될 폴더 이름을 지정
+    const imageKey = await addImageToS3(imageInput, albumName);
+//    const imageKey = await addImageToS3(imageInput, categoryName);
+//    const imageKey = await addImageToS3(imageInput);
     const data = {
       title,
 //      categoryId,
@@ -91,7 +93,7 @@ async function handleSubmit(e) {
     };
 
     console.log("데이터 전송 시작...");
-    await Api.post("/item", data);
+    await Api.post("/item/item-add", data);
 
     alert(`정상적으로 ${title} 제품이 등록되었습니다.`);
 
@@ -110,31 +112,13 @@ async function handleSubmit(e) {
 }
 
 // 사용자가 사진을 업로드했을 때, 파일 이름이 화면에 나타나도록 함.
-async function handleImageUpload() {
-    const fileInput = document.getElementById("imageInput");
-    const file = fileInput.files[0];
-
-    if (!file) {
-        alert("이미지를 선택하세요!");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("data", file);
-
-    try {
-        const response = await fetch("/s3/image/upload", {
-            method: "POST",
-            body: formData
-        });
-        if (!response.ok) throw new Error("이미지 업로드 실패");
-
-        const imageUrl = await response.text();
-        console.log("이미지 업로드 성공:", imageUrl);
-        return imageUrl;
-    } catch (error) {
-        console.error("이미지 업로드 오류:", error);
-    }
+function handleImageUpload() {
+  const file = imageInput.files[0];
+  if (file) {
+    fileNameSpan.innerText = file.name;
+  } else {
+    fileNameSpan.innerText = "";
+  }
 }
 
 // 선택할 수 있는 카테고리 종류를 api로 가져와서, 옵션 태그를 만들어 삽입함.
