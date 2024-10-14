@@ -27,7 +27,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> signup(@RequestBody UserRequest userRequest) {
         Long userId = userService.signup(userRequest);
-        UserResponse userResponse = new UserResponse(userId, userRequest.getEmail());
+        UserResponse userResponse = new UserResponse(userId, userRequest.getEmail(), userRequest.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
