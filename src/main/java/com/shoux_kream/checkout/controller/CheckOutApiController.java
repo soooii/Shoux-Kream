@@ -99,6 +99,8 @@ public class CheckOutApiController {
         //TODO        request의 cookies token값의 ROLE이 admin이 아니라면 작동 X
         //TODO role 어드민일때! 사용가능한 mapping
         // 그냥 모두 조회
+
+        // TODO role authorities => admin일때
         String email = principal.getUsername();
         UserResponse userResponse = userService.getUser(email);
         List<CheckOutResponseDto> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
@@ -112,6 +114,8 @@ public class CheckOutApiController {
         //service에서 email로 userid를 체크해서 update함
         CheckOutResponseDto checkOutResponseDto = checkOutService.updateCheckOut(detailId, userAddressDto);
         return ResponseEntity.ok(checkOutResponseDto);
+
+        //TODO patch => 업데이트 방법? update
     }
     @DeleteMapping("/admin/checkout/{detailId}") //TODO param에 checkout 번호를 입력받아야함, user의 토큰 권한도 확인
     public ResponseEntity<Long> deleteCheckOutByAdmin(@AuthenticationPrincipal User principal, @PathVariable("detailId") Long detailId) {
