@@ -21,7 +21,7 @@ jwt:
   secret: ${JWT_SECRET_KEY} #base64 32byte
   token:
     refresh-expires: 7200000 #2시간
-    access-expires: 7200000
+    access-expires: 1800000  #30분
 
 # S3
 cloud:
