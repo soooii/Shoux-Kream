@@ -60,4 +60,8 @@ public class CheckOut extends BaseEntity {
                 .request(this.request)
                 .build();
     }
+
+    public void updateAddress(UserAddress address){
+        this.address = address;
+    }
 }

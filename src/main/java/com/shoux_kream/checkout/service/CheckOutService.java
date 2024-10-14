@@ -1,6 +1,7 @@
 package com.shoux_kream.checkout.service;
 
 //import com.shoux_kream.checkout.CheckOutMapper;
+import com.shoux_kream.cart.dto.CartResponseDto;
 import com.shoux_kream.checkout.dto.CheckOutItemRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
@@ -9,13 +10,17 @@ import com.shoux_kream.checkout.entity.CheckOutItem;
 import com.shoux_kream.checkout.repository.CheckOutItemRepository;
 import com.shoux_kream.checkout.repository.CheckOutRepository;
 import com.shoux_kream.item.repository.ItemRepository;
+import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+
+//TODO orelseThrow globalexception 공통처리
 @Service
 @RequiredArgsConstructor
 public class CheckOutService {
@@ -26,6 +31,7 @@ public class CheckOutService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
+    //TODO Transactional을 언제, 왜, 어떻게 써야할까요?
     @Transactional
     public CheckOutResponseDto createCheckout(Long userId, CheckOutRequestDto checkOutRequestDto) {
         CheckOut checkOut = CheckOut.builder()
@@ -39,10 +45,6 @@ public class CheckOutService {
         return checkOut.toDto();
     }
 
-    public List<CheckOut> getCheckoutsByUserId(Long userId) {
-        return checkOutRepository.findByUserId(userId);
-    }
-
     @Transactional
     public void addCheckOutItem(CheckOutItemRequestDto checkoutItemRequestDto) {
         CheckOutItem checkOutItem = CheckOutItem.builder()
@@ -54,8 +56,29 @@ public class CheckOutService {
         checkOutItemRepository.save(checkOutItem);
     }
 
-    public List<CheckOut> getCheckOuts(Long userId) {
-        return checkOutRepository.findByUserId(userId);
+    public List<CheckOutResponseDto> getCheckOuts(Long userId) {
+        List<CheckOut> checkOuts = checkOutRepository.findByUserId(userId);
+        return checkOuts.stream()
+                .map(checkOut -> checkOut.toDto())
+                .collect(Collectors.toList());
+    }
+
+    public CheckOutResponseDto updateCheckOut(Long detailId, UserAddressDto userAddressDto) {
+        CheckOut checkOut =  checkOutRepository.findById(detailId).orElseThrow(() -> new IllegalArgumentException("checkoutId not found"));
+        checkOut.updateAddress(userAddressDto.toEntity());
+        checkOutRepository.save(checkOut);
+        return  checkOut.toDto();
+    }
+
+    public CheckOutResponseDto getCheckOutDetail(Long detailId) {
+        CheckOut checkOut = checkOutRepository.findById(detailId).orElseThrow(() -> new IllegalArgumentException("checkoutId not found"));
+        return checkOut.toDto();
+    }
+
+    public Long deleteCheckOut(String email, Long detailId) {
+        CheckOut checkOut = checkOutRepository.findByUserAndId(userRepository.findByEmail(email).orElseThrow(), detailId);
+        checkOutRepository.delete(checkOut);
+        return detailId;
     }
 
     // More methods for updating, deleting checkout and checkout items
