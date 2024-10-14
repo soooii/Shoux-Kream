@@ -18,6 +18,10 @@ public class Cart extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //TODO 선택정보 반영 => true값 외 false or null
+    @Column(name = "selected")
+    private boolean selected;
+
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
@@ -32,6 +36,11 @@ public class Cart extends BaseEntity {
     public Cart (User user, Item item, int quantity) {
         this.user = user;
         this.item = item;
+        this.quantity = quantity;
+    }
+
+    // 수량 변경
+    public void updateQuantity(int quantity) {
         this.quantity = quantity;
     }
 }

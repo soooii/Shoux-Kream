@@ -19,33 +19,29 @@ import java.util.Optional;
 @Slf4j
 public class AuthTokenImpl implements AuthToken<Claims> {
     private final String token;
-    private final Key key; //jwt 토큰 암호화 키
+    private final Key key;
 
-    public AuthTokenImpl(String sub,
-                         Role role,
-                         Key key,
-                         Claims claims,
-                         Date expiredDate
-    ) {
-        this.key = key;
-        this.token = createJwtToken(sub,role,claims,expiredDate).get();
-    }
-
-    private Optional<String> createJwtToken(
+    public AuthTokenImpl(
             String sub,
             Role role,
-            Map<String, Object> claimsMap,
+            Key key,
+            Claims claims,
             Date expiredDate
-    ){
-        DefaultClaims claims = new DefaultClaims(claimsMap);
-        claims.put(AUTHORITIES_TOKEN_KEY, role);
+    ) {
+        this.key = key;
+        this.token = createJwtToken(sub, role, claims, expiredDate).get();
+    }
 
-        return Optional.ofNullable(Jwts.builder()
-                .setSubject(sub)
-                .addClaims(claims)
-                .signWith(SignatureAlgorithm.HS256, key)
-                .setExpiration(expiredDate)
-                .compact()
+    private Optional<String> createJwtToken(String sub, Role role, Map<String, Object> claims, Date expiredDate) {
+        DefaultClaims defaultClaims = new DefaultClaims(claims);
+        defaultClaims.put(AUTHORITIES_TOKEN_KEY, role);
+        return Optional.ofNullable(
+                Jwts.builder()
+                        .setSubject(sub)
+                        .addClaims(claims)
+                        .signWith(key, SignatureAlgorithm.HS256)
+                        .setExpiration(expiredDate)
+                        .compact()
         );
     }
 
@@ -55,25 +51,33 @@ public class AuthTokenImpl implements AuthToken<Claims> {
     }
 
     @Override
-    public Claims getDate(){
-        try{
-            return Jwts
-                    .parserBuilder()
+    public Claims getDate() {
+        try {
+            return Jwts.parserBuilder()
                     .setSigningKey(key.getEncoded())
                     .build()
                     .parseClaimsJws(token).getBody();
-        }catch(SecurityException e){
+        } catch (SecurityException e) {
             log.warn("Invalid JWT signature");
-        }catch (MalformedJwtException e){
+        } catch (MalformedJwtException e) {
             log.warn("Invalid JWT token");
-        }catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             log.warn("Expired JWT token");
         } catch (UnsupportedJwtException e) {
             log.warn("Unsupported JWT Token");
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             log.warn("JWT token compact of handler are invalid");
         }
+        return null;
+    }
 
+    public Role getRole() {
+        Claims claims = getDate();
+        if (claims != null) {
+            String roleValue = claims.get(AUTHORITIES_TOKEN_KEY, String.class); // String으로 가져옴
+            return Role.valueOf(roleValue);
+        }
         return null;
     }
 }
+

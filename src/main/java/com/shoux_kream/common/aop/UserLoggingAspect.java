@@ -2,7 +2,7 @@ package com.shoux_kream.common.aop;
 
 
 import com.shoux_kream.admin.entity.UserLog;
-import com.shoux_kream.admin.repository.UserLogRepositry;
+import com.shoux_kream.admin.repository.UserLogRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class UserLoggingAspect {
 
-    private final UserLogRepositry userLogRepositry;
+    private final UserLogRepository userLogRepository;
 
     @Pointcut("execution(* com.shoux_kream..controller..*(..))")
     public void userLoggerPointCut() {}
@@ -52,7 +52,7 @@ public class UserLoggingAspect {
                         .build();
 
         // 1. 요청값을 저장한다.
-        UserLog savedLog = userLogRepositry.save(adminRequest);
+        UserLog savedLog = userLogRepository.save(adminRequest);
 
         try {
             Object result = proceedingJoinPoint.proceed();
@@ -69,14 +69,14 @@ public class UserLoggingAspect {
             savedLog.setResponseTime(LocalDateTime.now());
 
             // 2. 응답(성공)값을 업데이트 한다.
-            userLogRepositry.save(savedLog);
+            userLogRepository.save(savedLog);
             return result;
         } catch (Exception e) {
             savedLog.setResponseStatus(exceptionToStatus(e).value());
             savedLog.setResponseTime(LocalDateTime.now());
 
             // 3. 응답(실패)값을 업데이트 한다.
-            userLogRepositry.save(savedLog);
+            userLogRepository.save(savedLog);
             throw e;
         }
     }

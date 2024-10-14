@@ -29,7 +29,8 @@ public enum ErrorCode {
     BIDDING_NOT_LIVE(BAD_REQUEST, BAD_REQUEST.value(), "Bidding is not live. please transact other bidding."),
     BIDDING_NOT_IN_TRANSACTION(BAD_REQUEST, BAD_REQUEST.value(), "Bidding is not in transaction. please check yout bidding id again."),
     BIDDING_NOT_DEPOSIT(BAD_REQUEST, BAD_REQUEST.value(), "Bidding is not deposited yet. please send money first."),
-    BIDDING_ABUSING(BAD_REQUEST, BAD_REQUEST.value(), "cannot transact bidding for same owner")
+    BIDDING_ABUSING(BAD_REQUEST, BAD_REQUEST.value(), "cannot transact bidding for same owner"),
+
     ;
 
     private final HttpStatus httpStatus;

@@ -5,3 +5,4 @@ public interface AuthToken <T> {
     boolean validate();
     T getDate();
 }
+
