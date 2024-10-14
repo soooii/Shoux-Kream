@@ -32,8 +32,8 @@ async function fetchUserData() {
         if (!data) {
             throw new Error('User data is undefined');
         }
-        document.getElementById('user-info').innerHTML = `<p>Your email: ${data.email}</p>`;
-        document.getElementById('Id').innerHTML = `<p>Your id: ${data.userId}</p>`;
+        //document.getElementById('name').innerHTML = `<p>Your email: ${data.name}</p>`;
+        document.getElementById('name').innerText = data.name;
     } catch (error) {
         alert(`오류가 발생했습니다: ${error.message}`);
         window.location.href = '/users/login';
