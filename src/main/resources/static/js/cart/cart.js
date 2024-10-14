@@ -41,7 +41,7 @@ window.onload = function () {
             // 결제정보를 위한 변수 초기화
             let totalQuantity = 0;
             let totalPrice = 0;
-            let deliveryFee = 0; // 배송비 (고정값 혹은 동적으로 설정할 수 있음)
+
 
             data.forEach((item) => {
                 const id = item.cartId;
@@ -141,19 +141,20 @@ window.onload = function () {
             function updateOrderSummary() {
                 let selectedItemsTotalQuantity = 0;
                 let selectedItemsTotalPrice = 0;
+                let deliveryFee = 0;
+                const allSelectCheckbox = document.getElementById('allSelectCheckbox');
+                allSelectCheckbox.checked = true;
 
                 const checkboxes = cartContainer.querySelectorAll('input[type="checkbox"]');
                 checkboxes.forEach((checkbox, index) => {
                     const itemPrice = data[index].totalPrice;
                     const itemQuantity = data[index].quantity;
-                    const allSelectCheckbox = document.getElementById('allSelectCheckbox');
 
                     if (checkbox.checked) {
                         selectedItemsTotalQuantity += itemQuantity;
                         selectedItemsTotalPrice += itemPrice;
                         deliveryFee = 3000;
                     } else {
-                        deliveryFee = 0; // 선택된 상품이 없을 경우 배달비 0원
                         allSelectCheckbox.checked = false; // 전체선택 체크박스 해제
                     }
                 });
