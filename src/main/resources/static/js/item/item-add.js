@@ -44,8 +44,6 @@ async function handleSubmit(e) {
   e.preventDefault();
 
   const title = titleInput.value;
-//  const categoryId = categorySelectBox.value;
-//  const categoryId = categorySelectBox.value === "default" ? null : categorySelectBox.value; // "미지정"을 기본값으로 사용
   const manufacturer = manufacturerInput.value;
   const shortDescription = shortDescriptionInput.value;
   const detailDescription = detailDescriptionInput.value;
@@ -54,44 +52,38 @@ async function handleSubmit(e) {
   const price = parseInt(priceInput.value);
 
   // 입력 칸이 비어 있으면 진행 불가
-  if (
-    !title ||
-//    !categoryId ||
-    !manufacturer ||
-    !shortDescription ||
-    !detailDescription ||
-    !inventory ||
-    !price
-  ) {
+  if (!title || !manufacturer || !shortDescription || !detailDescription || !inventory || !price) {
     return alert("빈 칸 및 0이 없어야 합니다.");
   }
 
-  if (image && image.size > 3e6) {
-      return alert("사진은 최대 2.5MB 크기까지 가능합니다.");
+  if (image.size > 3e6) {
+    return alert("사진은 최대 2.5MB 크기까지 가능합니다.");
   }
 
-  // S3 에 이미지가 속할 폴더 이름은 카테고리명으로 함.
-//  const index = categorySelectBox.selectedIndex;
-//  const categoryName = categorySelectBox[index].text;
-//  let categoryId = categorySelectBox.value === "default" ? null : categorySelectBox.value;
-
   try {
-    console.log("이미지 업로드 시작...");
-    const imageKey = await addImageToS3(imageInput);
-    const data = {
-      title,
-//      categoryId,
-      manufacturer,
-      shortDescription,
-      detailDescription,
-      imageKey,
-      inventory,
-      price,
-      searchKeywords,
-    };
+    console.log("이미지 및 데이터 업로드 시작...");
 
-    console.log("데이터 전송 시작...");
-    await Api.post("/item", data);
+    // FormData 생성 및 데이터 추가
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("manufacturer", manufacturer);
+    formData.append("shortDescription", shortDescription);
+    formData.append("detailDescription", detailDescription);
+    formData.append("imageKey", image); // 파일 추가
+    formData.append("inventory", inventory);
+    formData.append("price", price);
+
+    // 검색 키워드를 문자열로 결합하여 추가
+    formData.append("searchKeywords", searchKeywords.join(","));
+
+    // FormData 전송
+    await fetch("/item/item-add", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+      }
+    });
 
     alert(`정상적으로 ${title} 제품이 등록되었습니다.`);
 
@@ -99,42 +91,21 @@ async function handleSubmit(e) {
     registerItemForm.reset();
     fileNameSpan.innerText = "";
     keywordsContainer.innerHTML = "";
-//    categorySelectBox.style.color = "black";
-//    categorySelectBox.style.backgroundColor = "white";
     searchKeywords = [];
   } catch (err) {
     console.log("등록 오류:", err.stack);
-
     alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
   }
 }
 
 // 사용자가 사진을 업로드했을 때, 파일 이름이 화면에 나타나도록 함.
-async function handleImageUpload() {
-    const fileInput = document.getElementById("imageInput");
-    const file = fileInput.files[0];
-
-    if (!file) {
-        alert("이미지를 선택하세요!");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("data", file);
-
-    try {
-        const response = await fetch("/s3/image/upload", {
-            method: "POST",
-            body: formData
-        });
-        if (!response.ok) throw new Error("이미지 업로드 실패");
-
-        const imageUrl = await response.text();
-        console.log("이미지 업로드 성공:", imageUrl);
-        return imageUrl;
-    } catch (error) {
-        console.error("이미지 업로드 오류:", error);
-    }
+function handleImageUpload() {
+  const file = imageInput.files[0];
+  if (file) {
+    fileNameSpan.innerText = file.name;
+  } else {
+    fileNameSpan.innerText = "";
+  }
 }
 
 // 선택할 수 있는 카테고리 종류를 api로 가져와서, 옵션 태그를 만들어 삽입함.

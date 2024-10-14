@@ -31,10 +31,10 @@ public class ItemDto {
     private String imageKey;
 
     @Positive(message = "재고 수량은 양수여야 합니다.")
-    private int inventory;
+    private Integer inventory;
 
     @Positive(message = "가격은 양수여야 합니다.")
-    private double price;
+    private Integer price;
 
     private String searchKeywords;
 }
