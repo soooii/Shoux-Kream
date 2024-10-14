@@ -2,20 +2,20 @@ package com.shoux_kream.user.service;
 
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.shoux_kream.config.jwt.impl.AuthTokenImpl;
 import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
 import com.shoux_kream.user.dto.JwtTokenDto;
 import com.shoux_kream.user.dto.request.JwtTokenLoginRequest;
 import com.shoux_kream.user.dto.request.UserRequest;
+import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
 import com.shoux_kream.user.entity.RefreshToken;
 import com.shoux_kream.user.entity.Role;
 import com.shoux_kream.user.entity.User;
+import com.shoux_kream.user.entity.UserAddress;
 import com.shoux_kream.user.repository.RefreshTokenRepository;
 import com.shoux_kream.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -132,6 +132,16 @@ public class UserService {
                 .build();
     }
 
+    public List<UserAddressDto> getUserAddresses(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("user doesn't exist"));
+        //optional 예외처리 적용
+
+        List<UserAddress> userAddresses = user.getAddresses();
+
+        return userAddresses.stream()
+                .map(UserAddress -> new UserAddressDto(UserAddress))
+                .collect(Collectors.toList());
+    }
 }
 
 

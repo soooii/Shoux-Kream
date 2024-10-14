@@ -4,7 +4,9 @@ async function get(endpoint, params = "") {
   console.log(`%cGET 요청: ${apiUrl} `, "color: #a25cd1;");
 
   // 토큰이 있으면 Authorization 헤더를 포함, 없으면 포함하지 않음
-  const token = sessionStorage.getItem("token");
+  // TODO access token 혹은 refresh 토큰 받아와야함 => 삼항연산자? 둘 중 하나만 있어도 되는데 받는 방법?
+  const token = sessionStorage.getItem('accessToken');
+  console.log(`%c token : ${token} `, "color: #a25cd1;");
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
   const res = await fetch(apiUrl, { headers });
@@ -28,7 +30,7 @@ async function post(endpoint, data) {
   console.log(`%cPOST 요청 데이터: ${bodyData}`, "color: #296aba;");
 
   // 토큰이 있으면 Authorization 헤더를 포함, 없으면 포함하지 않음
-  const token = sessionStorage.getItem("token");
+  const token = sessionStorage.getItem('accessToken');
   const headers = {
     "Content-Type": "application/json",
     ...(token && { Authorization: `Bearer ${token}` }),
@@ -66,7 +68,7 @@ async function patch(endpoint, params = "", data) {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
     },
     body: bodyData,
   });
@@ -97,7 +99,7 @@ async function del(endpoint, params = "", data = {}) {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
     },
     body: bodyData,
   });

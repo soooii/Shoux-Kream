@@ -1,9 +1,10 @@
 package com.shoux_kream.item.service;
 import com.shoux_kream.category.entity.Category;
-import com.shoux_kream.category.entity.CategoryRepository;
+import com.shoux_kream.category.repository.CategoryRepository;
 import com.shoux_kream.config.s3.S3Uploader;
 import com.shoux_kream.exception.ErrorCode;
 import com.shoux_kream.exception.KreamException;
+import com.shoux_kream.item.dto.ItemDto;
 import com.shoux_kream.item.dto.request.ItemSaveRequest;
 import com.shoux_kream.item.dto.request.ItemUpdateRequest;
 //import com.shoux_kream.item.dto.response.BrandResponse;

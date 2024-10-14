@@ -1,5 +1,6 @@
-package com.shoux_kream.category.entity;
+package com.shoux_kream.category.dto;
 
+import com.shoux_kream.category.entity.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

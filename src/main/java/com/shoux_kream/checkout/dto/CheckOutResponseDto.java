@@ -1,30 +1,25 @@
 package com.shoux_kream.checkout.dto;
 
-import com.shoux_kream.cart.entity.Cart;
-import com.shoux_kream.checkout.entity.CheckOut;
-import com.shoux_kream.checkout.entity.Receipt;
+import com.shoux_kream.user.dto.response.UserAddressDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 public class CheckOutResponseDto {
-
+    private Long id;
     private String summaryTitle;
     private int totalPrice;
-    private UserDeliveryInfoResponseDto address;
+    private UserAddressDto address;
     private String request;
 
-    // Method to convert Entity to Response DTO
-//    public static CheckoutResponseDto fromEntity(Checkout checkout) {
-//        return CheckoutResponseDto.builder()
-//                .summaryTitle(checkout.getSummaryTitle())
-//                .totalPrice(checkout.getTotalPrice())
-//                .address(UserDeliveryInfoResponseDto.fromEntity(checkout.getAddress()))
-//                .request(checkout.getRequest())
-//                .build();
-//    }
+    @Builder
+    public CheckOutResponseDto(Long id, String summaryTitle, int totalPrice, UserAddressDto address, String request) {
+        this.id = id;
+        this.summaryTitle = summaryTitle;
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.request = request;
+    }
 }
