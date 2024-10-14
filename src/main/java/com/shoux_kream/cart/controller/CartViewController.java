@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/cart")
 public class CartViewController {
 
-    private final CartService cartService;
-
     @GetMapping("/summary")
     public String getCarts() {
         return "cart/cart";
