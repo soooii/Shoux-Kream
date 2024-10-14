@@ -14,7 +14,7 @@ public record ItemResponse(
         String detailDescription,
         String imageKey,
         int inventory,
-        double price,
+        int price,
         String searchKeywords
 ) {
     public static ItemResponse fromEntity(Item item) {

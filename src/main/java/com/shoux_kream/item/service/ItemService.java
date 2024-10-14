@@ -1,6 +1,7 @@
 package com.shoux_kream.item.service;
 import com.shoux_kream.category.entity.Category;
 import com.shoux_kream.category.entity.CategoryRepository;
+import com.shoux_kream.config.s3.S3Uploader;
 import com.shoux_kream.exception.ErrorCode;
 import com.shoux_kream.exception.KreamException;
 import com.shoux_kream.item.dto.request.ItemSaveRequest;
@@ -15,7 +16,9 @@ import com.shoux_kream.item.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,20 +29,25 @@ public class ItemService {
     private final ItemRepository itemRepository;
 //    private final BrandRepository brandRepository;
     private final CategoryRepository categoryRepository;
+    private final S3Uploader s3Uploader;
 
-    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository) {
+    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository, S3Uploader s3Uploader) {
         this.itemRepository = itemRepository;
 //        this.brandRepository = brandRepository;
         this.categoryRepository = categoryRepository;
+        this.s3Uploader = s3Uploader;
     }
 
     // 새로운 상품을 등록하고 저장된 상품 정보를 반환
     @Transactional
-    public ItemResponse save(ItemSaveRequest itemSaveRequest) {
+    public ItemResponse save(ItemSaveRequest itemSaveRequest,  MultipartFile imageFile) throws IOException {
 //        Brand brand = findBrandById(itemSaveRequest.brandId());
 //        Category category = findCategoryById(itemSaveRequest.categoryId());
 //        Category category = categoryRepository.findByName("미지정")
 //                .orElseThrow(() -> new RuntimeException("Default '미지정' category not found"));
+
+        String imageKey = s3Uploader.upload(imageFile, "item-images");
+
         String searchKeywords = String.join(",", itemSaveRequest.searchKeywords());
 
         Item item = new Item(
@@ -49,7 +57,7 @@ public class ItemService {
                 itemSaveRequest.manufacturer(),
                 itemSaveRequest.shortDescription(),
                 itemSaveRequest.detailDescription(),
-                itemSaveRequest.imageKey(),
+                imageKey,
                 itemSaveRequest.inventory(),
                 itemSaveRequest.price(),
                 searchKeywords
@@ -71,6 +79,7 @@ public class ItemService {
                 savedItem.getSearchKeywords()
         );
     }
+
 
     // 주어진 id에 해당하는 상품을 조회하고 dto 로 변환하여 반환
     public ItemResponse findById(Long id) {
