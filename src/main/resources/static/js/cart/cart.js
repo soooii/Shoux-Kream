@@ -329,9 +329,5 @@ if (checkoutButton) {
                     alert('상품 구매에 실패했습니다. 다시 시도해 주세요.');
                 }
             })
-            .catch((error) => {
-                console.error('상품 구매 중 오류 발생:' + error, error);
-                alert('상품 구매 중 오류가 발생했습니다.');
-            });
     });
 }
