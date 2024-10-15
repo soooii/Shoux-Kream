@@ -18,24 +18,29 @@ public class Category {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private String title;
+
+    private String description;
+    private String themeClass;
 
     private String imageUrl; //이미지 URL 추가
 
-    @CreatedDate
+    @CreatedDate // 생성 날짜
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
+    @LastModifiedDate // 수정 날짜
     private LocalDateTime updatedAt;
 
-    public Category(String name, String imageUrl) {
-        this.name = name;
+    public Category(String title, String description, String themeClass, String imageUrl) {
+        this.title = title;
+        this.description = description;
+        this.themeClass = themeClass;
         this.imageUrl = imageUrl;
     }
 
 
-    public void updateCategory(String name, String imageUrl) { // 카테고리 정보 수정 메서드
-        this.name = name;
+    public void updateCategory(String title, String imageUrl) { // 카테고리 정보 수정 메서드
+        this.title = title;
         this.imageUrl = imageUrl;
     }
 }

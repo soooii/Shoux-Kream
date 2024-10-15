@@ -1,4 +1,3 @@
-import { addImageToS3 } from "../../aws-s3.js";
 import * as Api from "../../api.js";
 import { checkLogin, createNavbar } from "../../useful-functions.js";
 
@@ -36,7 +35,6 @@ async function handleSubmit(e) {
   const themeClass = themeSelectBox.value;
   const image = imageInput.files[0];
 
-  // 입력 칸이 비어 있으면 진행 불가
   if (!title || !description) {
     return alert("빈 칸이 없어야 합니다.");
   }
@@ -49,11 +47,15 @@ async function handleSubmit(e) {
     return alert("사진은 최대 2.5MB 크기까지 가능합니다.");
   }
 
-  try {
-    const imageKey = await addImageToS3(imageInput, "category");
-    const data = { title, description, themeClass, imageKey };
+  // FormData 객체를 생성해 multipart/form-data 전송
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("description", description);
+  formData.append("themeClass", themeClass);
+  formData.append("image", image);
 
-    await Api.post("/categories", data);
+  try {
+    await Api.postForm("/categories", formData);
 
     alert(`정상적으로 ${title} 카테고리가 등록되었습니다.`);
 

@@ -4,6 +4,7 @@ import com.shoux_kream.category.dto.CategoryDto;
 import com.shoux_kream.category.entity.Category;
 import com.shoux_kream.category.repository.CategoryRepository;
 import com.shoux_kream.config.s3.S3Uploader;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,30 +15,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
+    private final CategoryRepository categoryRepository;
     private S3Uploader s3Uploader; // S3Uploader 주입;
 
     @Transactional // 카테고리 추가
-    public CategoryDto createCategory(CategoryDto categoryDto, MultipartFile imageFile) {
-        // 이미지 파일을 S3에 업로드하고 이미지 키를 받아옴
-        try {
-            // 이미지 업로드 로직
-            String imageUrl = s3Uploader.upload(imageFile, "categories");
-            categoryDto.setImageUrl(imageUrl);
+    public CategoryDto createCategory(CategoryDto categoryDto, MultipartFile imageFile) throws IOException {
+        // 이미지 파일이 존재하면 S3에 업로드
+        String imageUrl = s3Uploader.upload(imageFile, "category");
 
-            Category category = categoryDto.toEntity();
-            Category savedCategory = categoryRepository.save(category);
+        // 카테고리 생성 및 저장
+        Category category = new Category(categoryDto.getTitle(), categoryDto.getDescription(), categoryDto.getThemeClass(), imageUrl);
+        Category savedCategory = categoryRepository.save(category);
 
-            return new CategoryDto(savedCategory);
-        } catch (IOException e) {
-            // 예외 처리 로직
-            throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e);
-        }
+        return new CategoryDto(savedCategory);
     }
 
     @Transactional // 카테고리 전체 조회
@@ -56,7 +49,7 @@ public class CategoryService {
 
         try {
             String imageUrl = s3Uploader.upload(imageFile, "categories"); // 이미지 업로드
-            category.updateCategory(categoryDto.getName(), imageUrl); // 이름과 이미지 URL로 카테고리 업데이트
+            category.updateCategory(categoryDto.getTitle(), imageUrl); // 이름과 이미지 URL로 카테고리 업데이트
         } catch (IOException e) {
             throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e); // 예외 처리
         }

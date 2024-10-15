@@ -1,11 +1,12 @@
 -- 카테고리 추가
-INSERT INTO category (name, created_at, updated_at) VALUES ('아티스트협업', NOW(), NOW());
-INSERT INTO category (name, created_at, updated_at) VALUES ('#러닝', NOW(), NOW());
-INSERT INTO category (name, created_at, updated_at) VALUES ('추천', NOW(), NOW());
-INSERT INTO category (name, created_at, updated_at) VALUES ('랭킹', NOW(), NOW());
-INSERT INTO category (name, created_at, updated_at) VALUES ('럭셔리', NOW(), NOW());
-INSERT INTO category (name, created_at, updated_at) VALUES ('남성', NOW(), NOW());
-INSERT INTO category (name, created_at, updated_at) VALUES ('여성', NOW(), NOW());
+INSERT INTO category (title, created_at, updated_at) VALUES ('아티스트협업', NOW(), NOW());
+INSERT INTO category (title, created_at, updated_at) VALUES ('#러닝', NOW(), NOW());
+INSERT INTO category (title, created_at, updated_at) VALUES ('추천', NOW(), NOW());
+INSERT INTO category (title, created_at, updated_at) VALUES ('랭킹', NOW(), NOW());
+INSERT INTO category (title, created_at, updated_at) VALUES ('럭셔리', NOW(), NOW());
+INSERT INTO category (title, created_at, updated_at) VALUES ('남성', NOW(), NOW());
+INSERT INTO category (title, created_at, updated_at) VALUES ('여성', NOW(), NOW());
+
 
 -- 상품 추가
 INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
