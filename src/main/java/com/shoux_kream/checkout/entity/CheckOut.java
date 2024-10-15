@@ -1,6 +1,5 @@
 package com.shoux_kream.checkout.entity;
 
-import com.shoux_kream.cart.entity.Cart;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.timestamp.BaseEntity;
 import com.shoux_kream.user.dto.response.UserAddressDto;
@@ -10,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
@@ -24,6 +24,12 @@ public class CheckOut extends BaseEntity {
 
     private String summaryTitle;
     private int totalPrice;
+
+
+    // TODO https://galid1.tistory.com/572 attribute 컨버터 사용방법도 있음
+    @ColumnDefault("발송준비") // 발송준비 배송시작 배송중 배송예정
+    @Enumerated(EnumType.STRING) // 스트링 값으로 저장하겠다.
+    private DeliveryStatus deliveryStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -63,5 +69,9 @@ public class CheckOut extends BaseEntity {
 
     public void updateAddress(UserAddress address){
         this.address = address;
+    }
+
+    public void updateDeliveryStatus(DeliveryStatus deliveryStatus){
+        this.deliveryStatus = deliveryStatus;
     }
 }
