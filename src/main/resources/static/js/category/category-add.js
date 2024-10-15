@@ -1,5 +1,5 @@
-import * as Api from "../../api.js";
-import { checkLogin, createNavbar } from "../../useful-functions.js";
+import * as Api from "/js/api.js";
+import { checkLogin, createNavbar } from "/js/useful-functions.js";
 
 // 요소(element), input 혹은 상수
 const titleInput = document.querySelector("#titleInput");
@@ -55,8 +55,13 @@ async function handleSubmit(e) {
   formData.append("image", image);
 
   try {
-    await Api.postForm("/categories", formData);
-
+    await fetch("/category/category-add", {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+          }
+        });
     alert(`정상적으로 ${title} 카테고리가 등록되었습니다.`);
 
     // 폼 초기화

@@ -30,6 +30,11 @@ public class CategoryController {
             @RequestParam("themeClass") String themeClass,
             @RequestParam("image") MultipartFile imageFile) throws IOException {
 
+        // 이미지 파일이 null인지 확인
+        if (imageFile == null || imageFile.isEmpty()) {
+            return ResponseEntity.badRequest().body(null); // 적절한 에러 메시지를 반환할 수 있도록 조정
+        }
+
         // DTO로 변환
         CategoryDto categoryDto = new CategoryDto(title, description, themeClass);
 
@@ -38,9 +43,10 @@ public class CategoryController {
         return ResponseEntity.ok(createdCategory);
     }
 
+    // URL 변경: GET 메소드는 /category-add/form로 호출
     @GetMapping("/add")
     public String addCategoryPage() {
-        return "category-add/form";  // category-add.html 템플릿 파일 반환
+        return "category/category-add";  // category-add.html 템플릿 파일 반환
     }
 
     @GetMapping("/page")

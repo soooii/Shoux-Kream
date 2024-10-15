@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private S3Uploader s3Uploader; // S3Uploader 주입;
+    private final S3Uploader s3Uploader; // S3Uploader 주입;
+
+
 
     @Transactional // 카테고리 추가
     public CategoryDto createCategory(CategoryDto categoryDto, MultipartFile imageFile) throws IOException {
