@@ -3,7 +3,9 @@ package com.shoux_kream.checkout.controller;
 import com.shoux_kream.checkout.dto.CheckOutItemRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
+import com.shoux_kream.checkout.entity.DeliveryStatus;
 import com.shoux_kream.checkout.service.CheckOutService;
+import com.shoux_kream.user.controller.JwtController;
 import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
 import org.springframework.security.core.userdetails.User;
@@ -14,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 //TODO 값 검증은 CartRequestDto 에서 validator 통해서 체크
 @RestController
@@ -21,7 +24,7 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class CheckOutApiController {
-    
+    private final JwtController jwtController;
     private final CheckOutService checkOutService;
     private final UserService userService;
 
@@ -73,13 +76,52 @@ public class CheckOutApiController {
     }
 
     //TODO 검증 필요!
-    @PostMapping("/checkoutitem") //checkoutItem의 checkoutId로 checkout과 1:N연관관계를 맺음
+    @PostMapping("/checkout-item") //checkoutItem의 checkoutId로 checkout과 1:N연관관계를 맺음
     public ResponseEntity addCheckoutItem(@RequestBody CheckOutItemRequestDto checkOutItemRequestDto) {
+
         try {
             checkOutService.addCheckOutItem(checkOutItemRequestDto);
             return ResponseEntity.ok().body(checkOutItemRequestDto.getCheckOutId());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("주문 아이템 오류" + e.getMessage());
         }
+    }
+
+
+    @GetMapping("/admin/checkout") //userEmail로 checkout 정보 받기
+    public ResponseEntity<List<CheckOutResponseDto>> getCheckOutsByAdmin(@AuthenticationPrincipal User principal) {
+        // post맨에선 에러가 나옴 => 헤더 토큰정보 문제
+        //  private Long id;
+        //    private String summaryTitle;
+        //    private int totalPrice;
+        // 이 정보만 필요.
+        //TODO        request의 cookies token값의 ROLE이 admin이 아니라면 작동 X
+        //TODO role 어드민일때! 사용가능한 mapping
+        // 그냥 모두 조회
+
+        // TODO role authorities => admin일때
+        String email = principal.getUsername();
+        UserResponse userResponse = userService.getUser(email);
+        List<CheckOutResponseDto> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
+        return ResponseEntity.ok(checkOuts);
+    }
+
+    // 어드민 프론트에서 쏴줄거 ⇒ dropdown으로 선택한 status, checkout 번호 > 수정
+    @PatchMapping("/admin/checkout/delivery-status/{detailID}")
+    public ResponseEntity<CheckOutResponseDto> updateDeliveryStatus (@PathVariable("detailId") Long detailId, @RequestBody DeliveryStatus deliveryStatus) {
+        //TODO 권한 확인 필요
+        //TODO 잘 되는데 주소 id번호까지 같이 바뀌어버림; CheckOut을 address랑 분리해야함!
+        //service에서 email로 userid를 체크해서 update함
+        CheckOutResponseDto checkOutResponseDto = checkOutService.updateDeliveryStatus(detailId, deliveryStatus);
+        return ResponseEntity.ok(checkOutResponseDto);
+
+        //TODO patch => 업데이트 방법? update
+    }
+
+    //todo principal 필요없음
+    @DeleteMapping("/admin/checkout/{detailId}") //TODO param에 checkout 번호를 입력받아야함, user의 토큰 권한도 확인
+    public ResponseEntity<Long> deleteCheckOutByAdmin(@AuthenticationPrincipal User principal, @PathVariable("detailId") Long detailId) {
+        Long deletedId = checkOutService.deleteCheckOut(principal.getUsername(), detailId);
+        return ResponseEntity.ok(deletedId);
     }
 }

@@ -1,12 +1,11 @@
 package com.shoux_kream.checkout.service;
 
-//import com.shoux_kream.checkout.CheckOutMapper;
-import com.shoux_kream.cart.dto.CartResponseDto;
 import com.shoux_kream.checkout.dto.CheckOutItemRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.checkout.entity.CheckOut;
 import com.shoux_kream.checkout.entity.CheckOutItem;
+import com.shoux_kream.checkout.entity.DeliveryStatus;
 import com.shoux_kream.checkout.repository.CheckOutItemRepository;
 import com.shoux_kream.checkout.repository.CheckOutRepository;
 import com.shoux_kream.item.repository.ItemRepository;
@@ -79,6 +78,12 @@ public class CheckOutService {
         CheckOut checkOut = checkOutRepository.findByUserAndId(userRepository.findByEmail(email).orElseThrow(), detailId);
         checkOutRepository.delete(checkOut);
         return detailId;
+    }
+
+    public CheckOutResponseDto updateDeliveryStatus(Long detailId, DeliveryStatus deliveryStatus) {
+        CheckOut checkOut = checkOutRepository.findById(detailId).orElseThrow(() -> new IllegalArgumentException("checkoutId not found"));
+        checkOut.updateDeliveryStatus(deliveryStatus);
+        return checkOut.toDto();
     }
 
     // More methods for updating, deleting checkout and checkout items
