@@ -27,9 +27,9 @@ public class CheckOut extends BaseEntity {
 
 
     // TODO https://galid1.tistory.com/572 attribute 컨버터 사용방법도 있음
-    @ColumnDefault("발송준비") // 발송준비 배송시작 배송중 배송예정
+    @ColumnDefault("'READY'")  // 기본값을 READY로 설정
     @Enumerated(EnumType.STRING) // 스트링 값으로 저장하겠다.
-    private DeliveryStatus deliveryStatus;
+    private DeliveryStatus deliveryStatus;// 발송준비 배송시작 배송중 배송예정
 
     @ManyToOne
     @JoinColumn(name = "user_id")
