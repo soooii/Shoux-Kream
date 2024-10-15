@@ -4,6 +4,8 @@ import com.shoux_kream.category.entity.Category;
 import com.shoux_kream.item.entity.Item;
 import com.shoux_kream.item.entity.ItemInfo;
 
+import java.util.List;
+
 public record ItemResponse(
         Long id,
 //        BrandResponse brand,
@@ -15,7 +17,7 @@ public record ItemResponse(
         String imageKey,
         Integer inventory,
         Integer price,
-        String searchKeywords
+        List<String> searchKeywords
 ) {
     public static ItemResponse fromEntity(Item item) {
         return new ItemResponse(

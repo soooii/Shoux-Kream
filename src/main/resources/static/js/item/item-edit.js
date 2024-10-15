@@ -4,43 +4,66 @@ import { checkLogin, randomId, createNavbar } from "/js/useful-functions.js";
 
 // 요소(element)들과 상수들
 const titleInput = document.querySelector("#titleInput");
-//const categorySelectBox = document.querySelector("#categorySelectBox");
 const manufacturerInput = document.querySelector("#manufacturerInput");
 const shortDescriptionInput = document.querySelector("#shortDescriptionInput");
-const detailDescriptionInput = document.querySelector(
-  "#detailDescriptionInput"
-);
+const detailDescriptionInput = document.querySelector("#detailDescriptionInput");
 const imageInput = document.querySelector("#imageInput");
 const inventoryInput = document.querySelector("#inventoryInput");
 const priceInput = document.querySelector("#priceInput");
 const searchKeywordInput = document.querySelector("#searchKeywordInput");
 const addKeywordButton = document.querySelector("#addKeywordButton");
 const keywordsContainer = document.querySelector("#keywordContainer");
-const submitButton = document.querySelector("#submitButton");
-const registerItemForm = document.querySelector("#registerItemForm");
-const fileNameSpan = document.querySelector("#fileNameSpan"); // 파일 이름 표시 요소
+const editButton = document.querySelector("#editButton");
+const editItemForm = document.querySelector("#editItemForm");
+const fileNameSpan = document.querySelector("#fileNameSpan");
 
-//TODO 아이템 등록을 위해 로그인 비활성화
+// 현재 수정할 아이템 ID
+const itemId = window.location.pathname.split("/").pop();
+
+// 로그인 확인, 네비게이션 및 초기 데이터 로드
 checkLogin();
 addAllElements();
 addAllEvents();
+loadItemData(); // 아이템 데이터 로드
 
-// html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
+// HTML에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 function addAllElements() {
   createNavbar();
-//  addOptionsToSelectBox();
 }
 
 // addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 function addAllEvents() {
   imageInput.addEventListener("change", handleImageUpload);
-  submitButton.addEventListener("click", handleSubmit);
-//  categorySelectBox.addEventListener("change", handleCategoryChange);
+  editButton.addEventListener("click", handleEditSubmit);
   addKeywordButton.addEventListener("click", handleKeywordAdd);
 }
 
-// 제품 추가 - 사진은 AWS S3에 저장, 이후 제품 정보를 백엔드 db에 저장.
-async function handleSubmit(e) {
+// 기존 아이템 데이터를 로드하여 필드에 표시
+async function loadItemData() {
+  try {
+    const itemData = await Api.get(`/item/${itemId}`);
+
+    titleInput.value = itemData.title;
+    manufacturerInput.value = itemData.manufacturer;
+    shortDescriptionInput.value = itemData.shortDescription;
+    detailDescriptionInput.value = itemData.detailDescription;
+    inventoryInput.value = itemData.inventory;
+    priceInput.value = itemData.price;
+    fileNameSpan.innerText = `현재 사진: ${itemData.imageKey}`;
+
+    // 기존 검색 키워드 로드
+    itemData.searchKeywords.forEach(keyword => {
+      addKeywordToContainer(keyword);
+      searchKeywords.push(keyword); // 배열에 추가
+    });
+  } catch (error) {
+    console.error("데이터 로드 오류:", error);
+    alert("상품 정보를 불러오는 중 오류가 발생했습니다.");
+  }
+}
+
+// 제품 수정 - 사진은 AWS S3에 저장, 이후 제품 정보를 백엔드 DB에 저장.
+async function handleEditSubmit(e) {
   e.preventDefault();
 
   const title = titleInput.value;
@@ -56,12 +79,12 @@ async function handleSubmit(e) {
     return alert("빈 칸 및 0이 없어야 합니다.");
   }
 
-  if (image.size > 3e6) {
+  if (image && image.size > 3e6) {
     return alert("사진은 최대 2.5MB 크기까지 가능합니다.");
   }
 
   try {
-    console.log("이미지 및 데이터 업로드 시작...");
+    console.log("이미지 및 데이터 업데이트 시작...");
 
     // FormData 생성 및 데이터 추가
     const formData = new FormData();
@@ -69,31 +92,28 @@ async function handleSubmit(e) {
     formData.append("manufacturer", manufacturer);
     formData.append("shortDescription", shortDescription);
     formData.append("detailDescription", detailDescription);
-    formData.append("imageKey", image); // 파일 추가
+    if (image) {
+      formData.append("imageKey", image); // 파일 추가
+    }
     formData.append("inventory", inventory);
     formData.append("price", price);
 
     // 검색 키워드를 문자열로 결합하여 추가
     formData.append("searchKeywords", searchKeywords.join(","));
 
-    // FormData 전송
-    await fetch("/item/item-add", {
-      method: "POST",
+    // FormData 전송 - 수정 API 호출
+    await fetch(`/item/${itemId}`, {
+      method: "PUT",
       body: formData,
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
       }
     });
 
-    alert(`정상적으로 ${title} 제품이 등록되었습니다.`);
-
-    // 폼 초기화
-    registerItemForm.reset();
-    fileNameSpan.innerText = "";
-    keywordsContainer.innerHTML = "";
-    searchKeywords = [];
+    alert(`정상적으로 ${title} 제품이 수정되었습니다.`);
+    window.location.href = `/item/item-detail/${itemId}`; // 수정 후 상세 페이지로 이동
   } catch (err) {
-    console.log("등록 오류:", err.stack);
+    console.log("수정 오류:", err.stack);
     alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
   }
 }
@@ -108,29 +128,7 @@ function handleImageUpload() {
   }
 }
 
-// 선택할 수 있는 카테고리 종류를 api로 가져와서, 옵션 태그를 만들어 삽입함.
-//async function addOptionsToSelectBox() {
-//  categorySelectBox.innerHTML = `<option value="default" selected>미지정</option>`; // 기본값 추가
-//  const categories = await Api.get("/categories");
-//  categories.forEach((category) => {
-//    const { _id, title, themeClass } = category;
-//    categorySelectBox.insertAdjacentHTML(
-//      "beforeend",
-//      `<option value=${_id} class="notification ${themeClass}"> ${title} </option>`
-//    );
-//  });
-//}
-
-
-// 카테고리 선택 시, 선택박스에 해당 카테고리 테마가 반영되게 함.
-//function handleCategoryChange() {
-//  const index = categorySelectBox.selectedIndex;
-//
-//  categorySelectBox.className = categorySelectBox[index].className;
-//}
-
-// 아래 함수는, 검색 키워드 추가 시, 해당 키워드로 만든 태그가 화면에 추가되도록 함.
-// 아래 배열은, 나중에 api 요청 시 사용함.
+// 검색 키워드를 추가할 때 사용되는 함수
 let searchKeywords = [];
 function handleKeywordAdd(e) {
   e.preventDefault();
@@ -145,8 +143,15 @@ function handleKeywordAdd(e) {
     return alert("이미 추가한 검색어입니다.");
   }
 
+  addKeywordToContainer(newKeyword);
   searchKeywords.push(newKeyword);
 
+  searchKeywordInput.value = "";
+  searchKeywordInput.focus();
+}
+
+// 키워드를 화면에 추가하고 삭제 기능을 추가하는 함수
+function addKeywordToContainer(keyword) {
   const random = randomId();
 
   keywordsContainer.insertAdjacentHTML(
@@ -154,34 +159,28 @@ function handleKeywordAdd(e) {
     `
     <div class="control" id="a${random}">
       <div class="tags has-addons">
-        <span class="tag is-link is-light">${newKeyword}</span>
+        <span class="tag is-link is-light">${keyword}</span>
         <a class="tag is-link is-light is-delete"></a>
       </div>
     </div>
   `
   );
 
-  // x 버튼에 삭제 기능 추가.
   keywordsContainer
     .querySelector(`#a${random} .is-delete`)
     .addEventListener("click", handleKeywordDelete);
-
-  // 초기화 및 사용성 향상
-  searchKeywordInput.value = "";
-  searchKeywordInput.focus();
 }
 
+// 키워드 삭제 처리 함수
 function handleKeywordDelete(e) {
-  // a 태그 클릭 -> 옆의 span 태그의 inenerText가 키워드임.
   const keywordToDelete = e.target.previousElementSibling.innerText;
 
-  // 배열에서 삭제
   const index = searchKeywords.indexOf(keywordToDelete);
   searchKeywords.splice(index, 1);
 
-  // 요소 삭제
   e.target.parentElement.parentElement.remove();
 }
+
 
 //console.log("JavaScript 로드 성공");
 //// 요소들 가져오기

@@ -3,16 +3,22 @@ package com.shoux_kream.item.entity;
 import com.shoux_kream.category.entity.Category;
 import com.shoux_kream.timestamp.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
 
 
 @Getter
+@Setter
 @Entity
 @Table(name = "item")
 @NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
 public class Item extends BaseEntity {
 
     @Id
@@ -47,7 +53,7 @@ public class Item extends BaseEntity {
     @Column(nullable = false)
     private Integer price; // 가격
 
-    private String searchKeywords; // 검색 키워드
+    private List<String> searchKeywords; // 검색 키워드
 
     // 비활성화
 //    @ManyToOne(fetch = FetchType.LAZY)
@@ -73,7 +79,7 @@ public class Item extends BaseEntity {
 //    private Integer userId;
 
     public Item(String title, String manufacturer, String shortDescription,
-                String detailDescription, String imageKey, int inventory, int price, String searchKeywords) {
+                String detailDescription, String imageKey, int inventory, int price, List<String> searchKeywords) {
 //        this.brand = brand;
         this.title = title;
 //        this.category = category;
@@ -87,7 +93,7 @@ public class Item extends BaseEntity {
     }
 
     public void update(String title, String manufacturer, String shortDescription,
-                       String detailDescription, String imageKey, int inventory, int price, String searchKeywords) {
+                       String detailDescription, String imageKey, int inventory, int price, List<String> searchKeywords) {
         this.title = title;
 //        this.category = category;
         this.manufacturer = manufacturer;

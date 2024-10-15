@@ -6,11 +6,13 @@ import com.shoux_kream.item.dto.request.ItemSaveRequest;
 import com.shoux_kream.item.dto.request.ItemUpdateRequest;
 import com.shoux_kream.item.dto.response.ItemResponse;
 import com.shoux_kream.item.dto.response.ItemUpdateResponse;
+import com.shoux_kream.item.entity.Item;
 import com.shoux_kream.item.service.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,18 +73,31 @@ public class ItemController {
 
 
     // 관리자 권한 필요 - 기존 상품 정보를 수정하고, 수정된 정보를 응답으로 반환
-    @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping
-    public ResponseEntity<ItemUpdateResponse> updateItem(@RequestBody ItemUpdateRequest itemUpdateRequest) {
-        ItemUpdateResponse itemUpdateResponse = itemService.update(itemUpdateRequest);
-        return ResponseEntity.ok().body(itemUpdateResponse);
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @PatchMapping
+//    public ResponseEntity<ItemUpdateResponse> updateItem(@RequestBody ItemUpdateRequest itemUpdateRequest) {
+//        ItemUpdateResponse itemUpdateResponse = itemService.update(itemUpdateRequest);
+//        return ResponseEntity.ok().body(itemUpdateResponse);
+//    }
+
+    // 조회용 GET 메서드 추가
+    @GetMapping("/{id}")
+    public ResponseEntity<ItemResponse> getItemById(@PathVariable Long id) {
+        ItemResponse itemResponse = itemService.findItemById(id);
+        return ResponseEntity.ok(itemResponse);
     }
 
-    // 관리자 권한 필요 - 주어진 id에 해당하는 상품을 삭제
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{itemId}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long itemId) {
-        itemService.delete(itemId);
-        return ResponseEntity.noContent().build();
+    // 수정용 PUT 메서드
+    @PutMapping("/{id}")
+    public ResponseEntity<ItemUpdateResponse> updateItemById(@PathVariable Long id, @ModelAttribute ItemUpdateRequest itemUpdateRequest) throws Exception {
+        ItemUpdateResponse itemUpdateResponse = itemService.update(id, itemUpdateRequest);
+        return ResponseEntity.ok(itemUpdateResponse);
+    }
+
+    // 상품 수정 페이지 뷰
+    @GetMapping("/edit/{id}")
+    public String showEditItemPage(@PathVariable Long id, Model model) {
+        model.addAttribute("itemId", id);
+        return "item/item-edit";
     }
 }

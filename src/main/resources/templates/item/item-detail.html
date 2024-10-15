@@ -39,6 +39,8 @@
             src="https://kit.fontawesome.com/9daa42bcef.js"
             crossorigin="anonymous"
     ></script>
+    <link rel="stylesheet" href="/css/item/item-detail.css" />
+    <script src="/js/item/item-detail.js" type="module" defer></script>
 </head>
 <body>
 
@@ -105,6 +107,40 @@
         <img th:src="${item.imageKey}" alt="Item Image" />
         <p><strong>검색 키워드:</strong> <span th:text="${item.searchKeywords}">키워드1, 키워드2</span></p>
     </div>
+
+    <!-- 상품 삭제 버튼 -->
+    <div>
+        <button onclick="deleteItem()">상품 삭제</button>
+    </div>
 </section>
+
+</section>
+
+<script>
+    function deleteItem() {
+        const itemId = /* [[${item.id}]] */ '';  // Thymeleaf에서 item의 ID를 가져오기
+
+        if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
+            fetch(`/item/item-detail/${itemId}`, {  // 삭제 요청을 /item/{id} 경로로 보냄
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert('상품이 삭제되었습니다.');
+                    window.location.href = '/';  // 삭제 후 메인 페이지로 이동
+                } else {
+                    alert('상품 삭제에 실패했습니다.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('상품 삭제 중 오류가 발생했습니다.');
+            });
+        }
+    }
+</script>
+
+
 </body>
 </html>
