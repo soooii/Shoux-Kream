@@ -3,6 +3,7 @@ package com.shoux_kream.user.controller;
 import com.shoux_kream.user.dto.request.UserRequest;
 import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
+import com.shoux_kream.user.entity.Role;
 import com.shoux_kream.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String email = principal.getUsername();
+
+
+        //관리자 계정 확인
+
+     /*   boolean isAdmin = principal.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));*/
+
+
         UserResponse userResponse = userService.getUser(email);
         return ResponseEntity.ok(userResponse);
     }

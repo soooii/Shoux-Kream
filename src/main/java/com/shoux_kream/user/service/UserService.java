@@ -32,8 +32,8 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtProviderImpl jwtProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    // private final RefreshTokenService refreshTokenService;
 
+    /*
     @jakarta.annotation.PostConstruct
     public void init() {
         User user = User.builder()
@@ -46,7 +46,34 @@ public class UserService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
+    }*/
+
+    @jakarta.annotation.PostConstruct
+    public void init() {
+        User user1 = User.builder()
+                .email("1@1")
+                .password(bCryptPasswordEncoder.encode("1"))
+                .name("elice")
+                .nickname("e")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .role(Role.USER)
+                .build();
+        userRepository.save(user1);
+
+        // 새로운 사용자 추가
+        User user2 = User.builder()
+                .email("2@2")
+                .password(bCryptPasswordEncoder.encode("2")) // 비밀번호를 적절히 변경
+                .name("admin")
+                .nickname("a")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .role(Role.ADMIN)
+                .build();
+        userRepository.save(user2);
     }
+
 
     //회원가입
     public Long signup(UserRequest dto) {
