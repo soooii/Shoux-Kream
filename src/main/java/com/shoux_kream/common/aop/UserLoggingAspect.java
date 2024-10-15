@@ -28,7 +28,7 @@ public class UserLoggingAspect {
 
     private final UserLogRepository userLogRepository;
 
-    @Pointcut("execution(* com.shoux_kream..controller..*(..))")
+    @Pointcut("execution(* com.shoux_kream..controller..*(..)) && !@annotation(org.springframework.web.bind.annotation.GetMapping)")
     public void userLoggerPointCut() {}
 
     @Around("userLoggerPointCut()")

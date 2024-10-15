@@ -5,6 +5,8 @@ import com.shoux_kream.admin.dto.request.UserLogUpdateRequest;
 import com.shoux_kream.admin.dto.response.UserLogResponse;
 import com.shoux_kream.admin.entity.UserLog;
 import com.shoux_kream.admin.repository.UserLogRepository;
+import com.shoux_kream.exception.ErrorCode;
+import com.shoux_kream.exception.KreamException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,7 +35,7 @@ public class UserLogService {
     }
 
     public ResponseEntity<Void> updateUserLog(UserLogUpdateRequest userLogUpdateRequest) {
-        UserLog userLog = userLogRepository.findById(userLogUpdateRequest.getUserLogId()).orElseThrow(() -> new IllegalArgumentException("not found id"));
+        UserLog userLog = userLogRepository.findById(userLogUpdateRequest.getUserLogId()).orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
         userLogUpdateRequest.toUpdateEntity(userLog);
         return new ResponseEntity<>(HttpStatus.OK);
     }

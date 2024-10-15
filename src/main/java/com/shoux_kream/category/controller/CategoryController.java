@@ -2,40 +2,69 @@ package com.shoux_kream.category.controller;
 
 import com.shoux_kream.category.dto.CategoryDto;
 import com.shoux_kream.category.service.CategoryService;
+import com.shoux_kream.config.s3.S3Uploader;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/categories")
-
+@Controller
+@RequestMapping("/category")
+@RequiredArgsConstructor
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping //카테고리 추가
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
-        CategoryDto createdCategory = categoryService.createCategory(categoryDto);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/category-add")
+    public ResponseEntity<CategoryDto> createCategory(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("themeClass") String themeClass,
+            @RequestParam("image") MultipartFile imageFile) throws IOException {
+
+        // 이미지 파일이 null인지 확인
+        if (imageFile == null || imageFile.isEmpty()) {
+            return ResponseEntity.badRequest().body(null); // 적절한 에러 메시지를 반환할 수 있도록 조정
+        }
+
+        // DTO로 변환
+        CategoryDto categoryDto = new CategoryDto(title, description, themeClass);
+
+        // 카테고리 생성 및 이미지 업로드
+        CategoryDto createdCategory = categoryService.createCategory(categoryDto, imageFile);
         return ResponseEntity.ok(createdCategory);
     }
-    @GetMapping //카테고리 목록 조회
-    public ResponseEntity<List<CategoryDto>> getAllCategories() {
-         List<CategoryDto> categories = categoryService.getAllCategories();
-         return ResponseEntity.ok(categories);
+
+    // URL 변경: GET 메소드는 /category-add/form로 호출
+    @GetMapping("/add")
+    public String addCategoryPage() {
+        return "category/category-add";  // category-add.html 템플릿 파일 반환
     }
 
-    @PutMapping("/{id}") //카테고리 수정
+    @GetMapping("/page")
+    public ResponseEntity<List<CategoryDto>> getAllCategories() {
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        return ResponseEntity.ok(categories);
+    }
+
+    @PutMapping("/{id}")
     public ResponseEntity<CategoryDto> updateCategory(
             @PathVariable Long id,
-            @RequestBody CategoryDto categoryDto) {
-        CategoryDto updatedCategory = categoryService.updateCategory(id, categoryDto);
+            @RequestParam("category") CategoryDto categoryDto,
+            @RequestParam("image") MultipartFile imageFile) {
+        CategoryDto updatedCategory = categoryService.updateCategory(id, categoryDto, imageFile);
         return ResponseEntity.ok(updatedCategory);
     }
 
-    @DeleteMapping("/{id}") //카테고리 삭제
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();

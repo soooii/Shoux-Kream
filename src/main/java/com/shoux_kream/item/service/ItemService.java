@@ -1,4 +1,5 @@
 package com.shoux_kream.item.service;
+import com.shoux_kream.cart.repository.CartRepository;
 import com.shoux_kream.category.entity.Category;
 import com.shoux_kream.category.repository.CategoryRepository;
 import com.shoux_kream.config.s3.S3Uploader;
@@ -31,17 +32,20 @@ public class ItemService {
 //    private final BrandRepository brandRepository;
     private final CategoryRepository categoryRepository;
     private final S3Uploader s3Uploader;
+    private final CartRepository cartRepository;
 
-    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository, S3Uploader s3Uploader) {
+    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository, S3Uploader s3Uploader, CartRepository cartRepository) {
         this.itemRepository = itemRepository;
 //        this.brandRepository = brandRepository;
         this.categoryRepository = categoryRepository;
         this.s3Uploader = s3Uploader;
+        this.cartRepository = cartRepository;
     }
 
     // 새로운 상품을 등록하고 저장된 상품 정보를 반환
     @Transactional
     public ItemResponse save(ItemSaveRequest itemSaveRequest,  MultipartFile imageFile) throws IOException {
+
 //        Brand brand = findBrandById(itemSaveRequest.brandId());
 //        Category category = findCategoryById(itemSaveRequest.categoryId());
 //        Category category = categoryRepository.findByName("미지정")
@@ -52,7 +56,8 @@ public class ItemService {
         String searchKeywords = String.join(",", itemSaveRequest.searchKeywords());
 
         Item item = new Item(
-//                brand,
+//              brand,
+                itemSaveRequest.id(),
                 itemSaveRequest.title(),
 //                category, // Category 엔티티 사용
                 itemSaveRequest.manufacturer(),
@@ -61,7 +66,7 @@ public class ItemService {
                 imageKey,
                 itemSaveRequest.inventory(),
                 itemSaveRequest.price(),
-                searchKeywords
+                itemSaveRequest.searchKeywords()
         );
 
         Item savedItem = itemRepository.save(item);
@@ -81,6 +86,31 @@ public class ItemService {
         );
     }
 
+    public ItemResponse findItemById(Long id) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+
+        return ItemResponse.fromEntity(item); // 조회용 DTO 반환
+    }
+
+    public ItemUpdateRequest getUpdateRequestById(Long id) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+
+        return new ItemUpdateRequest(
+                item.getId(),
+                item.getTitle(),
+                item.getManufacturer(),
+                item.getShortDescription(),
+                item.getDetailDescription(),
+                null, // MultipartFile은 수정 요청 시 클라이언트에서 처리
+                item.getInventory(),
+                item.getPrice(),
+                item.getSearchKeywords()
+        );
+    }
+
+
 
     // 주어진 id에 해당하는 상품을 조회하고 dto 로 변환하여 반환
     public ItemResponse findById(Long id) {
@@ -96,29 +126,57 @@ public class ItemService {
         return ItemResponse.fromEntity(item);
     }
 
+
+
     // 기존 상품 정보를 수정하고, 수정된 정보를 반환
     @Transactional
-    public ItemUpdateResponse update(ItemUpdateRequest itemUpdateRequest) {
-//        Brand brand = findBrandById(itemUpdateRequest.brandId());
+    public ItemUpdateResponse update(Long id, ItemUpdateRequest itemUpdateRequest) throws Exception {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
 
-        // TODO: repository query문 해결 후 활성화
-        // itemRepository.updateItemInfo(itemUpdateRequest.brandId(), itemUpdateRequest.itemName(), itemUpdateRequest.color(), itemUpdateRequest.modelNumber());
+        if (itemUpdateRequest.image() != null && !itemUpdateRequest.image().isEmpty()) {
+            String imageKey = s3Uploader.upload(itemUpdateRequest.image(), "item-images");
+            item.setImageKey(imageKey);  // 새로운 이미지 키로 업데이트
+        }
+
+        // Item의 필드 값 업데이트
+        item.setTitle(itemUpdateRequest.title());
+        item.setManufacturer(itemUpdateRequest.manufacturer());
+        item.setShortDescription(itemUpdateRequest.shortDescription());
+        item.setDetailDescription(itemUpdateRequest.detailDescription());
+        item.setInventory(itemUpdateRequest.inventory());
+        item.setPrice(itemUpdateRequest.price());
+        item.setSearchKeywords(itemUpdateRequest.searchKeywords());
+
+        // 업데이트된 내용을 저장
+        itemRepository.save(item);
 
         return new ItemUpdateResponse(
-//                brand.getTitle(),
-                itemUpdateRequest.itemName(),
-                itemUpdateRequest.color(),
-                itemUpdateRequest.modelNumber()
+                item.getId(),
+                item.getTitle(),
+                item.getManufacturer(),
+                item.getShortDescription(),
+                item.getDetailDescription(),
+                itemUpdateRequest.image(), // MultipartFile을 그대로 넘김
+                item.getInventory(),
+                item.getPrice(),
+                item.getSearchKeywords()
         );
     }
 
     // 주어진 id에 해당하는 상품을 삭제 (존재하지 않으면 예외 발생)
+    //TODO 삭제 비활성화
     @Transactional
-    public void delete(Long id) {
-        if (!itemRepository.existsById(id)) {
-            throw new KreamException(ErrorCode.INVALID_ID);
-        }
-        itemRepository.deleteById(id);
+    public void delete(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("Item not found"));
+
+        // S3에서 이미지 삭제 코드 (선택 사항)
+//        s3Uploader.deleteImage(item.getImageKey());
+        // Cart에서 해당 Item과 관련된 항목 삭제
+        cartRepository.deleteByItemId(itemId);
+
+        itemRepository.delete(item); // 데이터베이스에서 상품 삭제
     }
 
     // 모든 상품의 목록을 조회하고 dto 리스트로 반환
@@ -141,8 +199,11 @@ public class ItemService {
     }
 
     // 주어진 id에 해당하는 상품을 내부적으로 조회 (없으면 예외 발생)
-    private Item findItemById(Long id) {
-        return itemRepository.findById(id)
-                .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
-    }
+//    public Item findItemById(Long id) {
+//        return itemRepository.findById(id)
+//                .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
+//    }
+
+
+
 }

@@ -16,6 +16,12 @@ const detailDescriptionTag = document.querySelector("#detailDescriptionTag");
 const addToCartButton = document.querySelector("#addToCartButton");
 const purchaseButton = document.querySelector("#purchaseButton");
 
+// 새로운 삭제 버튼 요소
+const deleteButton = document.createElement("button");
+deleteButton.id = "deleteButton";
+deleteButton.classList.add("button", "is-danger");
+deleteButton.innerText = "삭제";
+
 checkUrlParams("id");
 addAllElements();
 addAllEvents();
@@ -56,6 +62,15 @@ async function insertItemData() {
       '<span class="tag is-success is-rounded">추천</span>'
     );
   }
+
+  const deleteButton = document.getElementById("deleteButton");
+
+      if (deleteButton) {
+          deleteButton.addEventListener("click", () => {
+              const { id } = getUrlParams(); // 현재 아이템의 ID 가져오기
+              deleteItem(id);
+          });
+      }
 
   addToCartButton.addEventListener("click", async () => {
     try {
@@ -115,4 +130,27 @@ async function insertDb(item) {
     // 위와 마찬가지 방식
     data.selectedIds = selectedIds ? [...selectedIds, id] : [id];
   });
+}
+
+function deleteItem() {
+    const itemId = /*[[${item.id}]]*/ '';  // Thymeleaf 또는 JS로 itemId 설정
+
+    if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
+        fetch(`/item/${itemId}`, {  // 정확한 삭제 경로로 요청 전송
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                alert('상품이 삭제되었습니다.');
+                window.location.href = '/';  // 삭제 후 메인 페이지로 이동
+            } else {
+                alert('상품 삭제에 실패했습니다.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('상품 삭제 중 오류가 발생했습니다.');
+        });
+    }
 }
