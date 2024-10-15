@@ -1,6 +1,5 @@
 package com.shoux_kream.checkout.entity;
 
-import com.shoux_kream.cart.entity.Cart;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.timestamp.BaseEntity;
 import com.shoux_kream.user.dto.response.UserAddressDto;

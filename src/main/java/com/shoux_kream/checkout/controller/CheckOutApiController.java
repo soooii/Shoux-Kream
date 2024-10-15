@@ -3,13 +3,11 @@ package com.shoux_kream.checkout.controller;
 import com.shoux_kream.checkout.dto.CheckOutItemRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
+import com.shoux_kream.checkout.entity.DeliveryStatus;
 import com.shoux_kream.checkout.service.CheckOutService;
 import com.shoux_kream.user.controller.JwtController;
-import com.shoux_kream.user.dto.JwtTokenDto;
 import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.userdetails.User;
 import com.shoux_kream.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -89,6 +87,7 @@ public class CheckOutApiController {
         }
     }
 
+
     @GetMapping("/admin/checkout") //userEmail로 checkout 정보 받기
     public ResponseEntity<List<CheckOutResponseDto>> getCheckOutsByAdmin(@AuthenticationPrincipal User principal) {
         // post맨에선 에러가 나옴 => 헤더 토큰정보 문제
@@ -107,16 +106,19 @@ public class CheckOutApiController {
         return ResponseEntity.ok(checkOuts);
     }
 
+    // 어드민 프론트에서 쏴줄거 ⇒ dropdown으로 선택한 status, checkout 번호 > 수정
     @PatchMapping("/admin/checkout/delivery-status/{detailID}")
-    public ResponseEntity<CheckOutResponseDto> updateDeliveryStatus (@PathVariable("detailId") Long detailId, @RequestBody UserAddressDto userAddressDto) {
+    public ResponseEntity<CheckOutResponseDto> updateDeliveryStatus (@PathVariable("detailId") Long detailId, @RequestBody DeliveryStatus deliveryStatus) {
         //TODO 권한 확인 필요
         //TODO 잘 되는데 주소 id번호까지 같이 바뀌어버림; CheckOut을 address랑 분리해야함!
         //service에서 email로 userid를 체크해서 update함
-        CheckOutResponseDto checkOutResponseDto = checkOutService.updateCheckOut(detailId, userAddressDto);
+        CheckOutResponseDto checkOutResponseDto = checkOutService.updateDeliveryStatus(detailId, deliveryStatus);
         return ResponseEntity.ok(checkOutResponseDto);
 
         //TODO patch => 업데이트 방법? update
     }
+
+    //todo principal 필요없음
     @DeleteMapping("/admin/checkout/{detailId}") //TODO param에 checkout 번호를 입력받아야함, user의 토큰 권한도 확인
     public ResponseEntity<Long> deleteCheckOutByAdmin(@AuthenticationPrincipal User principal, @PathVariable("detailId") Long detailId) {
         Long deletedId = checkOutService.deleteCheckOut(principal.getUsername(), detailId);
