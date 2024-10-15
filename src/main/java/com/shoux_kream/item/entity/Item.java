@@ -42,10 +42,10 @@ public class Item extends BaseEntity {
     private String imageKey; // 이미지 키 (S3에 저장된 이미지 키)
 
     @Column(nullable = false)
-    private int inventory; // 재고 수량
+    private Integer inventory; // 재고 수량
 
     @Column(nullable = false)
-    private int price; // 가격
+    private Integer price; // 가격
 
     private String searchKeywords; // 검색 키워드
 
@@ -65,7 +65,7 @@ public class Item extends BaseEntity {
 
     // 비활성화
 //    @Column(name = "size")
-//    private int size;
+//    private Integer size;
 
     //    관리자만 제품을 등록하고 관리하며, 일반 사용자는 구매만 하기 때문에,
 //    제품(Item) 엔티티에 사용자(user_id)와 직접적인 연결이 필요하지 않음

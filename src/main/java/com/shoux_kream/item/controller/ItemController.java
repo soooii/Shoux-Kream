@@ -48,10 +48,10 @@ public class ItemController {
 
     // 관리자 권한 필요 - 새로운 상품을 등록하고, 등록된 상품 정보를 응답으로 반환
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/item-add") //item-add
+    @PostMapping("/item-add")
     public ResponseEntity<ItemResponse> saveItem(@ModelAttribute ItemSaveRequest itemSaveRequest,
-                                                 @RequestParam("imageKey") MultipartFile imageKey) throws IOException {
-        ItemResponse savedItemResponse = itemService.save(itemSaveRequest, imageKey);
+                                                 @RequestParam("imageKey") MultipartFile imageFile) throws IOException {
+        ItemResponse savedItemResponse = itemService.save(itemSaveRequest, imageFile);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedItemResponse);
     }

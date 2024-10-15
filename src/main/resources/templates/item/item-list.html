@@ -149,6 +149,7 @@
     <h1>Item List</h1>
     <ul>
         <li th:each="item : ${items}">
+            <img th:src = "${item.imageKey}"/>
             <h2><a th:href="@{/item/item-detail/{id}(id=${item.id})}" th:text="${item.title}">상품 제목</a></h2>
             <p th:text="${item.shortDescription}">짧은 설명</p>
             <p th:text="${item.price}">가격</p>

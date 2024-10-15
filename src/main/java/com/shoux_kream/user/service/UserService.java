@@ -64,7 +64,7 @@ public class UserService {
     //회원 조회
     public UserResponse getUser(String email) {
         Optional<User> user = userRepository.findByEmail(email); //optional 예외처리 필요
-        return new UserResponse(user.get().getId(), user.get().getEmail());
+        return new UserResponse(user.get().getId(), user.get().getEmail(),user.get().getName());
     }
 
     //회원정보 수정
@@ -85,7 +85,7 @@ public class UserService {
                 .build();
 
         userRepository.save(updatedUser);
-        return new UserResponse(updatedUser.getId(), updatedUser.getEmail());
+        return new UserResponse(updatedUser.getId(), updatedUser.getEmail(),updatedUser.getName());
     }
 
     //회원정보 삭제
