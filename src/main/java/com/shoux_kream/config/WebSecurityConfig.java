@@ -17,6 +17,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @RequiredArgsConstructor
@@ -47,6 +49,14 @@ public class WebSecurityConfig {
 //                        ).permitAll()  // 위 경로는 인증 없이 접근 가능
 //                        .anyRequest().authenticated())
                 //TODO 개발 전용 permitAll
+                .cors(cors -> cors.configurationSource(request -> {
+                    var config = new org.springframework.web.cors.CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:9000", "https://txqfegberfyqzheq.tunnel-pt.elice.io/")); // 허용할 도메인
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // 허용할 메서드
+                    config.setAllowCredentials(true); // 인증 정보 포함 여부
+                    config.setAllowedHeaders(List.of("*")); // 허용할 헤더
+                    return config;
+                }))
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
