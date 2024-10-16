@@ -68,6 +68,8 @@ public class CategoryService {
 
     @Transactional // 카테고리 삭제
     public void deleteCategory(Long id) {
-        categoryRepository.deleteById(id);
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 카테고리가 존재하지 않습니다: " + id));
+        categoryRepository.delete(category);
     }
 }
