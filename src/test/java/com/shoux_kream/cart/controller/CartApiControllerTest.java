@@ -66,7 +66,8 @@ class CartApiControllerTest {
         cartRequestDto.setQuantity(2);
 
         // when
-        when(userService.getUser("test@example.com")).thenReturn(userResponse);
+        // getUser 인자값 필요없어짐
+        when(userService.getUser()).thenReturn(userResponse);
         when(cartService.addCart(any(CartRequestDto.class), any(Long.class))).thenReturn(1L);
 
         // then

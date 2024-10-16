@@ -20,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ class CartServiceTest {
 
         // Item 객체 초기화
         item = new Item("Test Item", "Test Manufacturer", "Short Description",
-                "Detailed Description", "imageKey", 100, 1000, "test, item");
+                "Detailed Description", "imageKey", 100, 1000, Collections.singletonList("test, item"));
     }
 
     // 장바구니 상품 추가
