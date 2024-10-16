@@ -109,7 +109,6 @@ public class ItemService {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
 
-        // 이미지가 있으면 S3에 업로드하고 item의 이미지 키를 업데이트
         if (imageFile != null && !imageFile.isEmpty()) {
             String imageKey = s3Uploader.upload(imageFile, "item-images");
             item.setImageKey(imageKey);  // 새로운 이미지 키로 업데이트
@@ -179,24 +178,9 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
-    // 주어진 id에 해당하는 브랜드를 내부적으로 조회 (없으면 예외 발생)
-//    private Brand findBrandById(Long id) {
-//        return brandRepository.findById(id)
-//                .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
-//    }
-
     // 주어진 id에 해당하는 카테고리를 내부적으로 조회 (없으면 예외 발생)
     private Category findCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
     }
-
-    // 주어진 id에 해당하는 상품을 내부적으로 조회 (없으면 예외 발생)
-//    public Item findItemById(Long id) {
-//        return itemRepository.findById(id)
-//                .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
-//    }
-
-
-
 }
