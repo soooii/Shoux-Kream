@@ -3,7 +3,7 @@ package com.shoux_kream.checkout.controller;
 import com.shoux_kream.checkout.dto.CheckOutItemRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
-import com.shoux_kream.checkout.entity.DeliveryStatus;
+import com.shoux_kream.checkout.dto.DeliveryStatusRequestDto;
 import com.shoux_kream.checkout.service.CheckOutService;
 import com.shoux_kream.user.controller.JwtController;
 import com.shoux_kream.user.dto.response.UserAddressDto;
@@ -16,7 +16,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 //TODO 값 검증은 CartRequestDto 에서 validator 통해서 체크
 @RestController
@@ -110,12 +109,12 @@ public class CheckOutApiController {
     }
 
     // 어드민 프론트에서 쏴줄거 ⇒ dropdown으로 선택한 status, checkout 번호 > 수정
-    @PatchMapping("/admin/checkout/delivery-status/{detailID}")
-    public ResponseEntity<CheckOutResponseDto> updateDeliveryStatus (@PathVariable("detailId") Long detailId, @RequestBody DeliveryStatus deliveryStatus) {
+    @PatchMapping("/admin/checkout/delivery-status/{detailId}")
+    public ResponseEntity<CheckOutResponseDto> updateDeliveryStatus (@PathVariable("detailId") Long detailId, @RequestBody DeliveryStatusRequestDto request) {
         //TODO 권한 확인 필요
         //TODO 잘 되는데 주소 id번호까지 같이 바뀌어버림; CheckOut을 address랑 분리해야함!
         //service에서 email로 userid를 체크해서 update함
-        CheckOutResponseDto checkOutResponseDto = checkOutService.updateDeliveryStatus(detailId, deliveryStatus);
+        CheckOutResponseDto checkOutResponseDto = checkOutService.updateDeliveryStatus(detailId, request.getDeliveryStatus());
         return ResponseEntity.ok(checkOutResponseDto);
 
         //TODO patch => 업데이트 방법? update
