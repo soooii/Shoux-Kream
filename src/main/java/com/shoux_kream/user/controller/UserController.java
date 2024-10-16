@@ -49,12 +49,8 @@ public class UserController {
 
     //마이페이지
     @GetMapping({"/me"})
-    public ResponseEntity<UserResponse> myPage(@AuthenticationPrincipal User principal) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+    public ResponseEntity<UserResponse> myPage() {
+        UserResponse userResponse = userService.getUser();
         return ResponseEntity.ok(userResponse);
     }
 
