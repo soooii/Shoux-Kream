@@ -20,7 +20,7 @@ import java.util.List;
 public class CategoryController {
 
     @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/category-add")
@@ -30,12 +30,12 @@ public class CategoryController {
             @RequestParam("themeClass") String themeClass,
             @RequestParam("image") MultipartFile imageFile) throws IOException {
 
-        // 이미지 파일이 null인지 확인
+        // 이미지 파일이 null 인지 확인
         if (imageFile == null || imageFile.isEmpty()) {
             return ResponseEntity.badRequest().body(null); // 적절한 에러 메시지를 반환할 수 있도록 조정
         }
 
-        // DTO로 변환
+        // DTO 로 변환
         CategoryDto categoryDto = new CategoryDto(title, description, themeClass);
 
         // 카테고리 생성 및 이미지 업로드
@@ -43,19 +43,25 @@ public class CategoryController {
         return ResponseEntity.ok(createdCategory);
     }
 
-    // URL 변경: GET 메소드는 /category-add/form로 호출
+    // URL 변경: GET 메소드는 /category-add 로 호출
     @GetMapping("/add")
     public String addCategoryPage() {
         return "category/category-add";  // category-add.html 템플릿 파일 반환
     }
 
-    @GetMapping("/page")
+    @GetMapping("/category-list") // 모든 카테고리 조회
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         List<CategoryDto> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/{id}") // 특정 ID에 해당하는 카테고리 조회 기능 추가
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
+        CategoryDto categoryDto = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(categoryDto);
+    }
+
+    @PutMapping("/{id}") // 수정 기능
     public ResponseEntity<CategoryDto> updateCategory(
             @PathVariable Long id,
             @RequestParam("category") CategoryDto categoryDto,
@@ -64,7 +70,7 @@ public class CategoryController {
         return ResponseEntity.ok(updatedCategory);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") // 삭제 기능
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
