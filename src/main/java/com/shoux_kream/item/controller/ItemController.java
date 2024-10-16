@@ -49,7 +49,7 @@ public class ItemController {
     }
 
     // 관리자 권한 필요 - 새로운 상품을 등록하고, 등록된 상품 정보를 응답으로 반환
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/item-add")
     public ResponseEntity<ItemResponse> saveItem(@ModelAttribute ItemSaveRequest itemSaveRequest,
                                                  @RequestParam("imageKey") MultipartFile imageFile) throws IOException {
@@ -64,7 +64,7 @@ public class ItemController {
 //        return "item/item-add"; // 등록 페이지 템플릿을 반환
 //    }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/item-add") // GET 요청으로 상품 등록 페이지를 불러오는 메서드
     public String getItemAddPage(){
 //        model.addAttribute("itemFormDTO", new ItemFormDTO());
