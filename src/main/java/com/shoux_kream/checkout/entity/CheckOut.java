@@ -25,9 +25,9 @@ public class CheckOut extends BaseEntity {
     private String summaryTitle;
     private int totalPrice;
 
+    @C
 
     // TODO https://galid1.tistory.com/572 attribute 컨버터 사용방법도 있음
-    @ColumnDefault("'READY'")  // 기본값을 READY로 설정
     @Enumerated(EnumType.STRING) // 스트링 값으로 저장하겠다.
     private DeliveryStatus deliveryStatus;// 발송준비 배송시작 배송중 배송예정
 
@@ -55,6 +55,8 @@ public class CheckOut extends BaseEntity {
         this.user = user;
         this.totalPrice = totalPrice;
         this.summaryTitle = summaryTitle;
+        //주문 처음 만들때 기본값 지정
+        this.deliveryStatus = DeliveryStatus.READY;
     }
 
     public CheckOutResponseDto toDto() {
@@ -62,6 +64,8 @@ public class CheckOut extends BaseEntity {
                 .id(this.id)
                 .summaryTitle(this.summaryTitle)
                 .totalPrice(this.totalPrice)
+                //DTO 반환시 status 반환
+                .deliveryStatus(deliveryStatus)
                 .address(UserAddressDto.builder().userAddress(this.address).build())
                 .request(this.request)
                 .build();
