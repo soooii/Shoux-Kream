@@ -8,5 +8,5 @@ public class AdminUserUpdateRequest {
     @NotNull(message = "유저 id가 없습니다.")
     private Long userId;
     @NotNull(message = "권한이 없습니다.")
-    private Role role;
+    private Role userRole;
 }
