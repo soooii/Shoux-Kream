@@ -1,6 +1,7 @@
 package com.shoux_kream.cart.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shoux_kream.MockSecurityConfig;
 import com.shoux_kream.cart.dto.CartRequestDto;
 import com.shoux_kream.cart.service.CartService;
 import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +29,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Import(MockSecurityConfig.class) // MockSecurityConfig를 임포트하여 사용
 @WebMvcTest(CartApiController.class)
 class CartApiControllerTest {
 
