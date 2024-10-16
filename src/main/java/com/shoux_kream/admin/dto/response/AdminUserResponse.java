@@ -20,7 +20,7 @@ public class AdminUserResponse {
         this.userEmail = entity.getEmail();
         this.userName = entity.getName();
         this.userNickName = entity.getNickname();
-        this.userRole = entity.getRole().getValue();
+        this.userRole = entity.getRole().getValue().replace("ROLE_", "");
         this.createAt = entity.getCreatedAt();
         this.updateAt = entity.getUpdatedAt();
     }
