@@ -1,9 +1,11 @@
 package com.shoux_kream.cart.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shoux_kream.MockSecurityConfig;
 import com.shoux_kream.cart.dto.CartRequestDto;
 import com.shoux_kream.cart.service.CartService;
 import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
+import com.shoux_kream.exception.JwtAuthenticationEntryPoint;
 import com.shoux_kream.user.dto.response.UserResponse;
 import com.shoux_kream.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +30,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Import(MockSecurityConfig.class) // MockSecurityConfig를 임포트하여 사용
 @WebMvcTest(CartApiController.class)
 class CartApiControllerTest {
 
@@ -41,6 +45,9 @@ class CartApiControllerTest {
 
     @MockBean
     private JwtProviderImpl jwtProvider;
+
+    @MockBean
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; // 추가
 
 
     @Autowired
