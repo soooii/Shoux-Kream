@@ -62,14 +62,13 @@ public class JwtController {
     @GetMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         // 쿠키에서 refreshToken 가져오기
-        Optional<String> refreshTokenOpt = resolveRefreshToken(request);
+        Optional<String> cookieToken = resolveRefreshToken(request);
 
-        if (refreshTokenOpt.isPresent()) {
-            String refreshToken = refreshTokenOpt.get();
+        if (cookieToken.isPresent()) {
+            String refreshToken = cookieToken.get();
             AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(refreshToken);
             if (jwtToken.validate()) {
-                String jti = jwtToken.getDate().getId();  // jti 추출
-
+                String jti = jwtToken.getDate().getId();
                 // jti를 통해 해당 리프레시 토큰만 삭제
                 refreshTokenRepository.deleteByJti(jti);
             }
@@ -89,21 +88,21 @@ public class JwtController {
     // Access Token 재발급
     @PostMapping("/refresh")
     public ResponseEntity<JwtTokenResponse> refresh(HttpServletRequest request) {
-        Optional<String> token = resolveRefreshToken(request);
+        Optional<String> cookieToken = resolveRefreshToken(request);
 
-        if (token.isPresent()) {
-            AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(token.get());
+        if (cookieToken.isPresent()) {
+            AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(cookieToken.get());
             if (jwtToken.validate()) {
                 Claims claims = jwtToken.getDate();
                 String email = claims.getSubject();
-                String jti = claims.getId();  // jti 가져오기
+                String jti = claims.getId();
                 Role role = jwtToken.getRole();
 
-                Optional<RefreshToken> refreshTokenOpt = refreshTokenRepository.findByJti(jti);
-                if (refreshTokenOpt.isPresent()) {
-                    RefreshToken storedRefreshToken = refreshTokenOpt.get();
-                    // jti를 비교하여 리프레시 토큰 유효성 검증
-                    if (storedRefreshToken.getRefreshToken().equals(token.get())) {
+                Optional<RefreshToken> dbToken = refreshTokenRepository.findByJti(jti);
+                if (dbToken.isPresent()) {
+                    RefreshToken storedRefreshToken = dbToken.get();
+                    // db에 저장된 RefreshToken과 쿠키의 RefreshToken이 같은지 검증
+                    if (storedRefreshToken.getRefreshToken().equals(cookieToken.get())) {
                         String newAccessToken = tokenProvider.createAccessToken(email, role, claims).getToken();
                         JwtTokenResponse dto = new JwtTokenResponse(newAccessToken);
                         return ResponseEntity.ok(dto);
