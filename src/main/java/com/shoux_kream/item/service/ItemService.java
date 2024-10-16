@@ -16,6 +16,7 @@ import com.shoux_kream.item.entity.Item;
 //import com.shoux_kream.item.repository.BrandRepository;
 import com.shoux_kream.item.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@AllArgsConstructor
 public class ItemService {
 
     private final ItemRepository itemRepository;
@@ -33,14 +35,6 @@ public class ItemService {
     private final CategoryRepository categoryRepository;
     private final S3Uploader s3Uploader;
     private final CartRepository cartRepository;
-
-    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository, S3Uploader s3Uploader, CartRepository cartRepository) {
-        this.itemRepository = itemRepository;
-//        this.brandRepository = brandRepository;
-        this.categoryRepository = categoryRepository;
-        this.s3Uploader = s3Uploader;
-        this.cartRepository = cartRepository;
-    }
 
     // 새로운 상품을 등록하고 저장된 상품 정보를 반환
     @Transactional
@@ -93,25 +87,6 @@ public class ItemService {
         return ItemResponse.fromEntity(item); // 조회용 DTO 반환
     }
 
-    public ItemUpdateRequest getUpdateRequestById(Long id) {
-        Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Item not found"));
-
-        return new ItemUpdateRequest(
-                item.getId(),
-                item.getTitle(),
-                item.getManufacturer(),
-                item.getShortDescription(),
-                item.getDetailDescription(),
-                null, // MultipartFile은 수정 요청 시 클라이언트에서 처리
-                item.getInventory(),
-                item.getPrice(),
-                item.getSearchKeywords()
-        );
-    }
-
-
-
     // 주어진 id에 해당하는 상품을 조회하고 dto 로 변환하여 반환
     public ItemResponse findById(Long id) {
         Item item = itemRepository.findById(id)
@@ -130,12 +105,13 @@ public class ItemService {
 
     // 기존 상품 정보를 수정하고, 수정된 정보를 반환
     @Transactional
-    public ItemUpdateResponse update(Long id, ItemUpdateRequest itemUpdateRequest) throws Exception {
+    public ItemUpdateResponse update(Long id, ItemUpdateRequest itemUpdateRequest, MultipartFile imageFile) throws Exception {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
 
-        if (itemUpdateRequest.image() != null && !itemUpdateRequest.image().isEmpty()) {
-            String imageKey = s3Uploader.upload(itemUpdateRequest.image(), "item-images");
+        // 이미지가 있으면 S3에 업로드하고 item의 이미지 키를 업데이트
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imageKey = s3Uploader.upload(imageFile, "item-images");
             item.setImageKey(imageKey);  // 새로운 이미지 키로 업데이트
         }
 
@@ -158,6 +134,23 @@ public class ItemService {
                 item.getShortDescription(),
                 item.getDetailDescription(),
                 itemUpdateRequest.image(), // MultipartFile을 그대로 넘김
+                item.getInventory(),
+                item.getPrice(),
+                item.getSearchKeywords()
+        );
+    }
+
+    public ItemUpdateRequest getUpdateRequestById(Long id) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+
+        return new ItemUpdateRequest(
+                item.getId(),
+                item.getTitle(),
+                item.getManufacturer(),
+                item.getShortDescription(),
+                item.getDetailDescription(),
+                null, // MultipartFile은 수정 요청 시 클라이언트에서 처리
                 item.getInventory(),
                 item.getPrice(),
                 item.getSearchKeywords()
