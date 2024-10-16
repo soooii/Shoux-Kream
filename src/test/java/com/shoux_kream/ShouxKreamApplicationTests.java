@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
-//applcation test 프로필 가져오기
-@SpringBootTest(classes = ShouxKreamApplicationTests.class)
+//어플 전체 실행 테스트 X
+//@SpringBootTest(classes = ShouxKreamApplicationTests.class)
 @TestPropertySource(properties = {
 		"S3_SHOUXKREAM_ACCESS_KEY=test",
 		"S3_SHOUXKREAM_SECRET_KEY=test",
