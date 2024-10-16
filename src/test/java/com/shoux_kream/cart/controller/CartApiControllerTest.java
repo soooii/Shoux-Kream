@@ -5,6 +5,7 @@ import com.shoux_kream.MockSecurityConfig;
 import com.shoux_kream.cart.dto.CartRequestDto;
 import com.shoux_kream.cart.service.CartService;
 import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
+import com.shoux_kream.exception.JwtAuthenticationEntryPoint;
 import com.shoux_kream.user.dto.response.UserResponse;
 import com.shoux_kream.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +45,9 @@ class CartApiControllerTest {
 
     @MockBean
     private JwtProviderImpl jwtProvider;
+
+    @MockBean
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; // 추가
 
 
     @Autowired
