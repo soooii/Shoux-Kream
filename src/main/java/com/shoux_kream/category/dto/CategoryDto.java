@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CategoryDto {
 
+    private Long id;
     private String title;
     private String themeClass;
     private String description;
@@ -17,6 +18,7 @@ public class CategoryDto {
 
 
     public CategoryDto(Category category) { //엔티티 -> DTO로 변환하는 생성자
+        this.id = category.getId();
         this.title = category.getTitle();
         this.description = category.getDescription();
         this.themeClass = category.getThemeClass();

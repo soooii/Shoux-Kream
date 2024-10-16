@@ -43,6 +43,12 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional // 특정 카테고리 조회
+    public CategoryDto getCategoryById(Long id) {
+        return categoryRepository.findById(id)
+                .map(CategoryDto::new)
+                .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
+    }
 
     @Transactional // 카테고리 수정
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto, MultipartFile imageFile) {
