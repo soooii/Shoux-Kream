@@ -21,6 +21,7 @@ public class RefreshToken {
     private String refreshToken;
     @NotBlank
     private String email;
+    private String jti;
 
     public RefreshToken updateToken(String token) {
         this.refreshToken = token;

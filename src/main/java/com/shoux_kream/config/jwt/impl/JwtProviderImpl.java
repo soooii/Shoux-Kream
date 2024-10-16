@@ -86,12 +86,16 @@ public class JwtProviderImpl implements JwtProvider<AuthTokenImpl> {
     @Override
     public AuthTokenImpl createAccessToken(String sub, Role role, Map<String, Object> claims) {
         claims.put("type", ACCESS_TOKEN_TYPE_VALUE);
+        String jti = UUID.randomUUID().toString();
+        claims.put("jti", jti);
         return new AuthTokenImpl(sub, role, key, new DefaultClaims(claims), new Date(System.currentTimeMillis() + accessExpires));
     }
 
     @Override
     public AuthTokenImpl createRefreshToken(String sub, Role role, Map<String, Object> claims) {
         claims.put("type", REFRESH_TOKEN_TYPE_VALUE);
+        String jti = UUID.randomUUID().toString();
+        claims.put("jti", jti);
         return new AuthTokenImpl(sub, role, key, new DefaultClaims(claims), new Date(System.currentTimeMillis() + refreshExpires));
     }
 }

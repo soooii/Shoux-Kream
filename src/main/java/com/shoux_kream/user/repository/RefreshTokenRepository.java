@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
-    Optional<RefreshToken> findByEmail(String email);
+    Optional<RefreshToken> findByJti(String jti);
     @Transactional
-    Optional<RefreshToken> deleteByEmail(String email);
+    void deleteByJti(String jti);
 }

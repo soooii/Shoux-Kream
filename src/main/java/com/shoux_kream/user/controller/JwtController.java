@@ -6,6 +6,7 @@ import com.shoux_kream.user.dto.JwtTokenDto;
 import com.shoux_kream.user.dto.request.JwtTokenLoginRequest;
 import com.shoux_kream.user.dto.response.JwtTokenResponse;
 import com.shoux_kream.user.dto.response.UserResponse;
+import com.shoux_kream.user.entity.RefreshToken;
 import com.shoux_kream.user.entity.Role;
 import com.shoux_kream.user.repository.RefreshTokenRepository;
 import com.shoux_kream.user.service.UserService;
@@ -58,35 +59,50 @@ public class JwtController {
         );
     }
 
-    // 로그아웃
     @GetMapping("/logout")
-    public ResponseEntity<Void> logout(@AuthenticationPrincipal User principal, HttpServletResponse response) {
-        String email = principal.getUsername();
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        // 쿠키에서 refreshToken 가져오기
+        Optional<String> cookieToken = resolveRefreshToken(request);
 
-        Cookie refreshTokenCookie = new Cookie("refreshToken", null); // 쿠키 값을 null로 설정
-        refreshTokenCookie.setHttpOnly(true); // HttpOnly 속성 설정
-        refreshTokenCookie.setMaxAge(0); // 쿠키 유효 기간을 0으로 설정
+        if (cookieToken.isPresent()) {
+            String refreshToken = cookieToken.get();
+            AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(refreshToken);
+            if (jwtToken.validate()) {
+                String jti = jwtToken.getDate().getId();
+                // jti를 통해 해당 리프레시 토큰만 삭제
+                refreshTokenRepository.deleteByJti(jti);
+            }
+        }
+
+        // 쿠키 삭제
+        Cookie refreshTokenCookie = new Cookie("refreshToken", null);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setMaxAge(0); // 쿠키 유효 기간을 0으로 설정하여 삭제
         refreshTokenCookie.setPath("/");
-        response.addCookie(refreshTokenCookie); // 응답에 쿠키 추가
-
-        refreshTokenRepository.deleteByEmail(email);
+        response.addCookie(refreshTokenCookie);
 
         return ResponseEntity.ok().build();
     }
 
+
     // Access Token 재발급
     @PostMapping("/refresh")
     public ResponseEntity<JwtTokenResponse> refresh(HttpServletRequest request) {
-        Optional<String> token = resolveRefreshToken(request);
+        Optional<String> cookieToken = resolveRefreshToken(request);
 
-        if (token.isPresent()) {
-            AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(token.get());
+        if (cookieToken.isPresent()) {
+            AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(cookieToken.get());
             if (jwtToken.validate()) {
                 Claims claims = jwtToken.getDate();
                 String email = claims.getSubject();
+                String jti = claims.getId();
                 Role role = jwtToken.getRole();
-                if(refreshTokenRepository.findByEmail(email).isPresent()) {
-                    if(refreshTokenRepository.findByEmail(email).get().getRefreshToken().equals(token.get())) {
+
+                Optional<RefreshToken> dbToken = refreshTokenRepository.findByJti(jti);
+                if (dbToken.isPresent()) {
+                    RefreshToken storedRefreshToken = dbToken.get();
+                    // db에 저장된 RefreshToken과 쿠키의 RefreshToken이 같은지 검증
+                    if (storedRefreshToken.getRefreshToken().equals(cookieToken.get())) {
                         String newAccessToken = tokenProvider.createAccessToken(email, role, claims).getToken();
                         JwtTokenResponse dto = new JwtTokenResponse(newAccessToken);
                         return ResponseEntity.ok(dto);
@@ -97,6 +113,7 @@ public class JwtController {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 401 Unauthorized
     }
+
 
 
     // 쿠키의 Refresh Token 가져옴
