@@ -36,8 +36,9 @@ public class CheckOutApiController {
 
     @PostMapping("/checkout") //TODO userId로 체크아웃 정보를 저장함, 저장한 entity를 id값을 포함해 반환
     public ResponseEntity<CheckOutResponseDto> processCheckOut(@AuthenticationPrincipal User principal,@RequestBody CheckOutRequestDto checkOutRequestDto) {
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         CheckOutResponseDto checkOutResponseDto = checkOutService.createCheckout(userResponse.getUserId(), checkOutRequestDto);
         // TODO 201 created(URI) 전환
         return ResponseEntity.ok(checkOutResponseDto);
@@ -50,8 +51,9 @@ public class CheckOutApiController {
         //    private String summaryTitle;
         //    private int totalPrice;
         // 이 정보만 필요.
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         List<CheckOutResponseDto> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
         return ResponseEntity.ok(checkOuts);
     }
@@ -100,8 +102,9 @@ public class CheckOutApiController {
         // 그냥 모두 조회
 
         // TODO role authorities => admin일때
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         List<CheckOutResponseDto> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
         return ResponseEntity.ok(checkOuts);
     }
