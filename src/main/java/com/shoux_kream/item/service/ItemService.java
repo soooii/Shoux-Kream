@@ -16,6 +16,7 @@ import com.shoux_kream.item.entity.Item;
 //import com.shoux_kream.item.repository.BrandRepository;
 import com.shoux_kream.item.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@AllArgsConstructor
 public class ItemService {
 
     private final ItemRepository itemRepository;
@@ -33,14 +35,6 @@ public class ItemService {
     private final CategoryRepository categoryRepository;
     private final S3Uploader s3Uploader;
     private final CartRepository cartRepository;
-
-    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository, S3Uploader s3Uploader, CartRepository cartRepository) {
-        this.itemRepository = itemRepository;
-//        this.brandRepository = brandRepository;
-        this.categoryRepository = categoryRepository;
-        this.s3Uploader = s3Uploader;
-        this.cartRepository = cartRepository;
-    }
 
     // 새로운 상품을 등록하고 저장된 상품 정보를 반환
     @Transactional

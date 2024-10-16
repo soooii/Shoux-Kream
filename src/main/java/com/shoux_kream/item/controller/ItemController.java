@@ -83,6 +83,7 @@ public class ItemController {
 
 
     // 상품 수정 페이지 뷰
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/edit/{id}")
     public String showEditItemPage(@PathVariable Long id, Model model) {
         model.addAttribute("itemId", id);
