@@ -128,9 +128,8 @@ public class UserService {
                 claims
         );
 
-        //Refresh Token 레디스에 저장
-        // refreshTokenService.save(sub, refreshToken.getToken());
-        RefreshToken token = RefreshToken.builder().refreshToken(refreshToken.getToken()).email(request.getEmail()).build();
+        String jti = refreshToken.getDate().getId();
+        RefreshToken token = RefreshToken.builder().refreshToken(refreshToken.getToken()).email(request.getEmail()).jti(jti).build();
         refreshTokenRepository.save(token);
 
         return JwtTokenDto.builder()
@@ -138,6 +137,7 @@ public class UserService {
                 .refreshToken(refreshToken.getToken())
                 .build();
     }
+
 
     public List<UserAddressDto> getUserAddresses(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("user doesn't exist"));
