@@ -1,21 +1,22 @@
 package com.shoux_kream.config;
 
+import com.shoux_kream.exception.JwtAccessDeniedHandler;
+import com.shoux_kream.exception.JwtAuthenticationEntryPoint;
 import com.shoux_kream.config.jwt.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
 
@@ -39,25 +40,24 @@ public class WebSecurityConfig {
 
     //2.특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                //TODO 개발, 릴리즈 분리해서 FilterChain 적용할 방법 고안
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(
-//                                "/api/users/signup",
-//                                "/api/users/login"
-//                        ).permitAll()  // 위 경로는 인증 없이 접근 가능
-//                        .anyRequest().authenticated())
-                //TODO 개발 전용 permitAll
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler jwtAccessDeniedHandler) throws Exception {
+        return http.
+                exceptionHandling(ex->ex
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, SecurityPath.ONLY_GET_WHITELIST).permitAll()
+                        .requestMatchers(HttpMethod.POST, SecurityPath.ONLY_POST_WHITELIST).permitAll()
+                        .requestMatchers("/js/**", "/css/**", "/html/**","/img/**").permitAll()
+                        .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(request -> {
-                    var config = new org.springframework.web.cors.CorsConfiguration();
+                    var config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of("http://localhost:9000", "https://txqfegberfyqzheq.tunnel-pt.elice.io/")); // 허용할 도메인
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // 허용할 메서드
                     config.setAllowCredentials(true); // 인증 정보 포함 여부
                     config.setAllowedHeaders(List.of("*")); // 허용할 헤더
                     return config;
                 }))
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -88,3 +88,4 @@ public class WebSecurityConfig {
 
 
 }
+
