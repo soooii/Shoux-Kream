@@ -26,8 +26,9 @@ public class CartApiContorller {
     // 장바구니 담기
     @PostMapping("/add/{itemId}")
     public ResponseEntity addCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("itemId") Long itemId, @AuthenticationPrincipal User principal) {
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        // String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         if (!userResponse.getUserId().equals(cartRequestDto.getUserId())) {
             return new ResponseEntity<String>("상품 추가 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
@@ -41,8 +42,9 @@ public class CartApiContorller {
     // 장바구니 조회
     @GetMapping("/summary")
     public ResponseEntity<List<CartResponseDto>> allCarts(@AuthenticationPrincipal User principal) {
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         List<CartResponseDto> carts = cartService.allCarts(userResponse.getUserId());
 
         return ResponseEntity.ok(carts);
@@ -53,8 +55,9 @@ public class CartApiContorller {
     //principal user는 userDetail의 user!
     public ResponseEntity<List<CartResponseDto>> getSelectedCarts(@AuthenticationPrincipal User principal){
         // principal의 unique값인 이메일로 특정
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         List<CartResponseDto> selectedCarts = cartService.selectedCarts(userResponse.getUserId());
 
         return ResponseEntity.ok(selectedCarts);
@@ -64,9 +67,9 @@ public class CartApiContorller {
     @PatchMapping("/selected")
     public ResponseEntity updateCartSelected(@RequestBody List<Long> cartIds, @AuthenticationPrincipal User principal) {
         // 체크된 cart Id 값만 true로 변경
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
-
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         cartService.updateCartSelected(cartIds, userResponse.getUserId());
 
         return ResponseEntity.ok()
@@ -92,9 +95,9 @@ public class CartApiContorller {
     // 장바구니 일괄 삭제
     @DeleteMapping("/")
     public ResponseEntity deleteCarts(@RequestBody List<Long> cartIds, @AuthenticationPrincipal User principal) {
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
-
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         cartService.deleteCarts(cartIds, userResponse.getUserId());
 
         return ResponseEntity.ok()

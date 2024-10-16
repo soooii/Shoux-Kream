@@ -19,6 +19,10 @@ import com.shoux_kream.user.entity.UserAddress;
 import com.shoux_kream.user.repository.RefreshTokenRepository;
 import com.shoux_kream.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,9 +66,12 @@ public class UserService {
     }
 
     //회원 조회
-    public UserResponse getUser(String email) {
-        Optional<User> user = userRepository.findByEmail(email); //optional 예외처리 필요
-        return new UserResponse(user.get().getId(), user.get().getEmail(),user.get().getName());
+    public UserResponse getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다"));
+        return new UserResponse(user.getId(), user.getEmail(), user.getName());
     }
 
     //회원정보 수정
