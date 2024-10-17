@@ -7,6 +7,27 @@
     box-shadow: none;
 }
 
+.logo-location {
+    margin-top: 4px;
+}
+
+.navbar-item {
+    color: inherit;
+    text-decoration-line: none;
+    display: flex;
+    font-size: 16px;
+    margin-top: -27px;
+    margin-left: -15px;
+    padding-left: 15px;
+    align-items: center;
+    letter-spacing: -0.3px;
+}
+
+.no-underline {
+    color: inherit;
+    text-decoration-line: none;
+}
+
 .cart-header {
     border-bottom: #dbdbdb solid 1px;
     margin-bottom: 2rem;
