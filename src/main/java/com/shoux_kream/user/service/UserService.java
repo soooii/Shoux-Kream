@@ -39,19 +39,20 @@ public class UserService {
     private final JwtProviderImpl jwtProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    @jakarta.annotation.PostConstruct
-    public void init() {
-        User user = User.builder()
-                .email("1@1")
-                .password(bCryptPasswordEncoder.encode("1"))
-                .name("elice")
-                .nickname("e")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .role(Role.USER)
-                .build();
-        userRepository.save(user);
-    }
+    //TODO 초기값 중복 init 문제, mysql은 인메모리 DB가 아니라 unique 중복값 문제가 존재함
+//    @jakarta.annotation.PostConstruct
+//    public void init() {
+//        User user = User.builder()
+//                .email("1@1")
+//                .password(bCryptPasswordEncoder.encode("1"))
+//                .name("elice")
+//                .nickname("e")
+//                .createdAt(LocalDateTime.now())
+//                .updatedAt(LocalDateTime.now())
+//                .role(Role.USER)
+//                .build();
+//        userRepository.save(user);
+//    }
 
     //회원가입
     public Long signup(UserRequest dto) {
