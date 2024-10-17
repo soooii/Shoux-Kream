@@ -61,11 +61,12 @@ public class CategoryController {
         return ResponseEntity.ok(categoryDto);
     }
 
-    @PutMapping("/{id}") // 수정 기능
+    @PutMapping("/{id}")
     public ResponseEntity<CategoryDto> updateCategory(
             @PathVariable Long id,
-            @RequestParam("category") CategoryDto categoryDto,
-            @RequestParam("image") MultipartFile imageFile) {
+            @RequestPart("category") CategoryDto categoryDto,
+            @RequestPart(value = "image", required = false) MultipartFile imageFile) {
+
         CategoryDto updatedCategory = categoryService.updateCategory(id, categoryDto, imageFile);
         return ResponseEntity.ok(updatedCategory);
     }
