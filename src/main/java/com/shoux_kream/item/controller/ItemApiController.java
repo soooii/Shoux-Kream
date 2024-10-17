@@ -20,7 +20,7 @@ public class ItemApiController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/item-detail/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteItem(@PathVariable("id") Long id) {
         itemService.delete(id);
         return ResponseEntity.noContent().build();
     }
