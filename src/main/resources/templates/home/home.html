@@ -36,7 +36,7 @@
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
   <!-- 커스텀 css, js -->
   <link rel="stylesheet" href="css/home/home.css" />
-  <script src="js/home/home.js" type="module" defer></script>
+  <script src="/js/home/home.js" type="module" defer></script>
   <script src="/js/login-logout.js"></script>
 </head>
 
@@ -173,6 +173,7 @@
     }
 
     // 새로운 URL로 이동할 때 토큰을 쿼리 파라미터로 추가
+<!--    window.location.href = `http://localhost:9000?token=${token}`;-->
     window.location.href = `https://txqfegberfyqzheq.tunnel-pt.elice.io/?token=${token}`;
   }
 
