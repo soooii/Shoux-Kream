@@ -1,4 +1,4 @@
-sspring:
+spring:
   config:
     activate:
       on-profile: release
