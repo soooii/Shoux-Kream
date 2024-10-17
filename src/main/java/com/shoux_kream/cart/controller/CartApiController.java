@@ -25,15 +25,10 @@ public class CartApiController {
 
     // 장바구니 담기
     @PostMapping("/add/{itemId}")
-    public ResponseEntity addCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("itemId") Long itemId, @AuthenticationPrincipal User principal) {
-        // String email = principal.getUsername();
-        //UserResponse userResponse = userService.getUser(email);
+    public ResponseEntity addCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("itemId") Long itemId) {
         UserResponse userResponse = userService.getUser();
-        if (!userResponse.getUserId().equals(cartRequestDto.getUserId())) {
-            return new ResponseEntity<String>("상품 추가 권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
 
-        Long cartId = cartService.addCart(cartRequestDto, itemId);
+        Long cartId = cartService.addCart(userResponse.getUserId(), cartRequestDto, itemId);
 
         return ResponseEntity.ok()
                 .body(cartId);
@@ -41,9 +36,7 @@ public class CartApiController {
 
     // 장바구니 조회
     @GetMapping("/summary")
-    public ResponseEntity<List<CartResponseDto>> allCarts(@AuthenticationPrincipal User principal) {
-        //String email = principal.getUsername();
-        //UserResponse userResponse = userService.getUser(email);
+    public ResponseEntity<List<CartResponseDto>> allCarts() {
         UserResponse userResponse = userService.getUser();
         List<CartResponseDto> carts = cartService.allCarts(userResponse.getUserId());
 
