@@ -39,8 +39,10 @@ public class Category {
     }
 
 
-    public void updateCategory(String title, String imageUrl) { // 카테고리 정보 수정 메서드
+    public void updateCategory(String title, String description, String themeClass, String imageUrl) {
         this.title = title;
+        this.description = description;
+        this.themeClass = themeClass;
         this.imageUrl = imageUrl;
     }
 }
