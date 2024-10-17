@@ -20,8 +20,9 @@ public class UserViewController {
     }
 
     @GetMapping("/me")
-    public String getUserPage() {
-        return "user/mypage-main";
-    }
+    public String getMyPage() {return "user/mypage-main";}
+
+    @GetMapping("/me/account")
+    public String getAccountPage() {return "user/mypage-account";}
 
 }
