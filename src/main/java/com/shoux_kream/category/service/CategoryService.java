@@ -52,15 +52,22 @@ public class CategoryService {
 
     @Transactional // 카테고리 수정
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto, MultipartFile imageFile) {
+        // 카테고리 존재 여부 확인
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
 
-        try {
-            String imageUrl = s3Uploader.upload(imageFile, "categories"); // 이미지 업로드
-            category.updateCategory(categoryDto.getTitle(), imageUrl); // 이름과 이미지 URL로 카테고리 업데이트
-        } catch (IOException e) {
-            throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e); // 예외 처리
+        // 이미지 파일이 있는 경우에만 S3에 업로드
+        String imageUrl = category.getImageUrl(); // 기존 이미지 URL을 기본값으로 설정
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                imageUrl = s3Uploader.upload(imageFile, "categories");
+            } catch (IOException e) {
+                throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e);
+            }
         }
+
+        // 카테고리 정보 업데이트
+        category.updateCategory(categoryDto.getTitle(), categoryDto.getDescription(), categoryDto.getThemeClass(), imageUrl);
 
         return new CategoryDto(category);
     }
