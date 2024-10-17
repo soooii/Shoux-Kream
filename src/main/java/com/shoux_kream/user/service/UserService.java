@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 
 import com.shoux_kream.config.jwt.impl.AuthTokenImpl;
 import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
+import com.shoux_kream.exception.InvalidPasswordException;
 import com.shoux_kream.user.dto.JwtTokenDto;
+import com.shoux_kream.user.dto.request.AccountRequest;
 import com.shoux_kream.user.dto.request.JwtTokenLoginRequest;
 import com.shoux_kream.user.dto.request.UserRequest;
 import com.shoux_kream.user.dto.response.UserAddressDto;
@@ -36,7 +38,6 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtProviderImpl jwtProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    // private final RefreshTokenService refreshTokenService;
 
     @jakarta.annotation.PostConstruct
     public void init() {
@@ -70,15 +71,28 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다"));
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
         return new UserResponse(user.getId(), user.getEmail(), user.getName());
     }
 
-    //회원정보 수정
-    public UserResponse updateProfile(String email, UserRequest dto) {
-        log.info(email);
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    // 회원정보 수정
+    public void updateProfile(AccountRequest dto) {
+        Long userId = getUser().getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
+
+        // 기존 비밀번호 입력하지 않음 or 입력한 기존 비밀번호와 db 현재 비밀번호가 일치하지 않음
+        if (dto.getPassword() == null || !bCryptPasswordEncoder.matches(dto.getPassword(), user.getPassword())) {
+           log.info(dto.getPassword());
+           log.info(user.getPassword());
+            throw new InvalidPasswordException("현재 비밀번호가 올바르지 않습니다.");
+        }
+
+        // 새 비밀번호가 null or 비어있을 때 기존 비밀번호 유지 / 아니라면 비밀번호 업데이트
+        String encodedNewPassword = user.getPassword();
+        if (dto.getNewPassword() != null && !dto.getNewPassword().isEmpty()) {
+            encodedNewPassword = bCryptPasswordEncoder.encode(dto.getNewPassword());
+        }
 
         User updatedUser = User.builder()
                 .id(user.getId())
@@ -88,17 +102,19 @@ public class UserService {
                 .createdAt(user.getCreatedAt())
                 .updatedAt(LocalDateTime.now())
                 .role(user.getRole())
-                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
+                .addresses(user.getAddresses())
+                .password(encodedNewPassword)
                 .build();
 
         userRepository.save(updatedUser);
-        return new UserResponse(updatedUser.getId(), updatedUser.getEmail(),updatedUser.getName());
     }
 
+
     //회원정보 삭제
-    public void deleteUser(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    public void deleteUser() {
+        Long userId = getUser().getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
         userRepository.delete(user);
     }
 
