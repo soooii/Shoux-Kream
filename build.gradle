@@ -91,6 +91,9 @@ dependencies {
 
 	// 보안 설정을 테스트할 수 있도록 도와주는 Spring Security 테스트 지원 라이브러리
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	//rds 이전용
+	runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
 tasks.named('test') {
