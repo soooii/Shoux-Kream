@@ -115,7 +115,7 @@
                 </div>
                 <div class="content">
                     <h1 class="subtitle is-3 Freesentation-9Black-title" th:text="${item.title}">상품 제목</h1>
-                    <h1 class="Freesentation-9Black-price" th:text="|${item.price}원|">2000원</h1>
+                    <h1 class="Freesentation-9Black-price" id="item-detail-price" th:text="|${item.price}원|">2000원</h1>
                     <p class="short-description" th:text="${item.shortDescription}">짧은 설명 예시</p>
                     <p class="detail-description" th:text="${item.detailDescription}">
                         상세 설명 예시
@@ -144,7 +144,7 @@
                         <div class="mb-3">
                             <input type="hidden" id="item-id" th:value="${item.id}">
                             <div class="fw-semibold">구매가격</div>
-                            <div class="fw-bold text-primary">3000원</div>
+                            <div class="fw-bold text-primary" id="item-price" th:text="${item.price}">3000원</div>
                         </div>
                         <div class="d-flex align-items-center justify-content-end">
                             <button class="btn btn-outline-dark btn-custom quantity-custom-button" type="button" id="decreaseBtn"> - </button>

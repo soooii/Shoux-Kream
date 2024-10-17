@@ -156,6 +156,16 @@
 //     }
 // }
 
+// 구매하기 모달창 숫자 포맷팅
+const itemPriceElement = document.getElementById('item-detail-price');
+
+// 텍스트 값 가져오기 (숫자 부분만 추출)
+const rawPrice = itemPriceElement.innerText.replace('원', '').replace(/,/g, ''); // '원' 제거 및 기존 쉼표 제거
+const formattedPrice = Number(rawPrice).toLocaleString(); // 1000단위로 쉼표 추가
+
+// 포맷팅된 가격을 다시 설정
+itemPriceElement.innerText = `${formattedPrice}원`;
+
 // 장바구니 담기
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -164,18 +174,32 @@ document.addEventListener('DOMContentLoaded', function () {
     const decreaseBtn = document.getElementById('decreaseBtn');
     const increaseBtn = document.getElementById('increaseBtn');
 
+    const itemPriceElement = document.getElementById('item-price');
+
+    // 텍스트 값 가져오기 (숫자 부분만 추출)
+    const rawPrice = itemPriceElement.innerText.replace('원', '').replace(/,/g, ''); // '원' 제거 및 기존 쉼표 제거
+    const formattedPrice = Number(rawPrice).toLocaleString(); // 1000단위로 쉼표 추가
+
+    // 포맷팅된 가격을 다시 설정
+    itemPriceElement.innerText = `${formattedPrice}원`;
+
+
     decreaseBtn.addEventListener('click', () => {
         const quantityInput = document.getElementById('quantity');
+        let totalPrice = parseInt(quantityInput.value) * parseInt(rawPrice);
         let currentQuantity = parseInt(quantityInput.value);
         if (currentQuantity > 1) {
             quantityInput.value = currentQuantity - 1;
+            itemPriceElement.innerText = (totalPrice - parseInt(rawPrice)).toLocaleString() + '원';
         }
     });
 
     increaseBtn.addEventListener('click', () => {
         const quantityInput = document.getElementById('quantity');
+        let totalPrice = parseInt(quantityInput.value) * parseInt(rawPrice);
         let currentQuantity = parseInt(quantityInput.value);
         quantityInput.value = currentQuantity + 1;
+        itemPriceElement.innerText = (totalPrice + parseInt(rawPrice)).toLocaleString() + '원';
     });
 
     if (addCartButton) {
