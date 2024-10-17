@@ -42,7 +42,7 @@ public class ItemController {
 
     // 상품을 클릭했을때 나오는 상세 페이지(ex.발매가, 사이즈 선택)
     @GetMapping("/item-detail/{id}")
-    public String getItemPage(@PathVariable Long id, Model model) {
+    public String getItemPage(@PathVariable("id") Long id, Model model) {
         ItemResponse item = itemService.findById(id); // 특정 ID의 상품을 조회
         model.addAttribute("item", item);
         return "item/item-detail";
@@ -66,7 +66,7 @@ public class ItemController {
 
     // 조회용 GET 메서드 추가
     @GetMapping("/{id}")
-    public ResponseEntity<ItemResponse> getItemById(@PathVariable Long id) {
+    public ResponseEntity<ItemResponse> getItemById(@PathVariable("id") Long id) {
         ItemResponse itemResponse = itemService.findItemById(id);
         return ResponseEntity.ok(itemResponse);
     }
@@ -74,7 +74,7 @@ public class ItemController {
     // 수정용 PUT 메서드
 //    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<ItemUpdateResponse> updateItemById(@PathVariable Long id,
+    public ResponseEntity<ItemUpdateResponse> updateItemById(@PathVariable("id") Long id,
                                                              @RequestParam(value = "imageKey", required = false) MultipartFile imageFile,
                                                              @ModelAttribute ItemUpdateRequest itemUpdateRequest) throws Exception {
         ItemUpdateResponse itemUpdateResponse = itemService.update(id, itemUpdateRequest, imageFile);
@@ -85,7 +85,7 @@ public class ItemController {
     // 상품 수정 페이지 뷰
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/edit/{id}")
-    public String showEditItemPage(@PathVariable Long id, Model model) {
+    public String showEditItemPage(@PathVariable("id") Long id, Model model) {
         model.addAttribute("itemId", id);
         return "item/item-edit";
     }
