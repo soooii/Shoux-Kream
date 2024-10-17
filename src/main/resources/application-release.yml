@@ -9,7 +9,7 @@ spring:
     password: ${AWS_MASTER_PASSWORD}
   jpa:
     #    초기세팅용 => 확인필요
-    defer-datasource-initialization: true
+#    defer-datasource-initialization: true
     show-sql: true
     hibernate:
       ddl-auto: update
@@ -20,7 +20,7 @@ spring:
   sql:
     init:
 #     never => init 안됨 always 세팅 한번 필요한듯?
-      mode: always
+      mode: never
 
 # 환경변수 설정으로 세팅
 jwt:
