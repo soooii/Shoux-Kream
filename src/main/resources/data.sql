@@ -1,11 +1,24 @@
 -- 카테고리 추가
-INSERT INTO category (title, created_at, updated_at) VALUES ('아티스트협업', NOW(), NOW());
-INSERT INTO category (title, created_at, updated_at) VALUES ('#러닝', NOW(), NOW());
-INSERT INTO category (title, created_at, updated_at) VALUES ('추천', NOW(), NOW());
-INSERT INTO category (title, created_at, updated_at) VALUES ('랭킹', NOW(), NOW());
-INSERT INTO category (title, created_at, updated_at) VALUES ('럭셔리', NOW(), NOW());
-INSERT INTO category (title, created_at, updated_at) VALUES ('남성', NOW(), NOW());
-INSERT INTO category (title, created_at, updated_at) VALUES ('여성', NOW(), NOW());
+INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
+VALUES ('아티스트협업', '아티스트와의 협업 상품', 'artist-collab', 'https://example.com/artist-collab.jpg', NOW(), NOW());
+
+INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
+VALUES ('#러닝', '러닝 관련 상품', 'running', 'https://example.com/running.jpg', NOW(), NOW());
+
+INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
+VALUES ('추천', '추천 상품', 'recommended', 'https://example.com/recommended.jpg', NOW(), NOW());
+
+INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
+VALUES ('랭킹', '랭킹 상위 상품', 'ranking', 'https://example.com/ranking.jpg', NOW(), NOW());
+
+INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
+VALUES ('럭셔리', '럭셔리 상품', 'luxury', 'https://example.com/luxury.jpg', NOW(), NOW());
+
+INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
+VALUES ('남성', '남성용 상품', 'mens', 'https://example.com/mens.jpg', NOW(), NOW());
+
+INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
+VALUES ('여성', '여성용 상품', 'womens', 'https://example.com/womens.jpg', NOW(), NOW());
 
 
 -- 상품 추가
@@ -53,3 +66,46 @@ VALUES
     (3, 2, 2, true),
     (1, 1, 3, false),
     (4, 1, 2, true);
+
+
+-- 주소 추가
+-- Insert into UserAddress (for user_id = 1)
+INSERT INTO addresses (recipient_name, recipient_phone, postal_code, address1, address2, user_id)
+VALUES ('John Doe', '123-456-7890', '10001', '123 Main St', 'Apt 4B', 2);
+
+-- Insert into UserAddress (for user_id = 2)
+INSERT INTO addresses (recipient_name, recipient_phone, postal_code, address1, address2, user_id)
+VALUES ('Jane Smith', '987-654-3210', '20002', '456 Elm St', 'Suite 5C', 2);
+
+-- Insert into UserAddress (for user_id = 3)
+INSERT INTO addresses (recipient_name, recipient_phone, postal_code, address1, address2, user_id)
+VALUES ('Alice Brown', '456-789-1234', '30003', '789 Oak St', 'House 10', 2);
+
+-- Insert into UserAddress (for user_id = 4)
+INSERT INTO addresses (recipient_name, recipient_phone, postal_code, address1, address2, user_id)
+VALUES ('Bob Johnson', '321-654-9870', '40004', '321 Pine St', 'Apt 12A', 2);
+
+-- Insert into UserAddress (for user_id = 5)
+INSERT INTO addresses (recipient_name, recipient_phone, postal_code, address1, address2, user_id)
+VALUES ('Charlie Davis', '654-321-0987', '50005', '654 Maple St', 'Unit 3', 2);
+
+-- 주문 내역 추가
+
+INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
+VALUES ('Order Summary 1', 10000, 'READY', 2, 1, 'Please leave at the door', NOW(), NOW());
+
+-- Insert into CheckOut with DeliveryStatus as START
+INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
+VALUES ('Order Summary 2', 15000, 'START', 2, 2, 'Handle with care', NOW(), NOW());
+
+-- Insert into CheckOut with DeliveryStatus as SHIPPING
+INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
+VALUES ('Order Summary 3', 20000, 'SHIPPING', 2, 3, 'Call me upon arrival', NOW(), NOW());
+
+-- Insert into CheckOut with DeliveryStatus as ARRIVED
+INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
+VALUES ('Order Summary 4', 25000, 'ARRIVED', 2, 4, 'Leave it at the front desk', NOW(), NOW());
+
+-- Insert into CheckOut with DeliveryStatus as READY (another example)
+INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
+VALUES ('Order Summary 5', 30000, 'READY', 2, 5, 'Ring the bell', NOW(), NOW());
