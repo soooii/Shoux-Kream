@@ -46,6 +46,7 @@ window.onload = function () {
             data.forEach((item) => {
                 const id = item.cartId;
 
+                const itemImage = document.createElement('img');
                 const itemName = document.createElement('p');
                 const quantity = document.createElement('span');
                 const price = document.createElement('p');
@@ -59,10 +60,12 @@ window.onload = function () {
                 checkbox.value = id;
                 checkbox.checked = true;
 
+                itemImage.classList.add('image');
                 itemName.classList.add('content'); // 클래스 추가
                 quantity.classList.add('quantity'); // 클래스 추가
                 price.classList.add('content'); // 클래스 추가
 
+                itemImage.src = `${item.imageUrl}`;
                 itemName.innerText = `${item.itemName}`;
                 quantity.innerText = `${item.quantity}개`;
                 price.innerText = `${item.totalPrice.toLocaleString()}원`;
@@ -124,6 +127,7 @@ window.onload = function () {
 
                 // 목록에 내용 추가
                 cartItemDiv.appendChild(checkbox);
+                cartItemDiv.appendChild(itemImage);
                 cartItemDiv.appendChild(itemName);
                 cartItemDiv.appendChild(quantity);
                 cartItemDiv.appendChild(price);

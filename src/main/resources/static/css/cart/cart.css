@@ -86,7 +86,7 @@
 
 .cart-product-item .edit-button {
     position: absolute;
-    top: -0.1rem;
+    top: 3.0rem;
     right: 2.5rem;
     border: none;
     background-color: transparent;
@@ -97,7 +97,7 @@
 
 .cart-product-item .delete-button {
     position: absolute;
-    top: -0.1rem;
+    top: 3.0rem;
     right: -0.5rem;
     border: none;
     background-color: transparent;
@@ -107,6 +107,8 @@
 }
 
 .cart-product-item .image {
+    width: 100px;
+    height: 100px;
     display: inline-block;
     margin-left: 1.2rem;
     cursor: pointer;
