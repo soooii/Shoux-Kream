@@ -39,3 +39,7 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+
+#서버 port 설정
+server:
+  port: 3000
