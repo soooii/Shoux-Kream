@@ -1,77 +1,136 @@
+@font-face {
+    font-family: 'Freesentation-9Black';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-9Black.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+}
+
 .header-search-input {
-  width: 20rem;
+    width: 20rem;
 }
 
 .navbar-menu .is-info:focus {
-  outline: none;
-  box-shadow: none;
+    outline: none;
+    box-shadow: none;
 }
 
 .item-detail-card .item-image {
-  padding: 0;
+    padding: 0;
+}
+
+.item-detail-card .item-image img {
+    width: 650px;
+    height: auto;
+    margin-left: auto;
+    display: block;
 }
 
 .item-detail-card .box {
-  box-shadow: none;
-  max-width: 100%;
+    box-shadow: none;
+    max-width: 100%;
 }
 
 .item-detail {
-  padding-bottom: 0;
-  margin-bottom: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    width: 650px;
+}
+
+.tabs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.tabs li {
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
 }
 
 .item-detail .tag {
-  display: inline-block;
-  margin-left: 0.5rem;
-  margin-bottom: 1rem;
-  line-height: 1.5rem;
+    display: inline-block;
+    margin-left: 0.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.5rem;
+}
+
+.Freesentation-9Black-title {
+    font-family: "Freesentation-9Black";
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.Freesentation-9Black-price {
+    font-family: "Freesentation-9Black";
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.short-description {
+    font-weight: 500;
 }
 
 .detail-description {
-  margin-top: 2rem;
-  padding-bottom: 2rem;
+    margin-top: -0.5rem;
+    padding-bottom: 2rem;
+    color: #a1a1a1;
 }
 
 .detail-description {
-  white-space: pre-line;
+    white-space: pre-line;
 }
 
 .buttons-container {
-  flex-grow: 0;
-  padding-right: 0;
-  padding-bottom: 0;
+    flex-grow: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    width: 650px;
 }
 
 .buttons-container button {
-  font-size: 1.3rem;
-  font-weight: 800;
-  width: 48%;
-  height: 4rem;
-  padding: 0rem;
+    font-size: 1.3rem;
+    font-weight: 800;
+    width: 48%;
+    height: 4rem;
+    padding: 0rem;
 }
 
 .buttons-container button.is-warning {
-  line-height: 3rem;
-  padding-top: 0.3rem;
+    line-height: 3rem;
+    padding-top: 0.3rem;
+}
+
+.custom-button {
+    height: 50px;
+    font-weight: bold;
+}
+
+.quantity-custom-button {
+    width: 40px;
+    height: 40px;
+    font-weight: bold;
 }
 
 .content p:not(:last-child) {
-  margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .content h1:not(:first-child) {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 @media only screen and (max-width: 500px) {
-  .item-detail-card .buttons-container button {
-    font-size: 1.3rem;
-    font-weight: 800;
-    width: 90%;
-    height: 4rem;
-    padding: 0rem;
-    margin: 0.3rem;
-    margin-left: 0 !important;
-  }
+    .item-detail-card .buttons-container button {
+        font-size: 1.3rem;
+        font-weight: 800;
+        width: 90%;
+        height: 4rem;
+        padding: 0rem;
+        margin: 0.3rem;
+        margin-left: 0 !important;
+    }
 }
