@@ -11,13 +11,15 @@ public class SecurityPath {
             "/item/item-detail/{id}",
             "/item/edit/{id}",
             "/item/item-add",
-            "/category/category-add"
+            "/category/category-add",
+            "/category/edit/{id}"
     };
     public static final String[] ONLY_POST_WHITELIST = {
             "/api/users/login",
             "/api/users/signup",
             "/api/users/refresh",
             "/item/item-add",
-            "/category/category-add"
+            "/category/category-add",
+            "/category/edit/{id}"
     };
 }
