@@ -92,20 +92,20 @@ VALUES ('Charlie Davis', '654-321-0987', '50005', '654 Maple St', 'Unit 3', 2);
 -- 주문 내역 추가
 
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 1', 10000, 'READY', 2, 1, 'Please leave at the door', NOW(), NOW());
+VALUES ('Order Summary 1', 10000, 'READY', 1, 1, 'Please leave at the door', NOW(), NOW());
 
 -- Insert into CheckOut with DeliveryStatus as START
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 2', 15000, 'START', 2, 2, 'Handle with care', NOW(), NOW());
+VALUES ('Order Summary 2', 15000, 'START', 1, 2, 'Handle with care', NOW(), NOW());
 
 -- Insert into CheckOut with DeliveryStatus as SHIPPING
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 3', 20000, 'SHIPPING', 2, 3, 'Call me upon arrival', NOW(), NOW());
+VALUES ('Order Summary 3', 20000, 'SHIPPING', 1, 3, 'Call me upon arrival', NOW(), NOW());
 
 -- Insert into CheckOut with DeliveryStatus as ARRIVED
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 4', 25000, 'ARRIVED', 2, 4, 'Leave it at the front desk', NOW(), NOW());
+VALUES ('Order Summary 4', 25000, 'ARRIVED', 1, 4, 'Leave it at the front desk', NOW(), NOW());
 
 -- Insert into CheckOut with DeliveryStatus as READY (another example)
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 5', 30000, 'READY', 2, 5, 'Ring the bell', NOW(), NOW());
+VALUES ('Order Summary 5', 30000, 'READY', 1, 5, 'Ring the bell', NOW(), NOW());
