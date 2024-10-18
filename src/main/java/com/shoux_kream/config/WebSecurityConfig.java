@@ -49,6 +49,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, SecurityPath.ONLY_GET_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.POST, SecurityPath.ONLY_POST_WHITELIST).permitAll()
                         .requestMatchers("/js/**", "/css/**", "/html/**","/img/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/users/admin-check").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(request -> {
                     var config = new CorsConfiguration();

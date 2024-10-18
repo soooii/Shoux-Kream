@@ -31,7 +31,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<String> token = resolveToken(request);
 
-        // 토큰이 존재하는지 검사
+        // 토큰 존재 검사
         if (token.isPresent()) {
             AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(token.get().split(" ")[1]);
 
@@ -39,10 +39,6 @@ public class JwtFilter extends OncePerRequestFilter {
             if (jwtToken.validate()) {
                 Authentication authentication = tokenProvider.getAuthentication(jwtToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else{
-                // 유효하지 않은 토큰일 경우 401 에러 반환
-                jwtAuthenticationEntryPoint.commence(request,response,new AuthenticationException("Invalid token"){});
-                return;
             }
 
         }
