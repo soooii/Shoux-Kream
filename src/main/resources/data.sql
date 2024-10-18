@@ -56,7 +56,7 @@ VALUES ('Wireless Mouse', 'Logitech', 'Ergonomic wireless mouse', 'Comfortable a
 INSERT INTO users (email, password, name, nickname, role, created_at, updated_at)
 VALUES
     ('1@xx.xx', '$2a$10$OHFb4wh54/5Lzeh2lJWvdOHH9SGvSNuJKWhZKoQD7eFzyZWFeFFM2', 'John Doe', 'johnd', 'ADMIN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('jane.smith@example.com', 'hashed_password_2', 'Jane Smith', 'janes', 'USER', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('1@1', '$2a$12$VzW8rQpaVyQU87gaE/p7KOdRauBsGL3QINCWqau..E197q4RTCVOK', 'Jane Smith', 'janes', 'USER', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('admin@example.com', 'hashed_password_3', 'Admin User', 'admin', 'ADMIN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 카트 추가
