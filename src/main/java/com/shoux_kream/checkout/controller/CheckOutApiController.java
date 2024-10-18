@@ -31,8 +31,9 @@ public class CheckOutApiController {
     /*
     //TODO 최근주소지 정보에 등록하는 API=> checkout에 통합
     await Api.post("/api/user/recentdelivery", data);
-     */
-
+    */
+    //TODO checkout postmapping => 단건구매 내용을 저장할 checkout proxy entity => 단건구매 누를때마다 porxy 초기화
+    // TODO 재고뺴는 로직이 하나도 없음
 
     @PostMapping("/checkout") //TODO userId로 체크아웃 정보를 저장함, 저장한 entity를 id값을 포함해 반환
     public ResponseEntity<CheckOutResponseDto> processCheckOut(@AuthenticationPrincipal User principal,@RequestBody CheckOutRequestDto checkOutRequestDto) {
@@ -40,6 +41,8 @@ public class CheckOutApiController {
         UserResponse userResponse = userService.getUser(email);
         CheckOutResponseDto checkOutResponseDto = checkOutService.createCheckout(userResponse.getUserId(), checkOutRequestDto);
         // TODO 201 created(URI) 전환
+
+        //isEach true => cart정보를 checkoutporxy에서 가져옴
         return ResponseEntity.ok(checkOutResponseDto);
     }
     //TODO 검증 필요! => controller x , 검증 비즈니스 로직은 서비스에서!

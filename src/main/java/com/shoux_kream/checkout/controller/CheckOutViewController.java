@@ -54,6 +54,7 @@ public class CheckOutViewController {
 
     // 카트의 정보를 받아서 모델에 넣어서 프론트에서 처리해야한다. model에 cart정보 넣기
     @GetMapping
+    // TODO 단건페이지 반환주소 + 여러 페이지 반환주소
     public String getCheckOutPage(){
         return "checkout/checkout";
     }
