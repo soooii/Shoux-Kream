@@ -96,6 +96,13 @@
     align-items: center;
 }
 
+.custom-checkbox {
+    width: 11px; /* 체크박스 너비 */
+    height: 11px; /* 체크박스 높이 */
+    margin-right: 40px; /* 체크박스와 텍스트 사이 간격 */
+    transform: scale(1.5); /* 크기 조정 */
+}
+
 .cart-product-item:not(:last-child) {
     border-bottom: #ddd solid 1px;
 }
