@@ -114,7 +114,7 @@
                     </ul>
                 </div>
                 <div class="content">
-                    <h1 class="subtitle is-3 Freesentation-9Black-title" th:text="${item.title}">상품 제목</h1>
+                    <h1 class="subtitle is-3 Freesentation-9Black-title" id="item-title" th:text="${item.title}">상품 제목</h1>
                     <h1 class="Freesentation-9Black-price" id="item-detail-price" th:text="|${item.price}원|">2000원</h1>
                     <p class="short-description" th:text="${item.shortDescription}">짧은 설명 예시</p>
                     <p class="detail-description" th:text="${item.detailDescription}">
@@ -164,39 +164,6 @@
             </div>
         </div>
     </div>
-
-    <!-- 상품 삭제 버튼 -->
-    <div>
-        <button onclick="deleteItem()">상품 삭제</button>
-    </div>
 </section>
-
-
-<script>
-    function deleteItem() {
-        const itemId = /* [[${item.id}]] */ '';  // Thymeleaf에서 item의 ID를 가져오기
-
-        if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
-            fetch(`/item/item-detail/${itemId}`, {  // 삭제 요청을 /item/{id} 경로로 보냄
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    alert('상품이 삭제되었습니다.');
-                    window.location.href = '/';  // 삭제 후 메인 페이지로 이동
-                } else {
-                    alert('상품 삭제에 실패했습니다.');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('상품 삭제 중 오류가 발생했습니다.');
-            });
-        }
-    }
-</script>
-
-
 </body>
 </html>
