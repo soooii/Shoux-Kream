@@ -20,37 +20,86 @@ VALUES ('남성', '남성용 상품', 'mens', 'https://example.com/mens.jpg', NO
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
 VALUES ('여성', '여성용 상품', 'womens', 'https://example.com/womens.jpg', NOW(), NOW());
 
+--키워드 테이블 생성--
+CREATE TABLE IF NOT EXISTS keyword (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    word VARCHAR(255),
+    item_id BIGINT,
+    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES item(id)
+);
 
 -- 상품 추가
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Laptop', 'Dell', 'Powerful laptop', 'A high-end laptop with 16GB RAM and 512GB SSD.', '/img/item/item1.png', 50, 1200.00, 'laptop, Dell, computer');
+-- Item 데이터 삽입
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Laptop', 'Dell', 'Powerful laptop', 'A high-end laptop with 16GB RAM and 512GB SSD.', '/img/item/item1.png', 50, 1200.00);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Smartphone', 'Samsung', 'Latest smartphone', 'The newest model with 128GB storage.', '/img/item/item2.png', 200, 999.99, 'smartphone, Samsung, mobile');
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Smartphone', 'Samsung', 'Latest smartphone', 'The newest model with 128GB storage.', '/img/item/item2.png', 200, 999.99);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Headphones', 'Sony', 'Noise-cancelling headphones', 'Premium quality noise-cancelling headphones.', '/img/item/item3.png', 150, 299.99, 'headphones, Sony, audio');
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Headphones', 'Sony', 'Noise-cancelling headphones', 'Premium quality noise-cancelling headphones.', '/img/item/item3.png', 150, 299.99);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Smart TV', 'LG', '4K Smart TV', 'Ultra HD 4K Smart TV with AI technology.', '/img/item/item4.png', 100, 799.99, 'smart TV, LG, 4K');
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Smart TV', 'LG', '4K Smart TV', 'Ultra HD 4K Smart TV with AI technology.', '/img/item/item4.png', 100, 799.99);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Gaming Console', 'Microsoft', 'Next-gen console', 'Next-generation gaming console with 1TB storage.', '/img/item/item5.png', 80, 499.99, 'gaming console, Microsoft, Xbox');
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Gaming Console', 'Microsoft', 'Next-gen console', 'Next-generation gaming console with 1TB storage.', '/img/item/item5.png', 80, 499.99);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Smartwatch', 'Apple', 'Stylish smartwatch', 'Advanced smartwatch with health tracking features.', '/img/item/item6.png', 300, 399.99, 'smartwatch, Apple, wearable');
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Smartwatch', 'Apple', 'Stylish smartwatch', 'Advanced smartwatch with health tracking features.', '/img/item/item6.png', 300, 399.99);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Bluetooth Speaker', 'JBL', 'Portable speaker', 'Compact portable Bluetooth speaker with high-quality sound.', '/img/item/item7.png', 250, 149.99, 'Bluetooth speaker, JBL, audio');
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Bluetooth Speaker', 'JBL', 'Portable speaker', 'Compact portable Bluetooth speaker with high-quality sound.', '/img/item/item7.png', 250, 149.99);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Camera', 'Canon', 'Digital camera', 'High-resolution digital camera with interchangeable lenses.', '/img/item/item8.png', 60, 1099.99, 'camera, Canon, photography');
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Camera', 'Canon', 'Digital camera', 'High-resolution digital camera with interchangeable lenses.', '/img/item/item8.png', 60, 1099.99);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Tablet', 'Apple', 'Sleek and powerful tablet', 'High-performance tablet with 256GB storage and Retina display.', '/img/item/item9.png', 120, 799.99, 'tablet, Apple, iPad, mobile');
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Tablet', 'Apple', 'Sleek and powerful tablet', 'High-performance tablet with 256GB storage and Retina display.', '/img/item/item9.png', 120, 799.99);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, search_keywords)
-VALUES ('Wireless Mouse', 'Logitech', 'Ergonomic wireless mouse', 'Comfortable and precise wireless mouse with long battery life.', '/img/item/item10.png', 400, 49.99, 'wireless mouse, Logitech, computer accessories');
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
+VALUES ('Wireless Mouse', 'Logitech', 'Ergonomic wireless mouse', 'Comfortable and precise wireless mouse with long battery life.', '/img/item/item10.png', 400, 49.99);
+
+-- KeyWord 데이터 삽입 (각 item_id는 삽입된 아이템의 ID를 참조합니다)
+-- Laptop 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('laptop', 1);
+
+-- Smartphone 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('smartphone', 2), ('Samsung', 2), ('mobile', 2);
+
+-- Headphones 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('headphones', 3), ('Sony', 3), ('audio', 3);
+
+-- Smart TV 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('smart TV', 4), ('LG', 4), ('4K', 4);
+
+-- Gaming Console 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('gaming console', 5), ('Microsoft', 5), ('Xbox', 5);
+
+-- Smartwatch 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('smartwatch', 6), ('Apple', 6), ('wearable', 6);
+
+-- Bluetooth Speaker 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('Bluetooth speaker', 7), ('JBL', 7), ('audio', 7);
+
+-- Camera 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('camera', 8), ('Canon', 8), ('photography', 8);
+
+-- Tablet 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('tablet', 9), ('Apple', 9), ('iPad', 9), ('mobile', 9);
+
+-- Wireless Mouse 관련 키워드
+INSERT INTO keyword (word, item_id)
+VALUES ('wireless mouse', 10), ('Logitech', 10), ('computer accessories', 10);
 
 -- 유저 추가
 INSERT INTO users (email, password, name, nickname, role, created_at, updated_at)
