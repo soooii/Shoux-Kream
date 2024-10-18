@@ -98,6 +98,10 @@ dependencies {
 	// 공간 데이터 처리 기능 의존성 추가
 	implementation("com.querydsl:querydsl-spatial:5.0.0")
 	implementation("org.hibernate:hibernate-spatial:6.2.5.Final")
+
+	// 엑셀 라이브러리
+	implementation 'org.apache.poi:poi:5.2.3'        // HSSF (for .xls files)
+	implementation 'org.apache.poi:poi-ooxml:5.2.3'  // XSSF (for .xlsx files)
 }
 
 tasks.named('test') {
