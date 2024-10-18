@@ -1,0 +1,51 @@
+/* category-edit.css */
+
+/* 폼의 배경 및 레이아웃 스타일 */
+.register-category-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 폼 박스 스타일 */
+.register-category-form-box {
+  padding: 20px;
+}
+
+/* 사진 업로드 영역 스타일 */
+.file.has-name.is-fullwidth {
+  display: flex;
+  align-items: center;
+}
+
+.file-label {
+  width: 100%;
+}
+
+.file-name {
+  margin-left: 10px;
+}
+
+/* 테마 색상 변경 미리보기 (동적으로 클래스 적용 시 사용) */
+.is-primary.is-light {
+  background-color: #e3f2fd;
+}
+
+.is-link.is-light {
+  background-color: #f3e5f5;
+}
+
+.is-info.is-light {
+  background-color: #e0f7fa;
+}
+
+.is-success.is-light {
+  background-color: #e8f5e9;
+}
+
+.is-warning.is-light {
+  background-color: #fffde7;
+}
+
+.is-danger.is-light {
+  background-color: #ffebee;
+}
