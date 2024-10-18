@@ -14,6 +14,7 @@ import com.shoux_kream.item.dto.response.ItemUpdateResponse;
 //import com.shoux_kream.item.entity.Brand;
 import com.shoux_kream.item.entity.Item;
 //import com.shoux_kream.item.repository.BrandRepository;
+import com.shoux_kream.item.entity.KeyWord;
 import com.shoux_kream.item.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -47,8 +48,6 @@ public class ItemService {
 
         String imageKey = s3Uploader.upload(imageFile, "item-images");
 
-        String searchKeywords = String.join(",", itemSaveRequest.searchKeywords());
-
         Item item = new Item(
 //              brand,
                 itemSaveRequest.id(),
@@ -60,7 +59,7 @@ public class ItemService {
                 imageKey,
                 itemSaveRequest.inventory(),
                 itemSaveRequest.price(),
-                itemSaveRequest.searchKeywords()
+                itemSaveRequest.keyWords()
         );
 
         Item savedItem = itemRepository.save(item);
@@ -76,7 +75,7 @@ public class ItemService {
                 savedItem.getImageKey(),
                 savedItem.getInventory(),
                 savedItem.getPrice(),
-                savedItem.getSearchKeywords()
+                savedItem.getKeyWords()
         );
     }
 
@@ -121,7 +120,7 @@ public class ItemService {
         item.setDetailDescription(itemUpdateRequest.detailDescription());
         item.setInventory(itemUpdateRequest.inventory());
         item.setPrice(itemUpdateRequest.price());
-        item.setSearchKeywords(itemUpdateRequest.searchKeywords());
+        item.setKeyWords(itemUpdateRequest.keyWords());
 
         // 업데이트된 내용을 저장
         itemRepository.save(item);
@@ -135,7 +134,7 @@ public class ItemService {
                 itemUpdateRequest.image(), // MultipartFile을 그대로 넘김
                 item.getInventory(),
                 item.getPrice(),
-                item.getSearchKeywords()
+                item.getKeyWords()
         );
     }
 
@@ -152,7 +151,7 @@ public class ItemService {
                 null, // MultipartFile은 수정 요청 시 클라이언트에서 처리
                 item.getInventory(),
                 item.getPrice(),
-                item.getSearchKeywords()
+                item.getKeyWords()
         );
     }
 
