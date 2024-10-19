@@ -20,7 +20,7 @@ public class CartResponseDto {
     private int quantity;
 
     private String itemName;
-//    private int itemSize;
+    private String imageUrl;
     private double itemPrice;
 
     private double totalPrice;
@@ -32,6 +32,7 @@ public class CartResponseDto {
         this.createdAt = cart.getCreatedAt();
         this.quantity = cart.getQuantity();
         this.itemName = cart.getItem().getTitle();
+        this.imageUrl = cart.getItem().getImageKey();
         this.itemPrice = cart.getItem().getPrice();
         this.totalPrice = this.quantity * this.itemPrice;
     }
