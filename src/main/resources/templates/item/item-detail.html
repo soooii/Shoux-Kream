@@ -120,8 +120,14 @@
                     <p class="detail-description" th:text="${item.detailDescription}">
                         상세 설명 예시
                     </p>
+                    <p>
+                        <span class="tag"
+                              th:each="keyword, iterStat : ${item.keyWords}"
+                              th:text="${keyword.word}"
+                              th:append="${iterStat.last} ? '' : ', '">키워드</span>
+                    </p>
+                    <br />
                     <p><strong>재고:</strong> <span th:text="${item.inventory}">100</span></p>
-                    <p><strong>검색 키워드:</strong> <span th:text="${item.searchKeywords}">키워드1, 키워드2</span></p>
                 </div>
                 <div class="tile is-child box buttons-container">
                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="purchaseButton">구매하기</button>
