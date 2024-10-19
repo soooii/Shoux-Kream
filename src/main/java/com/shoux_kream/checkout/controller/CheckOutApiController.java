@@ -1,9 +1,6 @@
 package com.shoux_kream.checkout.controller;
 
-import com.shoux_kream.checkout.dto.CheckOutItemRequestDto;
-import com.shoux_kream.checkout.dto.CheckOutRequestDto;
-import com.shoux_kream.checkout.dto.CheckOutResponseDto;
-import com.shoux_kream.checkout.dto.DeliveryStatusRequestDto;
+import com.shoux_kream.checkout.dto.*;
 import com.shoux_kream.checkout.service.CheckOutService;
 import com.shoux_kream.user.controller.JwtController;
 import com.shoux_kream.user.dto.response.UserAddressDto;
@@ -126,4 +123,32 @@ public class CheckOutApiController {
         Long deletedId = checkOutService.deleteCheckOut(principal.getUsername(), detailId);
         return ResponseEntity.ok(deletedId);
     }
+
+    // 즉시 구매 조회
+    @GetMapping("/checkout-each")
+    public ResponseEntity<CheckOutEachResponseDto> getCheckOutEach() {
+        UserResponse userResponse = userService.getUser();
+        CheckOutEachResponseDto checkOutEachResponseDto = checkOutService.getCheckOutEach(userResponse.getUserId());
+
+        return ResponseEntity.ok(checkOutEachResponseDto);
+    }
+
+    // 즉시 구매를 위한 정보 임시 저장
+    @PostMapping("/checkout-each")
+    public ResponseEntity addCheckOutEach(@RequestBody CheckOutEachRequestDto checkOutEachRequestDto) {
+        UserResponse userResponse = userService.getUser();
+        Long checkOutEachId = checkOutService.addCheckOutEach(userResponse.getUserId(), checkOutEachRequestDto);
+
+        return ResponseEntity.ok(checkOutEachId);
+    }
+
+    // 주문완료 후 즉시 구매 삭제
+    @DeleteMapping("/checkout-each/{checkOutEachId}")
+    public ResponseEntity deleteCheckOutEach(@PathVariable("checkOutEachId") Long checkOutEachId) {
+        checkOutService.deleteCheckOutEach(checkOutEachId);
+
+        return ResponseEntity.ok()
+                .build();
+    }
+
 }
