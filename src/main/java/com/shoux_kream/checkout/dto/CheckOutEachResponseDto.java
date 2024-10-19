@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CheckOutEachResponseDto {
     private Long checkOutEachId;
+    private Long userId;
     private Long itemId;
     private String itemName;
     private int quantity;
@@ -19,6 +20,7 @@ public class CheckOutEachResponseDto {
 
     public CheckOutEachResponseDto(CheckOutEach checkOutEach) {
         this.checkOutEachId = checkOutEach.getId();
+        this.userId = checkOutEach.getUser().getId();
         this.itemId = checkOutEach.getItem().getId();
         this.itemName = checkOutEach.getItem().getTitle();
         this.quantity = checkOutEach.getQuantity();

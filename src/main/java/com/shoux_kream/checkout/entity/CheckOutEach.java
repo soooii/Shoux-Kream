@@ -24,8 +24,13 @@ public class CheckOutEach {
     @JoinColumn(name = "items_id", nullable = false)
     private Item item;
 
-    public CheckOutEach(int quantity, Item item) {
-        this.quantity = quantity;
+    @ManyToOne
+    @JoinColumn(name = "users_id", nullable = false)
+    private User user;
+
+    public CheckOutEach(User user, Item item, int quantity) {
+        this.user = user;
         this.item = item;
+        this.quantity = quantity;
     }
 }

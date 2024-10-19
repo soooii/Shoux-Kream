@@ -83,10 +83,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const token = sessionStorage.getItem('accessToken');
             if (token === null) {
-                window.location.href = `/item/item-detail/${itemId}`;
+                window.location.href = `/users/login`;
             }
 
-            // 실제 삭제 요청 보내기
+            // 실제 구매 요청 보내기
             fetch(`/api/checkout-each`, {
                 method: 'POST',
                 headers: {
@@ -98,8 +98,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     quantity: quantity
                 })
             })
-                .then(() => {
-                    window.location.href = '/checkout-each';
+                .then((response) => {
+                    if (response.ok) {
+                        window.location.href = '/checkout-each';
+                    } else {
+                        alert('구매에 실패했습니다. 다시 시도해 주세요.');
+                    }
                 })
         })
     }
