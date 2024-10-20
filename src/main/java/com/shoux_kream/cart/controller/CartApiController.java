@@ -18,16 +18,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
-public class CartApiContorller {
+public class CartApiController {
 
     private final CartService cartService;
     private final UserService userService;
 
     // 장바구니 담기
     @PostMapping("/add/{itemId}")
-    public ResponseEntity<Long> addCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("itemId") Long itemId) {
+    public ResponseEntity addCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("itemId") Long itemId) {
+        UserResponse userResponse = userService.getUser();
 
-        Long cartId = cartService.addCart(cartRequestDto, itemId);
+        Long cartId = cartService.addCart(userResponse.getUserId(), cartRequestDto, itemId);
 
         return ResponseEntity.ok()
                 .body(cartId);
@@ -35,12 +36,8 @@ public class CartApiContorller {
 
     // 장바구니 조회
     @GetMapping("/summary")
-    public ResponseEntity<List<CartResponseDto>> allCarts(@AuthenticationPrincipal User principal) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+    public ResponseEntity<List<CartResponseDto>> allCarts() {
+        UserResponse userResponse = userService.getUser();
         List<CartResponseDto> carts = cartService.allCarts(userResponse.getUserId());
 
         return ResponseEntity.ok(carts);
@@ -50,23 +47,31 @@ public class CartApiContorller {
     @GetMapping("/selected")
     //principal user는 userDetail의 user!
     public ResponseEntity<List<CartResponseDto>> getSelectedCarts(@AuthenticationPrincipal User principal){
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         // principal의 unique값인 이메일로 특정
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         List<CartResponseDto> selectedCarts = cartService.selectedCarts(userResponse.getUserId());
 
         return ResponseEntity.ok(selectedCarts);
+    }
+    
+    // 구매하기 위해 선택한 상품 확인
+    @PatchMapping("/selected")
+    public ResponseEntity updateCartSelected(@RequestBody List<Long> cartIds, @AuthenticationPrincipal User principal) {
+        // 체크된 cart Id 값만 true로 변경
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
+        cartService.updateCartSelected(cartIds, userResponse.getUserId());
+
+        return ResponseEntity.ok()
+                .build();
     }
 
     // 장바구니 수정 -> 장바구니에서 수량 및 옵션 수정으로 사용
     @PatchMapping("/edit/{cartId}")
     public ResponseEntity updateCart(@Valid @RequestBody CartRequestDto cartRequestDto, @PathVariable("cartId") Long cartId, @AuthenticationPrincipal User principal) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         String email = principal.getUsername();
 
         if(!cartService.validateCartItem(cartId, email)){
@@ -83,16 +88,10 @@ public class CartApiContorller {
     // 장바구니 일괄 삭제
     @DeleteMapping("/")
     public ResponseEntity deleteCarts(@RequestBody List<Long> cartIds, @AuthenticationPrincipal User principal) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        String email = principal.getUsername();
-
-        for (Long cartId : cartIds) {
-            cartService.validateCartItem(cartId, email);
-        }
-
-        cartService.deleteCarts(cartIds);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
+        cartService.deleteCarts(cartIds, userResponse.getUserId());
 
         return ResponseEntity.ok()
                 .build();
@@ -101,9 +100,6 @@ public class CartApiContorller {
     // 장바구니 개별 삭제
     @DeleteMapping("/{cartId}")
     public ResponseEntity deleteCart(@PathVariable("cartId") Long cartId, @AuthenticationPrincipal User principal) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         String email = principal.getUsername();
 
         if(!cartService.validateCartItem(cartId, email)){

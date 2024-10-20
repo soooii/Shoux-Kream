@@ -41,13 +41,13 @@ export const createNavbar = () => {
     case "/order/":
       addNavElements("admin account logout");
       break;
-    case "/item/add/":
+    case "/item/item-add/":
       addNavElements("admin account logout");
       break;
-    case "/item/detail/":
+    case "/item/item-detail/":
       addNavElements("admin register login account logout");
       break;
-    case "/item/list/":
+    case "/item/item-list/":
       addNavElements("admin register login account logout");
       break;
     case "/register/":

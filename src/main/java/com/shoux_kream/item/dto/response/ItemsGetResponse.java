@@ -3,7 +3,7 @@ package com.shoux_kream.item.dto.response;
 import java.util.List;
 
 public record ItemsGetResponse(
-        int size,
+        Integer size,
         List<ItemResponse> itemList
 ) {
 }

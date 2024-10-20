@@ -72,6 +72,11 @@ public class User implements UserDetails {
         return password;
     }
 
+    // 어드민 유저 관리 페이지에서 권한 수정이 필요해서 setRole 추가
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     // 이 밑으로는 맞는지 확인 필요
     @Override
     public boolean isAccountNonExpired() {
