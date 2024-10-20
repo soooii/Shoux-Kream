@@ -33,6 +33,20 @@ public class KreamExceptionHandler {
                 .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage));
     }
 
+    //입력한 기존 비밀번호가 db 비밀번호와 다를 때 발생하는 Exception
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException ex) {
+        return ResponseEntity.status(418).body(ex.getMessage());
+    }
+
+    //배송지 삭제 시 해당 배송지 사용하는 주문이 있을 경우 발생하는 Exception
+    @ExceptionHandler(AddressInUseException.class)
+    public ResponseEntity<String> handleAddressInUseException(AddressInUseException ex) {
+        return ResponseEntity.status(419).body(ex.getMessage());
+    }
+
+
+
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
 //        logger.error("Unhandled exception occurred: {}", exception.getMessage(), exception);
