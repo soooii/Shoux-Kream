@@ -5,12 +5,16 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.shoux_kream.checkout.entity.CheckOut;
+import com.shoux_kream.checkout.repository.CheckOutRepository;
 import com.shoux_kream.config.jwt.impl.AuthTokenImpl;
 import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
+import com.shoux_kream.exception.AddressInUseException;
 import com.shoux_kream.exception.InvalidPasswordException;
 import com.shoux_kream.user.dto.JwtTokenDto;
 import com.shoux_kream.user.dto.request.AccountRequest;
 import com.shoux_kream.user.dto.request.JwtTokenLoginRequest;
+import com.shoux_kream.user.dto.request.UserAddressRequest;
 import com.shoux_kream.user.dto.request.UserRequest;
 import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
@@ -19,6 +23,7 @@ import com.shoux_kream.user.entity.Role;
 import com.shoux_kream.user.entity.User;
 import com.shoux_kream.user.entity.UserAddress;
 import com.shoux_kream.user.repository.RefreshTokenRepository;
+import com.shoux_kream.user.repository.UserAddressRepository;
 import com.shoux_kream.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -29,6 +34,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -38,6 +44,8 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtProviderImpl jwtProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserAddressRepository userAddressRepository;
+    private final CheckOutRepository checkOutRepository;
 
     //TODO 초기값 중복 init 문제, mysql은 인메모리 DB가 아니라 unique 중복값 문제가 존재함
 //    @jakarta.annotation.PostConstruct
@@ -110,14 +118,30 @@ public class UserService {
         userRepository.save(updatedUser);
     }
 
-
-    //회원정보 삭제
     public void deleteUser() {
         Long userId = getUser().getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
-        userRepository.delete(user);
+
+        // 유저의 주문 내역을 먼저 가져옴
+        List<CheckOut> checkOuts = checkOutRepository.findByUserId(userId);
+
+        // CheckOut에서 관련된 주소를 먼저 null로 설정 (주문에서 주소 참조 제거)
+        for (CheckOut checkOut : checkOuts) {
+            checkOut.removeAddress(); // 주소를 null로 설정
+        }
+
+        // 변경사항을 db에 반영
+        checkOutRepository.saveAll(checkOuts);
+
+        // 주문 삭제
+        checkOutRepository.deleteAll(checkOuts);
+
+        // 유저 삭제
+        userRepository.deleteById(userId);
     }
+
+
 
     //로그인
     public JwtTokenDto login(JwtTokenLoginRequest request) {
@@ -156,7 +180,7 @@ public class UserService {
     }
 
 
-    public List<UserAddressDto> getUserAddresses(String email) {
+    public List<UserAddressDto> getAddresses(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("user doesn't exist"));
         //optional 예외처리 적용
 
@@ -165,6 +189,32 @@ public class UserService {
         return userAddresses.stream()
                 .map(UserAddress -> new UserAddressDto(UserAddress))
                 .collect(Collectors.toList());
+    }
+
+    //배송지 추가
+    public void addAddress(UserAddressRequest userAddressRequest) {
+        Long userId = getUser().getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
+
+        // UserAddressDto를 UserAddress 엔티티로 변환
+        UserAddress userAddress = userAddressRequest.toEntity(user); // User 객체를 설정하여 엔티티로 변환
+
+        // 사용자 주소 목록에 추가
+        user.getAddresses().add(userAddress); // 사용자의 주소 목록에 추가
+
+        // 주소 저장 (CascadeType.ALL을 설정했을 경우 user.save()만 호출하면 된다)
+        userAddressRepository.save(userAddress); // 주소 저장
+    }
+
+    //배송지 삭제
+    public void deleteAddress(Long id) {
+        if (!checkOutRepository.findByAddressId(id).isEmpty()) {
+            throw new AddressInUseException("해당 주소를 사용하는 주문이 있어 삭제할 수 없습니다.");
+        }
+        UserAddress address = userAddressRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 주소가 없습니다."));
+        userAddressRepository.delete(address);
     }
 }
 
