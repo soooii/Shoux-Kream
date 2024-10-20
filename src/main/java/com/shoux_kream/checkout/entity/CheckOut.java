@@ -76,4 +76,6 @@ public class CheckOut extends BaseEntity {
     public void updateDeliveryStatus(DeliveryStatus deliveryStatus){
         this.deliveryStatus = deliveryStatus;
     }
+
+    public void removeAddress() {this.address = null;}
 }
