@@ -37,9 +37,8 @@ public class ItemService {
     public ItemResponse save(ItemSaveRequest itemSaveRequest,  MultipartFile imageFile) throws IOException {
 
 //        Brand brand = findBrandById(itemSaveRequest.brandId());
-//        Category category = findCategoryById(itemSaveRequest.categoryId());
-//        Category category = categoryRepository.findByName("미지정")
-//                .orElseThrow(() -> new RuntimeException("Default '미지정' category not found"));
+        Category category = findCategoryById(itemSaveRequest.categoryId());
+        //TODO 카테고리 미지정 선택불가 처리
 
         String imageKey = s3Uploader.upload(imageFile, "item-images");
 
@@ -47,7 +46,7 @@ public class ItemService {
 //              brand,
                 itemSaveRequest.id(),
                 itemSaveRequest.title(),
-//                category, // Category 엔티티 사용
+                category, // Category 엔티티 사용
                 itemSaveRequest.manufacturer(),
                 itemSaveRequest.shortDescription(),
                 itemSaveRequest.detailDescription(),
@@ -63,7 +62,7 @@ public class ItemService {
                 savedItem.getId(),
 //                new BrandResponse(savedItem.getBrand().getId(), savedItem.getBrand().getTitle()),
                 savedItem.getTitle(),
-//                savedItem.getCategory(), // Category 엔티티 사용
+                savedItem.getCategory(), // Category 엔티티 사용
                 savedItem.getManufacturer(),
                 savedItem.getShortDescription(),
                 savedItem.getDetailDescription(),
@@ -107,9 +106,11 @@ public class ItemService {
             String imageKey = s3Uploader.upload(imageFile, "item-images");
             item.setImageKey(imageKey);  // 새로운 이미지 키로 업데이트
         }
+        Category category = findCategoryById(itemUpdateRequest.categoryId());
 
         // Item의 필드 값 업데이트
         item.setTitle(itemUpdateRequest.title());
+        item.setCategory(category);
         item.setManufacturer(itemUpdateRequest.manufacturer());
         item.setShortDescription(itemUpdateRequest.shortDescription());
         item.setDetailDescription(itemUpdateRequest.detailDescription());
@@ -123,10 +124,11 @@ public class ItemService {
         return new ItemUpdateResponse(
                 item.getId(),
                 item.getTitle(),
+                item.getCategory(),
                 item.getManufacturer(),
                 item.getShortDescription(),
                 item.getDetailDescription(),
-                itemUpdateRequest.image(), // MultipartFile을 그대로 넘김
+                imageFile, // MultipartFile을 그대로 넘김
                 item.getInventory(),
                 item.getPrice(),
                 item.getKeyWords()
@@ -140,10 +142,10 @@ public class ItemService {
         return new ItemUpdateRequest(
                 item.getId(),
                 item.getTitle(),
+                item.getCategory().getId(),
                 item.getManufacturer(),
                 item.getShortDescription(),
                 item.getDetailDescription(),
-                null, // MultipartFile은 수정 요청 시 클라이언트에서 처리
                 item.getInventory(),
                 item.getPrice(),
                 item.getKeyWords()

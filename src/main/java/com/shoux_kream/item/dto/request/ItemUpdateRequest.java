@@ -8,12 +8,10 @@ public record ItemUpdateRequest(
 //        Long brandId,
         Long id,
         String title,
-//        Long categoryId, // Category의 ID만 받도록 수정
+        Long categoryId, // Category의 ID만 받도록 수정
         String manufacturer,
         String shortDescription,
         String detailDescription,
-//        String imageKey,
-        MultipartFile image,
         Integer inventory,
         Integer price,
         List<String> keyWords // 배열로 받기 위해 List<String> 사용
