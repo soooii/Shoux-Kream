@@ -49,7 +49,6 @@ public class ItemController {
     }
 
     // 관리자 권한 필요 - 새로운 상품을 등록하고, 등록된 상품 정보를 응답으로 반환
-//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/item-add")
     public ResponseEntity<ItemResponse> saveItem(@ModelAttribute ItemSaveRequest itemSaveRequest,
                                                  @RequestParam("imageKey") MultipartFile imageFile) throws IOException {
@@ -58,7 +57,6 @@ public class ItemController {
                 .body(savedItemResponse);
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/item-add") // GET 요청으로 상품 등록 페이지를 불러오는 메서드
     public String getItemAddPage(){
         return "item/item-add";
@@ -72,7 +70,6 @@ public class ItemController {
     }
 
     // 수정용 PUT 메서드
-//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ItemUpdateResponse> updateItemById(@PathVariable("id") Long id,
                                                              @RequestParam(value = "imageKey", required = false) MultipartFile imageFile,
@@ -83,7 +80,6 @@ public class ItemController {
 
 
     // 상품 수정 페이지 뷰
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/edit/{id}")
     public String showEditItemPage(@PathVariable("id") Long id, Model model) {
         model.addAttribute("itemId", id);
