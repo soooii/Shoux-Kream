@@ -103,6 +103,7 @@ public class UserService {
         userRepository.save(updatedUser);
     }
 
+    /* 수정중
     public void deleteUser() {
         Long userId = getUser().getUserId();
         User user = userRepository.findById(userId)
@@ -124,7 +125,7 @@ public class UserService {
 
         // 유저 삭제
         userRepository.deleteById(userId);
-    }
+    }*/
 
 
 
