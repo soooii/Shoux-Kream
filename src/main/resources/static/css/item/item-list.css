@@ -1,61 +1,60 @@
-.header-search-input {
-  width: 20rem;
+.home-item-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1280px;
 }
 
-.navbar-menu .is-info:focus {
-  outline: none;
-  box-shadow: none;
+.home-items {
+    width: 230px;
+    text-align: left;
+    margin-bottom: 28px;
 }
 
-.item-item {
-  cursor: pointer;
+.img_box {
+    background: #f4f4f4;
+    border-radius: 8px;
 }
 
-.item-item .image {
-  margin: 0.5rem 1rem 0.5rem 0.5rem;
-  height: 200px;
-  width: 200px;
+.info_box {
+    padding: 9px 4px 0;
 }
 
-.item-item .image img {
-  height: 200px;
+.brand-text {
+    align-items: center;
+    color: #222;
+    display: inline-flex;
+    font-size: 13px;
+    font-weight: 700;
+    height: 17px;
+    line-height: 17px;
+    margin-bottom: 2px;
 }
 
-.item-item p.title {
-  margin: 1rem 0;
+.detail-description {
+    color: #222;
+    display: -webkit-box;
+    font-size: 13px;
+    line-height: 16px;
+    max-height: 34px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
 }
 
-.item-item p.title .tag {
-  display: inline-block;
-  margin-left: 0.5rem;
-  margin-bottom: 1rem;
-  line-height: 1.5rem;
+.item-price {
+    padding-top: 12px;
 }
 
-.item-item p.description {
-  font-size: 1.2rem;
-}
-
-.item-item p.price {
-  font-size: 2rem;
-  margin-top: 3.5rem;
-}
-
-.media + .media {
-  margin-top: 0.5rem;
-  padding-top: 0;
-}
-
-.message:not(:last-child) {
-  margin-bottom: 1rem;
-}
-
-@media only screen and (max-width: 500px) {
-  .item-item {
-    display: block;
-  }
-
-  .item-item .image {
-    margin: 0.5rem auto;
-  }
+.item-price-text {
+    color: #222;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -.04px;
+    line-height: 17px;
+    vertical-align: top;
 }

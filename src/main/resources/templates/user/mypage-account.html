@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마이페이지</title>
+  <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/elice-rabbit-favicon.png"
+  />
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+  />
+  <script
+          defer
+          src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/js/bulma-carousel.min.js"
+  ></script>
+
+  <script
+          defer
+          src="https://kit.fontawesome.com/9daa42bcef.js"
+          crossorigin="anonymous"
+  ></script>
+  <!-- AWS S3 사진 업로드용 -->
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+  <script src="/js/login-logout.js"></script>
+  <script src="/js/user/mypage-account.js" type="module" defer></script>
+
+  <style>
+    .mypage-title a {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: black;
+      text-decoration: none;
+    }
+
+    .larger-text {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .title {
+      margin-bottom: 1rem;
+    }
+
+  </style>
+</head>
+<body>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="container mt-3">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <img src="/img/elice-rabbit.png" width="30" height="30" />
+        <span class="has-text-link">Shopping Mall</span>
+      </a>
+
+      <a
+              role="button"
+              class="navbar-burger"
+              aria-label="menu"
+              aria-expanded="false"
+              data-target="navbarBasicExample"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
+      <ul id="navbar">
+        <li>
+          <a href="/cart/summary" aria-current="page">
+                <span class="icon">
+                  <i class="fas fa-cart-shopping"></i>
+                </span>
+            <span>카트</span>
+          </a>
+          <a id="loginButton" href="/users/login">
+            <span class="icon">
+              <i class="fa fa-sign-in" aria-hidden="true"></i>
+            </span>
+            <span>로그인</span>
+          </a>
+
+          <a id="logoutButton" href="/">
+            <span class="icon">
+              <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </span>
+            <span>로그아웃</span>
+          </a>
+
+          <a href="api/admin" aria-current="page">
+            <span class="icon">
+              <i class="fa fa-address-book-o" aria-hidden="true"></i>
+            </span>
+            <span>관리자</span>
+          </a>
+
+          <a href="/users/me">
+            <span class="icon">
+              <i class="fas fa-user" aria-hidden="true"></i>
+            </span>
+            <span>My</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <aside class="column is-3">
+        <nav class="menu">
+          <p class="menu-label mypage-title">
+            <a href="/users/me">마이 페이지</a></p>
+          <ul class="menu-list">
+            <li class="larger-text">쇼핑 정보</li>
+            <li><a href="#purchase-history">구매 내역</a></li>
+            <li><a href="#sales-history">판매 내역</a></li>
+            <li class="larger-text">내 정보</li>
+            <li><a href="/users/me/account">계정 관리</a></li>
+            <li><a href="/users/me/address">주소록</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- 회원정보 박스 -->
+      <div class="column is-9">
+        <div class="menu-container">
+          <div class="form-container">
+            <form class="box form-box" id="loginForm">
+              <div class="level-left">
+                <p class="title">회원 정보</p>
+              </div>
+              <div class="field">
+                <label class="label" for="fullEmailInput">이메일 주소</label>
+                <div class="control">
+                  <input
+                          class="input"
+                          id="fullEmailInput"
+                          type="email"
+                          autocomplete="off"
+                  />
+
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="fullNameInput">이름</label>
+                <div class="control">
+                  <input
+                          class="input"
+                          id="fullNameInput"
+                          type="text"
+                          autocomplete="off"
+                  />
+
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="fullNicknameInput">닉네임</label>
+                <div class="control">
+                  <input
+                          class="input"
+                          id="fullNicknameInput"
+                          type="text"
+                          autocomplete="off"
+                          placeholder="닉네임을 입력해주세요."
+                  />
+
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="currentPasswordInput">현재 비밀번호</label>
+                <div class="control">
+                  <input
+                          class="input"
+                          id="currentPasswordInput"
+                          type="password"
+                          autocomplete="off"
+                  />
+                  <p id="passwordMatchMessage" class="help is-danger" style="display: none;">
+                    비밀번호가 일치하지 않습니다.
+                  </p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="newPasswordInput">새 비밀번호</label>
+                <div class="control">
+                  <input
+                          class="input"
+                          id="newPasswordInput"
+                          type="password"
+                          autocomplete="off"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="confirmPasswordInput">비밀번호 확인</label>
+                <div class="control">
+                  <input
+                          class="input"
+                          id="confirmPasswordInput"
+                          type="password"
+                          autocomplete="off"
+                  />
+                </div>
+                <p id="newPasswordMatchMessage" class="help is-danger" style="display: none;">
+                  비밀번호를 확인해주세요.
+                </p>
+              </div>
+
+              <button
+                      class="button button-submit is-info is-fullwidth js-modal-trigger"
+                      id="saveButton"
+                      data-target="modal-js-example"
+              >
+                저장하기
+              </button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

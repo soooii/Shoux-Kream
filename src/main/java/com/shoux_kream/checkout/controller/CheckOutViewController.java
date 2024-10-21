@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/checkout")
 public class CheckOutViewController {
     /*
     상품id
@@ -52,14 +51,17 @@ public class CheckOutViewController {
 [출처] [Spring] 쇼핑몰 만들기 11. 주문하기 기능 구현 (1) 개별상품 주문하기|작성자 워니
      */
 
+    // 단 건 체크아웃
+    @GetMapping("/checkout-each")
+    public String getCheckOutEachPage() { return "checkout/checkout-each"; }
+
     // 카트의 정보를 받아서 모델에 넣어서 프론트에서 처리해야한다. model에 cart정보 넣기
-    @GetMapping
-    // TODO 단건페이지 반환주소 + 여러 페이지 반환주소
+    @GetMapping("/checkout")
     public String getCheckOutPage(){
         return "checkout/checkout";
     }
 
-    @GetMapping("/complete")
+    @GetMapping("/checkout/complete")
     public String getCheckOutCompletePage(){
         return "checkout/checkoutcomplete";
     }

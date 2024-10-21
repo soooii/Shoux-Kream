@@ -27,7 +27,7 @@ public class AdminUserService {
 
     public ResponseEntity<Void> updateUser(AdminUserUpdateRequest adminUserUpdateRequest) {
         User user = adminUserRepository.findById(adminUserUpdateRequest.getUserId()).orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
-        user.setRole(adminUserUpdateRequest.getRole());
+        user.setRole(adminUserUpdateRequest.getUserRole());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

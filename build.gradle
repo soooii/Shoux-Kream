@@ -35,6 +35,7 @@ dependencies {
 
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
 
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	// RESTful API를 포함한 웹 애플리케이션을 개발하기 위한 Spring Boot 스타터
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -90,6 +91,17 @@ dependencies {
 
 	// 보안 설정을 테스트할 수 있도록 도와주는 Spring Security 테스트 지원 라이브러리
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	//rds 이전용
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// 공간 데이터 처리 기능 의존성 추가
+	implementation("com.querydsl:querydsl-spatial:5.0.0")
+	implementation("org.hibernate:hibernate-spatial:6.2.5.Final")
+
+	// 엑셀 라이브러리
+	implementation 'org.apache.poi:poi:5.2.3'        // HSSF (for .xls files)
+	implementation 'org.apache.poi:poi-ooxml:5.2.3'  // XSSF (for .xlsx files)
 }
 
 tasks.named('test') {

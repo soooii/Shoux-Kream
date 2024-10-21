@@ -1,9 +1,6 @@
 package com.shoux_kream.checkout.controller;
 
-import com.shoux_kream.checkout.dto.CheckOutItemRequestDto;
-import com.shoux_kream.checkout.dto.CheckOutRequestDto;
-import com.shoux_kream.checkout.dto.CheckOutResponseDto;
-import com.shoux_kream.checkout.entity.DeliveryStatus;
+import com.shoux_kream.checkout.dto.*;
 import com.shoux_kream.checkout.service.CheckOutService;
 import com.shoux_kream.user.controller.JwtController;
 import com.shoux_kream.user.dto.response.UserAddressDto;
@@ -16,7 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 //TODO 값 검증은 CartRequestDto 에서 validator 통해서 체크
 @RestController
@@ -37,8 +33,9 @@ public class CheckOutApiController {
 
     @PostMapping("/checkout") //TODO userId로 체크아웃 정보를 저장함, 저장한 entity를 id값을 포함해 반환
     public ResponseEntity<CheckOutResponseDto> processCheckOut(@AuthenticationPrincipal User principal,@RequestBody CheckOutRequestDto checkOutRequestDto) {
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         CheckOutResponseDto checkOutResponseDto = checkOutService.createCheckout(userResponse.getUserId(), checkOutRequestDto);
         // TODO 201 created(URI) 전환
 
@@ -53,8 +50,9 @@ public class CheckOutApiController {
         //    private String summaryTitle;
         //    private int totalPrice;
         // 이 정보만 필요.
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         List<CheckOutResponseDto> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
         return ResponseEntity.ok(checkOuts);
     }
@@ -103,19 +101,20 @@ public class CheckOutApiController {
         // 그냥 모두 조회
 
         // TODO role authorities => admin일때
-        String email = principal.getUsername();
-        UserResponse userResponse = userService.getUser(email);
+        //String email = principal.getUsername();
+        //UserResponse userResponse = userService.getUser(email);
+        UserResponse userResponse = userService.getUser();
         List<CheckOutResponseDto> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
         return ResponseEntity.ok(checkOuts);
     }
 
     // 어드민 프론트에서 쏴줄거 ⇒ dropdown으로 선택한 status, checkout 번호 > 수정
-    @PatchMapping("/admin/checkout/delivery-status/{detailID}")
-    public ResponseEntity<CheckOutResponseDto> updateDeliveryStatus (@PathVariable("detailId") Long detailId, @RequestBody DeliveryStatus deliveryStatus) {
+    @PatchMapping("/admin/checkout/delivery-status/{detailId}")
+    public ResponseEntity<CheckOutResponseDto> updateDeliveryStatus (@PathVariable("detailId") Long detailId, @RequestBody DeliveryStatusRequestDto request) {
         //TODO 권한 확인 필요
         //TODO 잘 되는데 주소 id번호까지 같이 바뀌어버림; CheckOut을 address랑 분리해야함!
         //service에서 email로 userid를 체크해서 update함
-        CheckOutResponseDto checkOutResponseDto = checkOutService.updateDeliveryStatus(detailId, deliveryStatus);
+        CheckOutResponseDto checkOutResponseDto = checkOutService.updateDeliveryStatus(detailId, request.getDeliveryStatus());
         return ResponseEntity.ok(checkOutResponseDto);
 
         //TODO patch => 업데이트 방법? update
@@ -127,4 +126,32 @@ public class CheckOutApiController {
         Long deletedId = checkOutService.deleteCheckOut(principal.getUsername(), detailId);
         return ResponseEntity.ok(deletedId);
     }
+
+    // 즉시 구매 조회
+    @GetMapping("/checkout-each")
+    public ResponseEntity<CheckOutEachResponseDto> getCheckOutEach() {
+        UserResponse userResponse = userService.getUser();
+        CheckOutEachResponseDto checkOutEachResponseDto = checkOutService.getCheckOutEach(userResponse.getUserId());
+
+        return ResponseEntity.ok(checkOutEachResponseDto);
+    }
+
+    // 즉시 구매를 위한 정보 임시 저장
+    @PostMapping("/checkout-each")
+    public ResponseEntity addCheckOutEach(@RequestBody CheckOutEachRequestDto checkOutEachRequestDto) {
+        UserResponse userResponse = userService.getUser();
+        Long checkOutEachId = checkOutService.addCheckOutEach(userResponse.getUserId(), checkOutEachRequestDto);
+
+        return ResponseEntity.ok(checkOutEachId);
+    }
+
+    // 주문완료 후 즉시 구매 삭제
+    @DeleteMapping("/checkout-each/{checkOutEachId}")
+    public ResponseEntity deleteCheckOutEach(@PathVariable("checkOutEachId") Long checkOutEachId) {
+        checkOutService.deleteCheckOutEach(checkOutEachId);
+
+        return ResponseEntity.ok()
+                .build();
+    }
+
 }

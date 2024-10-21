@@ -33,6 +33,21 @@ public class KreamExceptionHandler {
                 .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage));
     }
 
+    //입력한 기존 비밀번호가 db 비밀번호와 다를 경우 발생하는 Exception
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException ex) {
+        return ResponseEntity.status(418).body(ex.getMessage());
+    }
+
+    //해당 아이디의 주소가 없을 경우 발생하는 Exception
+    @ExceptionHandler(AddressNotFoundException.class)
+    public ResponseEntity<String> handleAddressNotFoundException(AddressNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+
+
+
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
 //        logger.error("Unhandled exception occurred: {}", exception.getMessage(), exception);

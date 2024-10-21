@@ -1,14 +1,13 @@
 package com.shoux_kream.admin.controller;
 
+import com.shoux_kream.admin.dto.excel.AdminUserExcelRequest;
 import com.shoux_kream.admin.dto.request.AdminUserUpdateRequest;
 import com.shoux_kream.admin.dto.response.AdminUserResponse;
 import com.shoux_kream.admin.service.AdminUserService;
-import com.shoux_kream.user.service.UserService;
+import com.shoux_kream.common.utils.ExcelUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +19,7 @@ import java.util.List;
 public class AdminUserApiController {
 
     private final AdminUserService adminUserService;
+    private final ExcelUtils excelUtils;
 
     @GetMapping()
     public ResponseEntity<List<AdminUserResponse>> getAllUser() {
@@ -29,5 +29,11 @@ public class AdminUserApiController {
     @PutMapping()
     public ResponseEntity<Void> updateUser(@RequestBody @Validated AdminUserUpdateRequest adminUserUpdateRequest) {
         return adminUserService.updateUser(adminUserUpdateRequest);
+    }
+
+    @PostMapping("/excel/download")
+    public void excelDownLoad(HttpServletResponse response, @RequestBody List<AdminUserExcelRequest> adminUserExcelRequest) {
+        // 엑셀 다운로드 로직 실행
+        excelUtils.downloadExcel(adminUserExcelRequest, response);
     }
 }

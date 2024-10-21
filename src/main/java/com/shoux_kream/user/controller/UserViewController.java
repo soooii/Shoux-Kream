@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserViewController {
 
     @GetMapping("/login")
-    public String login() {
-        return "user/login";
-    }
+    public String login() {return "user/login";}
 
     @GetMapping("/signup")
     public String signup() {
@@ -20,8 +18,13 @@ public class UserViewController {
     }
 
     @GetMapping("/me")
-    public String getUserPage() {
-        return "user/mypage-main";
-    }
+    public String getMyPage() {return "user/mypage-main";}
+
+    @GetMapping("/me/account")
+    public String getAccountPage() {return "user/mypage-account";}
+
+    @GetMapping("/me/address")
+    public String getAddressPage() {return "user/mypage-address";}
+
 
 }
