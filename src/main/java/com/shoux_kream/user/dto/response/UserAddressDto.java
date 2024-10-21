@@ -27,7 +27,7 @@ public class UserAddressDto {
 
     public UserAddress toEntity() {
         return UserAddress.builder()
-                .recipientName(recipientPhone)
+                .recipientName(recipientName)
                 .recipientPhone(recipientPhone)
                 .postalCode(postalCode)
                 .address1(address1)
