@@ -5,7 +5,7 @@ import java.util.List;
 public record ItemSaveRequest(
         Long id,
         String title,
-//        Long categoryId, // Category의 ID만 받도록 수정
+        Long categoryId, // Category의 ID만 받도록 수정
         String manufacturer,
         String shortDescription,
         String detailDescription,

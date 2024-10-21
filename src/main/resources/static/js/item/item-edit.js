@@ -4,6 +4,7 @@ import { checkLogin, randomId, createNavbar, checkAdmin } from "/js/useful-funct
 
 // 요소(element)들과 상수들
 const titleInput = document.querySelector("#titleInput");
+const categorySelectBox = document.querySelector("#categorySelectBox");
 const manufacturerInput = document.querySelector("#manufacturerInput");
 const shortDescriptionInput = document.querySelector("#shortDescriptionInput");
 const detailDescriptionInput = document.querySelector("#detailDescriptionInput");
@@ -30,12 +31,14 @@ loadItemData(); // 아이템 데이터 로드
 // HTML에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 function addAllElements() {
   createNavbar();
+  addOptionsToSelectBox();
 }
 
 // addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 function addAllEvents() {
   imageInput.addEventListener("change", handleImageUpload);
   editButton.addEventListener("click", handleEditSubmit);
+  categorySelectBox.addEventListener("change", handleCategoryChange);
   addKeywordButton.addEventListener("click", handleKeywordAdd);
 }
 
@@ -45,6 +48,7 @@ async function loadItemData() {
     const itemData = await Api.get(`/item/${itemId}`);
 
     titleInput.value = itemData.title;
+    categorySelectBox.value = itemData.category.id;
     manufacturerInput.value = itemData.manufacturer;
     shortDescriptionInput.value = itemData.shortDescription;
     detailDescriptionInput.value = itemData.detailDescription;
@@ -68,6 +72,7 @@ async function handleEditSubmit(e) {
   e.preventDefault();
 
   const title = titleInput.value;
+  const categoryId = categorySelectBox.value;
   const manufacturer = manufacturerInput.value;
   const shortDescription = shortDescriptionInput.value;
   const detailDescription = detailDescriptionInput.value;
@@ -90,6 +95,7 @@ async function handleEditSubmit(e) {
     // FormData 생성 및 데이터 추가
     const formData = new FormData();
     formData.append("title", title);
+    formData.append("categoryId", categoryId);
     formData.append("manufacturer", manufacturer);
     formData.append("shortDescription", shortDescription);
     formData.append("detailDescription", detailDescription);
@@ -126,6 +132,27 @@ function handleImageUpload() {
   } else {
     fileNameSpan.innerText = "";
   }
+}
+
+// 선택할 수 있는 카테고리 종류를 api로 가져와서, 옵션 태그를 만들어 삽입함.
+async function addOptionsToSelectBox() {
+  categorySelectBox.innerHTML = `<option value="default" selected disabled hidden>카테고리를 선택해 주세요.</option>`; // 기본값 추가
+  const categories = await Api.get("/category/category-list");
+  categories.forEach((category) => {
+    const { id, title, themeClass } = category;
+    categorySelectBox.insertAdjacentHTML(
+      "beforeend",
+      `<option value=${id} class="notification ${themeClass}"> ${title} </option>`
+    );
+  });
+}
+
+
+// 카테고리 선택 시, 선택박스에 해당 카테고리 테마가 반영되게 함.
+function handleCategoryChange() {
+  const index = categorySelectBox.selectedIndex;
+
+  categorySelectBox.className = categorySelectBox[index].className;
 }
 
 // 검색 키워드를 추가할 때 사용되는 함수
