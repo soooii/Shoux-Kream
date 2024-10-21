@@ -41,4 +41,14 @@ public class Sale extends BaseEntity {
         this.user = user;
         this.item = item;
     }
+
+    // 마감 기한 변경
+    public void updateDaysToAdd(int daysToAdd) {
+        this.dueDate = LocalDateTime.now().plusDays(daysToAdd);
+    }
+
+    // 판매 희망가 변경
+    public void updateSellingPrice(Long sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
 }
