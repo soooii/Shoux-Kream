@@ -19,7 +19,7 @@ public class SaleApiController {
     private final SaleService saleService;
     private final UserService userService;
 
-    // TODO 사용자 판매 상품 등록
+    // 사용자 판매 상품 등록
     @PostMapping("/sell")
     public ResponseEntity sellItem(@RequestBody SaleRequestDto saleRequestDto) {
         UserResponse userResponse = userService.getUser();
@@ -28,7 +28,7 @@ public class SaleApiController {
         return ResponseEntity.ok(saleId);
     }
     
-    // TODO 사용자 판매 내역 마이페이지 - 판매 목록에서 보여줌
+    // 사용자 판매 내역 마이페이지 - 판매 목록에서 보여줌
     @GetMapping
     public ResponseEntity<List<SaleResponseDto>> getSales() {
         UserResponse userResponse = userService.getUser();
@@ -37,7 +37,7 @@ public class SaleApiController {
         return ResponseEntity.ok(sales);
     }
 
-    // TODO 판매 등록 완료 후 내역 조회
+    // 판매 등록 완료 후 내역 조회
     @GetMapping("/{saleId}")
     public ResponseEntity<SaleResponseDto> getSale(@PathVariable("saleId") Long saleId) {
         SaleResponseDto saleResponseDto = saleService.getSale(saleId);
@@ -45,7 +45,7 @@ public class SaleApiController {
         return ResponseEntity.ok(saleResponseDto);
     }
 
-    // TODO 사용자 판매 상품 수정
+    // 사용자 판매 상품 수정
     @PatchMapping("/{saleId}")
     public ResponseEntity updateSale (@PathVariable("saleId") Long saleId, @RequestBody SaleRequestDto saleRequestDto) {
         SaleResponseDto saleResponseDto = saleService.updateSale(saleId, saleRequestDto);
@@ -53,7 +53,7 @@ public class SaleApiController {
         return ResponseEntity.ok(saleResponseDto);
     }
     
-    // TODO 사용자 판매 상품 삭제
+    // 사용자 판매 상품 삭제
     @DeleteMapping("/{saleId}")
     public ResponseEntity deleteSale (@PathVariable("saleId") Long saleId) {
         saleService.deleteSale(saleId);

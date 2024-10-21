@@ -71,7 +71,7 @@ public class SaleService {
         return new SaleResponseDto(sale);
     }
 
-    // TODO 사용자 판매 상품 삭제
+    // 사용자 판매 상품 삭제
     public void deleteSale(Long saleId) {
         saleRepository.deleteById(saleId);
     }
