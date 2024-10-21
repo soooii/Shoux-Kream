@@ -20,8 +20,7 @@ public class AdminCategoryApiController {
 
     @GetMapping()
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        List<CategoryDto> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @DeleteMapping("/{id}")
