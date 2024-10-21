@@ -72,9 +72,9 @@ async function handleSubmit(e) {
     formData.append("imageKey", image); // 파일 추가
     formData.append("inventory", inventory);
     formData.append("price", price);
+    // json 배열타입 그대로 전송
+    formData.append("keyWords", searchKeywords);
 
-    // 검색 키워드를 문자열로 결합하여 추가
-    formData.append("searchKeywords", searchKeywords.join(","));
 
     // FormData 전송
     await fetch("/item/item-add", {
