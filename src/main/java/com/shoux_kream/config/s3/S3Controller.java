@@ -23,6 +23,6 @@ public class S3Controller {
     @PostMapping("/s3/image/upload")
     @ResponseBody
     public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
-        return s3Uploader.upload(multipartFile, "static");
+        return s3Uploader.upload(multipartFile, "album");
     }
 }

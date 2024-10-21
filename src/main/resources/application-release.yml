@@ -1,38 +1,33 @@
 spring:
+  config:
+    activate:
+      on-profile: release
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: ${AWS_RDS_ENDPOINT}
+    username: ${AWS_MASTER_ID}
+    password: ${AWS_MASTER_PASSWORD}
   jpa:
-    properties:
-      hibernate:
-        show-sql: true
-        format_sql: true
-        use_sql_comments: true
-        generate_statistics: true
-    #defer-datasource-initialization: true 설정 => data.sql 초기화 필요시 사용
-    #    defer-datasource-initialization: true
+    #    초기세팅용 => 확인필요
+#    defer-datasource-initialization: true
+    show-sql: true
     hibernate:
       ddl-auto: update
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-  h2:
-    console:
-      settings:
-        web-allow-others: true
-      enabled: true
-      # 시스템 설정이라 바꿔줘야함
-
-  config:
-      activate:
-        on-profile: release
-# 배포 서버용 세팅
-server:
-  port: 3000
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+#     never => init 안됨 always 세팅 한번 필요한듯?
+      mode: never
 
 # 환경변수 설정으로 세팅
 jwt:
   secret: ${JWT_SECRET_KEY} #base64 32byte
   token:
     refresh-expires: 7200000 #2시간
-    access-expires: 7200000
+    access-expires: 1800000
 # S3
 cloud:
   aws:
@@ -42,6 +37,10 @@ cloud:
     s3:
       bucket: ${S3_SHOUXKREAM_BUCKET}
     region:
-      static: ap-southeast-2
+      static: ap-northeast-2
     stack:
       auto: false
+
+#서버 port 설정
+server:
+  port: 3000

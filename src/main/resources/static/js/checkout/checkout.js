@@ -262,7 +262,7 @@ async function doCheckOut() {
       var price = id.itemPrice;
       const totalPrice = quantity * price;
 
-      await Api.post("/api/checkoutitem", {
+      await Api.post("/api/checkout-item", {
         checkOutId,
         itemId,
         quantity,

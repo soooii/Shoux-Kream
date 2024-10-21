@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shopping Mall</title>
+
+    <!-- 아이콘 -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/elice-rabbit-favicon.png" />
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+
+    <!-- Font Awesome: 아이콘 -->
+    <script defer src="https://kit.fontawesome.com/9daa42bcef.js" crossorigin="anonymous"></script>
+
+    <!-- Daum 주소 API 사용하기 위한 파일 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <!-- 커스텀 CSS, JS -->
+    <script src="/js/user/mypage-address.js" type="module" defer></script>
+
+
+</head>
+<body>
+<!-- 헤더 -->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="container mt-3">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <img src="/img/elice-rabbit.png" width="30" height="30" />
+                <span class="has-text-link">Shopping Mall</span>
+            </a>
+
+            <a
+                    role="button"
+                    class="navbar-burger"
+                    aria-label="menu"
+                    aria-expanded="false"
+                    data-target="navbarBasicExample"
+            >
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
+            <ul id="navbar">
+                <li>
+                    <a href="/cart/summary" aria-current="page">
+                <span class="icon">
+                  <i class="fas fa-cart-shopping"></i>
+                </span>
+                        <span>카트</span>
+                    </a>
+                    <a id="loginButton" href="/users/login">
+            <span class="icon">
+              <i class="fa fa-sign-in" aria-hidden="true"></i>
+            </span>
+                        <span>로그인</span>
+                    </a>
+
+                    <a id="logoutButton" href="/">
+            <span class="icon">
+              <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </span>
+                        <span>로그아웃</span>
+                    </a>
+
+                    <a href="api/admin" aria-current="page">
+            <span class="icon">
+              <i class="fa fa-address-book-o" aria-hidden="true"></i>
+            </span>
+                        <span>관리자</span>
+                    </a>
+
+                    <a href="/users/me">
+            <span class="icon">
+              <i class="fas fa-user" aria-hidden="true"></i>
+            </span>
+                        <span>My</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 메인 컨텐츠 -->
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            <!-- 왼쪽 네비게이션 바 -->
+            <aside class="column is-3">
+                <nav class="menu">
+                    <p class="menu-label mypage-title">
+                        <a href="/users/me">마이페이지</a>
+                    </p>
+                    <ul class="menu-list">
+                        <li class="larger-text">쇼핑정보</li>
+                        <li><a href="#purchase-history">구매내역</a></li>
+                        <li><a href="#sales-history">판매내역</a></li>
+                        <li class="larger-text">내정보</li>
+                        <li><a href="/users/me/account">계정관리</a></li>
+                        <li><a href="/users/me/address">주소록</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- 주소록 섹션 -->
+            <div class="column is-9">
+                <div class="box">
+                    <div class="level">
+                        <div class="level-left">
+                            <p class="title">주소록</p>
+                        </div>
+                        <div class="level-right">
+                            <button class="button is-link" id="addAddress">새 배송지 추가</button>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <!-- 배송지 정보를 표시할 영역 -->
+                    <div id="address-container"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 모달 -->
+<div class="modal" id="addressModal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">새 배송지 추가</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <form>
+                <div class="field">
+                    <label class="label">이름</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="수령인을 입력하세요" />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">휴대폰번호</label>
+                    <div class="control">
+                        <input class="input" type="tel" placeholder="휴대폰 번호를 입력하세요" />
+                    </div>
+                </div>
+
+                <!-- 우편번호 필드 -->
+                <div class="field">
+                    <label class="label">우편 번호</label>
+                    <div class="control has-icons-right">
+                        <input class="input" type="text" id="postalCodeInput" placeholder="우편 번호를 검색하세요" readonly />
+                        <span class="icon is-small is-right">
+              <i class="fas fa-search"></i>
+            </span>
+                        <button class="button is-link" id="searchAddressButton">우편번호 검색</button>
+                    </div>
+                </div>
+
+                <!-- 주소 필드 -->
+                <div class="field">
+                    <label class="label">주소</label>
+                    <div class="control">
+                        <input class="input" id="address1Input" type="text" placeholder="주소가 자동으로 입력됩니다." readonly />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">상세 주소</label>
+                    <div class="control">
+                        <input class="input" id="address2Input" type="text" placeholder="상세 주소를 입력하세요" />
+                    </div>
+                </div>
+            </form>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button" id="save">저장하기</button>
+            <button class="button" id="close">취소</button>
+        </footer>
+    </div>
+</div>
+
+<style>
+    .mypage-title a {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: black;
+        text-decoration: none;
+    }
+
+    .larger-text {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .address-item {
+        margin-bottom: 1rem;
+    }
+
+    .modal-card {
+        width: 500px;
+    }
+</style>
+
+</body>

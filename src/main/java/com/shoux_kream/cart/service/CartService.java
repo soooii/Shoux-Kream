@@ -28,8 +28,8 @@ public class CartService {
 
     // 장바구니 담기
     @Transactional
-    public Long addCart(CartRequestDto cartRequestDto, Long itemId) {
-        User user = userRepository.findById(cartRequestDto.getUserId())
+    public Long addCart(Long userId, CartRequestDto cartRequestDto, Long itemId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         Item item = itemRepository.findById(itemId)
@@ -79,10 +79,8 @@ public class CartService {
     // 장바구니 삭제
     // 장바구니 선택 삭제
     @Transactional
-    public void deleteCarts(List<Long> cartIds) {
-        for (Long cartId : cartIds) {
-            cartRepository.deleteById(cartId);
-        }
+    public void deleteCarts(List<Long> cartIds, Long userId) {
+        cartRepository.deleteCartsSelected(userId, cartIds);
     }
 
     // 장바구니 개별 삭제
@@ -115,5 +113,12 @@ public class CartService {
         return selectedCarts.stream()
                 .map(cart -> new CartResponseDto(cart))
                 .collect(Collectors.toList());
+    }
+
+    // cart에서 구매하기로 선택한 상품 변경
+    @Transactional
+    public void updateCartSelected(List<Long> cartIds, Long userId) {
+        cartRepository.deselectOldItems(userId, cartIds);
+        cartRepository.updateCartSelected(userId, cartIds);
     }
 }

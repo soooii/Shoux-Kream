@@ -47,12 +47,11 @@ export const checkLogin = () => {
 
 // 관리자 여부 확인
 export const checkAdmin = async () => {
-  // 우선 화면을 가리고 시작함 -> 화면 번쩍거림으로 인해 일단 미적용
-  //window.document.body.style.display = 'none';
+  window.document.body.style.display = 'none';
 
-  const token = sessionStorage.getItem("token");
+  const token = sessionStorage.getItem("accessToken");
 
-  // 우선 토큰 존재 여부 확인
+  // 토큰 존재 여부 확인
   if (!token) {
     // 현재 페이지의 url 주소 추출하기
     const pathname = window.location.pathname;
@@ -63,24 +62,21 @@ export const checkAdmin = async () => {
   }
 
   // 관리자 토큰 여부 확인
-  const res = await fetch("/users/admin-check", {
+  const res = await fetch("/api/users/admin-check", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  const { result } = await res.json();
-
-  if (result === "success") {
+  if (res.ok) {
     window.document.body.style.display = "block";
-
     return;
   } else {
     alert("관리자 전용 페이지입니다.");
-
     window.location.replace("/");
   }
 };
+
 
 // 로그인 상태일 때에는 접근 불가한 페이지로 만듦. (회원가입 페이지 등)
 export const blockIfLogin = () => {
@@ -149,6 +145,24 @@ export const randomPick = (items) => {
 
 // 주변 다른 파일 것도 여기서 일괄 export 함
 export { createNavbar } from "./navbar.js";
+
+// AccessToken 재발급 함수
+export async function fetchNewAccessToken() {
+  const response = await fetch('/api/users/refresh', {
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    throw new Error('토큰 재발급에 실패했습니다.');
+  }
+
+  const data = await response.json();
+  console.log('Response json', data);
+  const newAccessToken = data.accessToken;
+  sessionStorage.setItem('accessToken', newAccessToken);
+  console.log('New Access Token:', newAccessToken);
+}
+
 
 
 

@@ -36,7 +36,7 @@
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
   <!-- 커스텀 css, js -->
   <link rel="stylesheet" href="css/home/home.css" />
-  <script src="js/home/home.js" type="module" defer></script>
+  <script src="/js/home/home.js" type="module" defer></script>
   <script src="/js/login-logout.js"></script>
 </head>
 
@@ -46,7 +46,7 @@
   <div class="container mt-3">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <img src="img/elice-rabbit.png" width="30" height="30" />
+        <img src="/img/elice-rabbit.png" width="30" height="30" />
         <span class="has-text-link">Shopping Mall</span>
       </a>
 
@@ -86,7 +86,7 @@
             <span>로그아웃</span>
           </a>
 
-          <a href="api/admin" aria-current="page">
+          <a id="adminButton" onclick="adminButtonClick(event)" aria-current="page">
             <span class="icon">
               <i class="fa fa-address-book-o" aria-hidden="true"></i>
             </span>
@@ -95,7 +95,7 @@
 
           <a href="/users/me">
             <span class="icon">
-              <i class="fa fa-address-book-o" aria-hidden="true"></i>
+              <i class="fas fa-user" aria-hidden="true"></i>
             </span>
             <span>My</span>
           </a>
@@ -104,85 +104,79 @@
     </div>
   </div>
 </nav>
+<div class="container mt-3">
+  <div class="flex-box">
+    <li
+        th:unless="${#lists.isEmpty(categories)}"
+        th:each="category : ${categories}"
+        class="category-list"
+    >
+      <a class="category-li-tab" href="/item/item-list">
+        <span th:text="${category.title}" class="category-li-span"></span>
+      </a>
+    </li>
+
+  </div>
+</div>
 
 <!-- 슬라이드 이미지 -->
-<section class="section">
+<section>
   <div class="container is-clipped">
-    <!--
-    일단 주석 하고 bulma라이브러리에서 제공하는 슬라이드 버튼 사용
-    <div class="slider-arrow-container">
-      <button class="slider-arrow slider-arrow-left" id="sliderArrowLeft">
-            <span class="icon is-large">
-              <i class="fas fa-chevron-left fa-2x"></i>
-            </span>
-      </button>
-      <button class="slider-arrow slider-arrow-right" id="sliderArrowRight">
-            <span class="icon is-large">
-              <i class="fas fa-chevron-right fa-2x"></i>
-            </span>
-      </button>
-    </div>
-    -->
     <div id="slider"></div>
   </div>
 </section>
 
 <!-- 상품 or 카테고리 이미지 -->
-<!-- TODO 데이터 받아와서 반복문 돌려서 img태그 채우기 -->
 <section class="section">
+  <div class="title_wrap ">
+    <div class="item-title"> Just Dropped</div>
+    <div class="item-sub_title"> 발매 상품 </div>
+  </div>
   <div class="home-item-container">
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
-    </div>
-
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
-    </div>
-
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
-    </div>
-
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
-    </div>
-
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
-    </div>
-
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
-    </div>
-
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
-    </div>
-
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
-    </div>
-
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
-    </div>
-
-    <div class="home-items">
-      <img src="img/elice-rabbit.png"/>
-      <p>상품 설명</p>
+    <div
+      th:unless="${#lists.isEmpty(items)}"
+      th:each="item : ${items}"
+      class="home-items"
+    >
+      <a href="/users/me"
+         th:href="@{/item/item-detail/{id}(id=${item.id})}"
+      >
+        <div class="img_box">
+          <img th:src="@{${item.imageKey}}" />
+        </div>
+        <div class="info_box">
+          <div class="brand">
+            <p class="brand-text">
+              <span th:text="${item.manufacturer}"></span>
+            </p>
+          </div>
+          <p class="detail-description" th:text="${item.detailDescription}"></p>
+          <div class="item-price">
+            <p class="item-price-text">
+              <span th:text="${item.price}"></span>
+              <span>원</span>
+            </p>
+          </div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
+<script>
+  const adminButtonClick=(event)=>{
+    const token = sessionStorage.getItem("accessToken");
 
+    // 토큰이 없을 경우 처리 (선택 사항)
+    if (!token) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
 
+    // 새로운 URL로 이동할 때 토큰을 쿼리 파라미터로 추가
+<!--    window.location.href = `http://localhost:9000?token=${token}`;-->
+    window.location.href = `https://txqfegberfyqzheq.tunnel-pt.elice.io/?token=${token}`;
+  }
+
+</script>
 </body>
 </html>
