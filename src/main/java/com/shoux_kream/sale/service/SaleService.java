@@ -1,6 +1,5 @@
 package com.shoux_kream.sale.service;
 
-import com.shoux_kream.cart.dto.CartResponseDto;
 import com.shoux_kream.item.entity.Item;
 import com.shoux_kream.item.repository.ItemRepository;
 import com.shoux_kream.sale.dto.SaleRequestDto;

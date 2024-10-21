@@ -1,5 +1,7 @@
 package com.shoux_kream.sale.controller;
 
+import com.shoux_kream.item.dto.response.SaleItemResponseDto;
+import com.shoux_kream.item.service.ItemService;
 import com.shoux_kream.sale.dto.SaleRequestDto;
 import com.shoux_kream.sale.dto.SaleResponseDto;
 import com.shoux_kream.sale.service.SaleService;
@@ -18,6 +20,7 @@ public class SaleApiController {
 
     private final SaleService saleService;
     private final UserService userService;
+    private final ItemService itemService;
 
     // 사용자 판매 상품 등록
     @PostMapping("/sell")
@@ -26,6 +29,14 @@ public class SaleApiController {
 
         Long saleId = saleService.sellItem(userResponse.getUserId(), saleRequestDto);
         return ResponseEntity.ok(saleId);
+    }
+
+    // 사용자 판매 등록 시 아이템 조회
+    @GetMapping("/item/{itemId}")
+    public ResponseEntity getItemDetail(@PathVariable("itemId") Long itemId) {
+        SaleItemResponseDto saleItemResponseDto = itemService.findSaleItemById(itemId);
+
+        return ResponseEntity.ok(saleItemResponseDto);
     }
     
     // 사용자 판매 내역 마이페이지 - 판매 목록에서 보여줌

@@ -5,16 +5,15 @@ import com.shoux_kream.category.repository.CategoryRepository;
 import com.shoux_kream.config.s3.S3Uploader;
 import com.shoux_kream.exception.ErrorCode;
 import com.shoux_kream.exception.KreamException;
-import com.shoux_kream.item.dto.ItemDto;
 import com.shoux_kream.item.dto.request.ItemSaveRequest;
 import com.shoux_kream.item.dto.request.ItemUpdateRequest;
 //import com.shoux_kream.item.dto.response.BrandResponse;
 import com.shoux_kream.item.dto.response.ItemResponse;
 import com.shoux_kream.item.dto.response.ItemUpdateResponse;
 //import com.shoux_kream.item.entity.Brand;
+import com.shoux_kream.item.dto.response.SaleItemResponseDto;
 import com.shoux_kream.item.entity.Item;
 //import com.shoux_kream.item.repository.BrandRepository;
-import com.shoux_kream.item.entity.KeyWord;
 import com.shoux_kream.item.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -24,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -181,5 +182,13 @@ public class ItemService {
     private Category findCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
+    }
+
+    // 판매 등록을 위한 상품 찾기
+    public SaleItemResponseDto findSaleItemById(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NoSuchElementException("Item not found. item id : " + itemId));
+
+        return new SaleItemResponseDto(item);
     }
 }
