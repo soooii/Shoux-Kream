@@ -130,6 +130,7 @@
                     <p><strong>재고:</strong> <span th:text="${item.inventory}">100</span></p>
                 </div>
                 <div class="tile is-child box buttons-container">
+                    <input type="hidden" id="item-id-sell" th:value="${item.id}">
                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="purchaseButton">구매하기</button>
                     <button class="btn btn-primary" id="sellButton">판매하기</button>
                 </div>
