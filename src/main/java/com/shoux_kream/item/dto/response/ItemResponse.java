@@ -1,9 +1,6 @@
 package com.shoux_kream.item.dto.response;
 
-import com.shoux_kream.category.entity.Category;
 import com.shoux_kream.item.entity.Item;
-import com.shoux_kream.item.entity.ItemInfo;
-import com.shoux_kream.item.entity.KeyWord;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,10 +20,10 @@ public class ItemResponse{
         String imageKey;
         Integer inventory;
         Integer price;
-        List<KeyWord> keyWords;
+        List<String> keyWords;
 
         @Builder
-        public ItemResponse(Long id, String title, String manufacturer, String shortDescription, String detailDescription, String imageKey, Integer inventory, Integer price, List<KeyWord> keyWords) {
+        public ItemResponse(Long id, String title, String manufacturer, String shortDescription, String detailDescription, String imageKey, Integer inventory, Integer price, List<String> keyWords) {
             this.id = id;
             this.title = title;
             this.manufacturer = manufacturer;

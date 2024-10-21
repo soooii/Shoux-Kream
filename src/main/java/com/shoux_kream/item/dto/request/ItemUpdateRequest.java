@@ -1,6 +1,5 @@
 package com.shoux_kream.item.dto.request;
 
-import com.shoux_kream.item.entity.KeyWord;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public record ItemUpdateRequest(
         MultipartFile image,
         Integer inventory,
         Integer price,
-        List<KeyWord> keyWords // 배열로 받기 위해 List<String> 사용
+        List<String> keyWords // 배열로 받기 위해 List<String> 사용
 //        Long itemInfoId, // ItemInfo의 ID만 받도록 수정
 //        Integer size
 ) {
