@@ -1,6 +1,6 @@
 import { addImageToS3 } from "/js/aws-s3.js";
 import * as Api from "/js/api.js";
-import { checkLogin, randomId, createNavbar } from "/js/useful-functions.js";
+import { checkLogin, randomId, createNavbar, checkAdmin } from "/js/useful-functions.js";
 
 // 요소(element)들과 상수들
 const titleInput = document.querySelector("#titleInput");
@@ -22,6 +22,7 @@ const itemId = window.location.pathname.split("/").pop();
 
 // 로그인 확인, 네비게이션 및 초기 데이터 로드
 checkLogin();
+checkAdmin();
 addAllElements();
 addAllEvents();
 loadItemData(); // 아이템 데이터 로드
