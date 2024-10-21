@@ -82,7 +82,7 @@ public class UserController {
     }
 
     //배송지 수정
-    @PatchMapping("/{addressId}")
+    @PatchMapping("userAddress/{addressId}")
     public ResponseEntity<UserAddressDto> updateAddress(@PathVariable Long addressId, @RequestBody UserAddressDto userAddressDto) {
         UserAddressDto updatedAddress = userService.updateAddress(addressId, userAddressDto);
         return ResponseEntity.ok(updatedAddress);
