@@ -52,9 +52,9 @@ async function loadItemData() {
     fileNameSpan.innerText = `현재 사진: ${itemData.imageKey}`;
 
     // 기존 검색 키워드 로드
-    itemData.searchKeywords.forEach(keyword => {
-      addKeywordToContainer(keyword);
-      searchKeywords.push(keyword); // 배열에 추가
+    itemData.keyWords.forEach(keyWord => {
+      addKeywordToContainer(keyWord);
+      searchKeywords.push(keyWord); // 배열에 추가
     });
   } catch (error) {
     console.error("데이터 로드 오류:", error);
@@ -97,9 +97,8 @@ async function handleEditSubmit(e) {
     }
     formData.append("inventory", inventory);
     formData.append("price", price);
-
-    // 검색 키워드를 문자열로 결합하여 추가
-    formData.append("searchKeywords", searchKeywords.join(","));
+    // 배열 그대로 전송
+    formData.append("keyWords", searchKeywords);
 
     // FormData 전송 - 수정 API 호출
     await fetch(`/item/${itemId}`, {

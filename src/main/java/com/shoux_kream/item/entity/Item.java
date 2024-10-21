@@ -1,6 +1,7 @@
 package com.shoux_kream.item.entity;
 
 import com.shoux_kream.category.entity.Category;
+import com.shoux_kream.config.StringListConverter;
 import com.shoux_kream.timestamp.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -53,8 +54,8 @@ public class Item extends BaseEntity {
     @Column(nullable = false)
     private Integer price; // 가격
 
-    @OneToMany(mappedBy = "item")
-    private List<KeyWord> keyWords; // 검색 키워드
+    @Convert(converter = StringListConverter.class)
+    private List<String> keyWords; // 검색 키워드
 
     // 비활성화
 //    @ManyToOne(fetch = FetchType.LAZY)
@@ -80,7 +81,7 @@ public class Item extends BaseEntity {
 //    private Integer userId;
 
     public Item(String title, String manufacturer, String shortDescription,
-                String detailDescription, String imageKey, int inventory, int price, List<KeyWord> keyWords) {
+                String detailDescription, String imageKey, int inventory, int price, List<String> keyWords) {
 //        this.brand = brand;
         this.title = title;
 //        this.category = category;
@@ -94,7 +95,7 @@ public class Item extends BaseEntity {
     }
 
     public void update(String title, String manufacturer, String shortDescription,
-                       String detailDescription, String imageKey, int inventory, int price, List<KeyWord> keyWords) {
+                       String detailDescription, String imageKey, int inventory, int price, List<String> keyWords) {
         this.title = title;
 //        this.category = category;
         this.manufacturer = manufacturer;
