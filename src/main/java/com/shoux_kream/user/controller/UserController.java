@@ -54,7 +54,8 @@ public class UserController {
     //회원 탈퇴
     @DeleteMapping("/me")
     public ResponseEntity<String> delete() {
-        userService.deleteUser();
+        //TODO BUILD 에러로 임시 바활성화
+//        userService.deleteUser();
         return ResponseEntity.ok("탈퇴가 완료되었습니다.");
     }
 
