@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -36,5 +38,5 @@ public class ItemDto {
     @Positive(message = "가격은 양수여야 합니다.")
     private Integer price;
 
-    private String searchKeywords;
+    private List<String> keyWords;
 }

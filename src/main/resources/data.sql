@@ -20,14 +20,6 @@ VALUES ('남성', '남성용 상품', 'mens', 'https://example.com/mens.jpg', NO
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
 VALUES ('여성', '여성용 상품', 'womens', 'https://example.com/womens.jpg', NOW(), NOW());
 
---키워드 테이블 생성--
-CREATE TABLE IF NOT EXISTS keyword (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    word VARCHAR(255),
-    item_id BIGINT,
-    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES item(id)
-);
-
 -- 상품 추가
 -- Item 데이터 삽입
 INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
@@ -59,47 +51,6 @@ VALUES ('Tablet', 'Apple', 'Sleek and powerful tablet', 'High-performance tablet
 
 INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
 VALUES ('Wireless Mouse', 'Logitech', 'Ergonomic wireless mouse', 'Comfortable and precise wireless mouse with long battery life.', '/img/item/item10.png', 400, 49.99);
-
--- KeyWord 데이터 삽입 (각 item_id는 삽입된 아이템의 ID를 참조합니다)
--- Laptop 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('laptop', 1);
-
--- Smartphone 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('smartphone', 2), ('Samsung', 2), ('mobile', 2);
-
--- Headphones 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('headphones', 3), ('Sony', 3), ('audio', 3);
-
--- Smart TV 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('smart TV', 4), ('LG', 4), ('4K', 4);
-
--- Gaming Console 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('gaming console', 5), ('Microsoft', 5), ('Xbox', 5);
-
--- Smartwatch 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('smartwatch', 6), ('Apple', 6), ('wearable', 6);
-
--- Bluetooth Speaker 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('Bluetooth speaker', 7), ('JBL', 7), ('audio', 7);
-
--- Camera 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('camera', 8), ('Canon', 8), ('photography', 8);
-
--- Tablet 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('tablet', 9), ('Apple', 9), ('iPad', 9), ('mobile', 9);
-
--- Wireless Mouse 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('wireless mouse', 10), ('Logitech', 10), ('computer accessories', 10);
 
 -- 유저 추가
 INSERT INTO users (email, password, name, nickname, role, created_at, updated_at)
