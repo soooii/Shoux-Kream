@@ -28,8 +28,8 @@ public class CartService {
 
     // 장바구니 담기
     @Transactional
-    public Long addCart(CartRequestDto cartRequestDto, Long itemId) {
-        User user = userRepository.findById(cartRequestDto.getUserId())
+    public Long addCart(Long userId, CartRequestDto cartRequestDto, Long itemId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         Item item = itemRepository.findById(itemId)

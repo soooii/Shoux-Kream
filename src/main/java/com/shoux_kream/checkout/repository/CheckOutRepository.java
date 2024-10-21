@@ -13,4 +13,6 @@ public interface CheckOutRepository extends JpaRepository<CheckOut, Long> {
     List<CheckOut> findByUserId(Long userId);
 
     CheckOut findByUserAndId(User user, Long detailId);
+
+    List<CheckOut> findByAddressId(Long addressId);
 }

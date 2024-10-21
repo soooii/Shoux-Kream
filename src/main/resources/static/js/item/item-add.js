@@ -1,6 +1,6 @@
 import { addImageToS3 } from "/js/aws-s3.js";
 import * as Api from "/js/api.js";
-import { checkLogin, randomId, createNavbar } from "/js/useful-functions.js";
+import { checkLogin, randomId, createNavbar,checkAdmin } from "/js/useful-functions.js";
 
 // 요소(element)들과 상수들
 const titleInput = document.querySelector("#titleInput");
@@ -22,6 +22,7 @@ const fileNameSpan = document.querySelector("#fileNameSpan"); // 파일 이름 �
 
 //TODO 아이템 등록을 위해 로그인 비활성화
 checkLogin();
+checkAdmin();
 addAllElements();
 addAllEvents();
 

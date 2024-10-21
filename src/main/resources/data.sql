@@ -89,6 +89,11 @@ VALUES ('Bob Johnson', '321-654-9870', '40004', '321 Pine St', 'Apt 12A', 2);
 INSERT INTO addresses (recipient_name, recipient_phone, postal_code, address1, address2, user_id)
 VALUES ('Charlie Davis', '654-321-0987', '50005', '654 Maple St', 'Unit 3', 2);
 
+-- 주문 내역 없는 주소지 추가 (주소록 페이지에서 삭제 가능한 배송지)
+INSERT INTO addresses (recipient_name, recipient_phone, postal_code, address1, address2, user_id)
+VALUES ('Evelyn Brown', '321-654-0987', '50009', '987 Cedar Dr', 'Suite 100', 2);
+
+
 -- 주문 내역 추가
 
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)

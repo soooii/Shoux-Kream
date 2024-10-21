@@ -45,13 +45,15 @@ window.onload = function () {
 
             data.forEach((item) => {
                 const id = item.cartId;
+                const itemId = item.itemId;
 
+                const itemImage = document.createElement('img');
                 const itemName = document.createElement('p');
                 const quantity = document.createElement('span');
                 const price = document.createElement('p');
 
                 const cartItemDiv = document.createElement('div'); // 목록을 담음
-                cartItemDiv.classList.add('cart-product-item')
+                cartItemDiv.classList.add('cart-product-item');
 
                 const checkbox = document.createElement('input'); // 체크박스 요소 생성
                 checkbox.type = 'checkbox'; // 체크박스 타입 설정
@@ -59,13 +61,22 @@ window.onload = function () {
                 checkbox.value = id;
                 checkbox.checked = true;
 
+                checkbox.classList.add('custom-checkbox')
+                itemImage.classList.add('image');
                 itemName.classList.add('content'); // 클래스 추가
                 quantity.classList.add('quantity'); // 클래스 추가
                 price.classList.add('content'); // 클래스 추가
 
+                itemImage.src = `${item.imageUrl}`;
                 itemName.innerText = `${item.itemName}`;
                 quantity.innerText = `${item.quantity}개`;
                 price.innerText = `${item.totalPrice.toLocaleString()}원`;
+
+                // 링크 추가
+                const itemLink = document.createElement('a');
+                itemLink.href = `/item/item-detail/${itemId}`; // 링크 설정
+                itemLink.style.textDecoration = 'none'; // 밑줄 없애기
+                itemLink.style.color = 'inherit'; // 부모 요소의 색상 상속
 
                 // 체크박스 클릭 시 이벤트 처리
                 checkbox.addEventListener('change', updateOrderSummary);
@@ -123,18 +134,21 @@ window.onload = function () {
                 });
 
                 // 목록에 내용 추가
-                cartItemDiv.appendChild(checkbox);
+                itemLink.appendChild(checkbox); // 체크박스는 링크 안에 넣지 않음
+                cartItemDiv.appendChild(itemImage);
                 cartItemDiv.appendChild(itemName);
                 cartItemDiv.appendChild(quantity);
                 cartItemDiv.appendChild(price);
                 cartItemDiv.appendChild(deleteButton);
                 cartItemDiv.appendChild(editButton);
 
+                itemLink.appendChild(cartItemDiv);
+
                 // 가격 및 수량 업데이트
                 totalQuantity += item.quantity;
                 totalPrice += item.totalPrice;
 
-                cartContainer.appendChild(cartItemDiv); // 컨테이너에 추가
+                cartContainer.appendChild(itemLink); // 컨테이너에 추가
             });
 
             // 결제정보 업데이트 함수

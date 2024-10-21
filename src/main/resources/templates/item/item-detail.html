@@ -25,21 +25,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>상품 상세 정보</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="${item.title}">상품 상세 정보</title>
     <!-- bulma css -->
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
     />
+    <!--부트스트랩-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- 폰트 어썸: 아이콘 -->
     <script
             defer
             src="https://kit.fontawesome.com/9daa42bcef.js"
             crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="/css/item/item-detail.css" />
+    <link rel="stylesheet" href="/css/item/item-detail.css"/>
     <script src="/js/item/item-detail.js" type="module" defer></script>
 </head>
 <body>
@@ -49,7 +52,7 @@
     <div class="container mt-3">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
-                <img src="/img/elice-rabbit.png" width="30" height="30" />
+                <img src="/img/elice-rabbit.png" class="logo-location" width="30" height="30"/>
                 <span class="has-text-link">Shopping Mall</span>
             </a>
 
@@ -69,19 +72,19 @@
         <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
             <ul id="navbar">
                 <li>
-                    <a href="/cart" aria-current="page">
+                    <a href="/cart/summary" aria-current="page" class="no-underline">
                 <span class="icon">
                   <i class="fas fa-cart-shopping"></i>
                 </span>
                         <span>카트</span>
                     </a>
-                    <a href="/users/login">
+                    <a href="/users/login" class="no-underline">
             <span class="icon">
               <i class="fa fa-sign-in" aria-hidden="true"></i>
             </span>
                         <span>로그인</span>
                     </a>
-                    <a href="api/admin" aria-current="page">
+                    <a href="api/admin" aria-current="page" class="no-underline">
             <span class="icon">
               <i class="fa fa-address-book-o" aria-hidden="true"></i>
             </span>
@@ -95,52 +98,78 @@
 
 <!-- 상품 상세 정보 -->
 <section>
-    <h1>상품 상세 정보</h1>
-    <div>
-        <h2 th:text="${item.title}">상품 제목</h2>
-        <p><strong>제조사:</strong> <span th:text="${item.manufacturer}">제조사 예시</span></p>
-        <p><strong>짧은 설명:</strong> <span th:text="${item.shortDescription}">짧은 설명 예시</span></p>
-        <p><strong>상세 설명:</strong> <span th:text="${item.detailDescription}">상세 설명 예시</span></p>
-        <p><strong>가격:</strong> <span th:text="${item.price}">50000</span></p>
-        <p><strong>재고:</strong> <span th:text="${item.inventory}">100</span></p>
-        <p><strong>이미지:</strong></p>
-        <img th:src="${item.imageKey}" alt="Item Image" />
-        <p><strong>검색 키워드:</strong> <span th:text="${item.keyWords}">키워드1, 키워드2</span></p>
+    <div class="tile is-ancestor item-detail-card">
+        <div class="tile is-6 is-parent">
+            <div class="tile is-child box item-image">
+                <figure class="image is-square">
+                    <img th:src="${item.imageKey}" alt="Item Image"/>
+                </figure>
+            </div>
+        </div>
+        <div class="tile is-parent is-vertical">
+            <div class="tile is-child box item-detail">
+                <div class="tabs">
+                    <ul>
+                        <li th:text="|제조사: ${item.manufacturer}|"> ABC Electronics</li>
+                    </ul>
+                </div>
+                <div class="content">
+                    <h1 class="subtitle is-3 Freesentation-9Black-title" id="item-title" th:text="${item.title}">상품 제목</h1>
+                    <h1 class="Freesentation-9Black-price" id="item-detail-price" th:text="|${item.price}원|">2000원</h1>
+                    <p class="short-description" th:text="${item.shortDescription}">짧은 설명 예시</p>
+                    <p class="detail-description" th:text="${item.detailDescription}">
+                        상세 설명 예시
+                    </p>
+                    <p>
+                        <span class="tag"
+                              th:each="keyword, iterStat : ${item.keyWords}"
+                              th:text="${keyword.word}"
+                              th:append="${iterStat.last} ? '' : ', '">키워드</span>
+                    </p>
+                    <br />
+                    <p><strong>재고:</strong> <span th:text="${item.inventory}">100</span></p>
+                </div>
+                <div class="tile is-child box buttons-container">
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="purchaseButton">구매하기</button>
+                    <button class="btn btn-primary" id="sellButton">판매하기</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- 상품 삭제 버튼 -->
-    <div>
-        <button onclick="deleteItem()">상품 삭제</button>
+    <!--구매하기 버튼 누르면 열리는 모달창 : 장바구니 & 바로 구매하기-->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">구매하기</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="mb-3">
+                            <input type="hidden" id="item-id" th:value="${item.id}">
+                            <div class="fw-semibold">구매가격</div>
+                            <div class="fw-bold text-primary" id="item-price" th:text="${item.price}">3000원</div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button class="btn btn-outline-dark btn-custom quantity-custom-button" type="button" id="decreaseBtn"> - </button>
+                            <div class="input-group" style="width: 100px;">
+                                <label for="quantity" class="form-label"></label>
+                                <input type="text" class="form-control text-center" id="quantity" name="quantity" value="1" readonly>
+                            </div>
+                            <button class="btn btn-outline-dark btn-custom quantity-custom-button" type="button" id="increaseBtn"> + </button>
+                            <br />
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="button" class="btn btn-dark flex-fill custom-button" id="add-cart-btn">장바구니 담기</button>
+                        <button type="button" class="btn btn-warning flex-fill custom-button" id="checkout-btn">즉시 구매하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
-
-</section>
-
-<script>
-    function deleteItem() {
-        const itemId = /* [[${item.id}]] */ '';  // Thymeleaf에서 item의 ID를 가져오기
-
-        if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
-            fetch(`/item/item-detail/${itemId}`, {  // 삭제 요청을 /item/{id} 경로로 보냄
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    alert('상품이 삭제되었습니다.');
-                    window.location.href = '/';  // 삭제 후 메인 페이지로 이동
-                } else {
-                    alert('상품 삭제에 실패했습니다.');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('상품 삭제 중 오류가 발생했습니다.');
-            });
-        }
-    }
-</script>
-
-
 </body>
 </html>

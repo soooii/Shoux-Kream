@@ -2,6 +2,7 @@ package com.shoux_kream.user.controller;
 
 import com.shoux_kream.exception.InvalidPasswordException;
 import com.shoux_kream.user.dto.request.AccountRequest;
+import com.shoux_kream.user.dto.request.UserAddressRequest;
 import com.shoux_kream.user.dto.request.UserRequest;
 import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
@@ -10,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -40,12 +43,6 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    //입력한 기존 비밀번호가 db 비밀번호와 다를 때 발생하는 Exception
-    @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException ex) {
-        return ResponseEntity.status(418).body(ex.getMessage());
-    }
-
     //회원정보 수정
     @PatchMapping({"/me"})
     public ResponseEntity<String> updateProfile(@RequestBody AccountRequest accountRequest) {
@@ -60,13 +57,37 @@ public class UserController {
         return ResponseEntity.ok("탈퇴가 완료되었습니다.");
     }
 
-
+    //배송지 목록 가져오기
     @GetMapping("/userAddress")
     public ResponseEntity<List<UserAddressDto>> getUserAddress(@AuthenticationPrincipal User principal){
         //recipientName, recipientPhone, postalCode, address1, address2 user에서 얻어오기
         String email = principal.getUsername();
-        List<UserAddressDto> userAddresses = userService.getUserAddresses(email);
+        List<UserAddressDto> userAddresses = userService.getAddresses(email);
         return ResponseEntity.ok(userAddresses);
     }
+
+    //배송지 추가
+    @PostMapping("/userAddress")
+    public ResponseEntity<UserAddressRequest> addUserAddress(@RequestBody UserAddressRequest userAddressRequest) {
+        userService.addAddress(userAddressRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userAddressRequest);
+    }
+
+    //배송지 삭제
+    @DeleteMapping("/userAddress/{id}")
+    public ResponseEntity<Void> deleteUserAddress(@PathVariable Long id) {
+        userService.deleteAddress(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 삭제 후 204 응답
+    }
+
+
+    //Admin 확인
+    @GetMapping("/admin-check")
+    public ResponseEntity<String> adminCheck() {
+        return ResponseEntity.ok("권한이 인증되었습니다.");
+    }
+
+
+
 
 }
