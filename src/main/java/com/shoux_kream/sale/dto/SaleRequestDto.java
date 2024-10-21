@@ -11,13 +11,11 @@ import lombok.NoArgsConstructor;
 public class SaleRequestDto {
     private Long itemId;
     private Long sellingPrice;
-    private int quantity;
     private int daysToAdd;
 
-    public SaleRequestDto(Sale sale, int quantity, int daysToAdd) {
+    public SaleRequestDto(Sale sale, int daysToAdd) {
         this.itemId = sale.getItem().getId();
         this.sellingPrice = sale.getSellingPrice();
-        this.quantity = quantity;
         this.daysToAdd = daysToAdd;
     }
 }

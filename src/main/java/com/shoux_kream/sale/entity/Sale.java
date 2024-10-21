@@ -24,9 +24,6 @@ public class Sale extends BaseEntity {
     @Column(name = "selling_price", nullable = false)
     private Long sellingPrice;
 
-    @Column(name = "quantity", nullable = false)
-    private int quantity;
-
     @Column(name = "due_date", nullable = false)
     private LocalDateTime dueDate;
 
@@ -38,9 +35,8 @@ public class Sale extends BaseEntity {
     @JoinColumn(name = "items_id", nullable = false)
     private Item item;
 
-    public Sale(Long sellingPrice, int quantity, int daysToAdd, User user, Item item) {
+    public Sale(Long sellingPrice, int daysToAdd, User user, Item item) {
         this.sellingPrice = sellingPrice;
-        this.quantity = quantity;
         this.dueDate = LocalDateTime.now().plusDays(daysToAdd);
         this.user = user;
         this.item = item;

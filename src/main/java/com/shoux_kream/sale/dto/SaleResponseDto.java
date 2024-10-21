@@ -16,7 +16,6 @@ public class SaleResponseDto {
     private Long itemId;
 
     private LocalDateTime dueDate;
-    private int quantity;
     private Long sellingPrice;
 
     private String itemName;
@@ -31,13 +30,12 @@ public class SaleResponseDto {
         this.userId = sale.getUser().getId();
         this.itemId = sale.getItem().getId();
         this.dueDate = sale.getDueDate();
-        this.quantity = sale.getQuantity();
         this.sellingPrice = sale.getSellingPrice();
         this.itemName = sale.getItem().getTitle();
         this.imageUrl = sale.getItem().getImageKey();
         this.shortDescription = sale.getItem().getShortDescription();
         this.detailDescription = sale.getItem().getDetailDescription();
-        this.fee = (sellingPrice * 0.10) * quantity;
+        this.fee = (sellingPrice * 0.10);
     }
 
 }
