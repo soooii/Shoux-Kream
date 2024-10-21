@@ -9,14 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class SaleRequestDto {
-    private Long userId;
     private Long itemId;
     private Long sellingPrice;
     private int quantity;
     private int daysToAdd;
 
     public SaleRequestDto(Sale sale, int quantity, int daysToAdd) {
-        this.userId = sale.getUser().getId();
         this.itemId = sale.getItem().getId();
         this.sellingPrice = sale.getSellingPrice();
         this.quantity = quantity;
