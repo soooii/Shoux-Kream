@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.button-container {
+    margin-left: 100px; /* 버튼과 제목 사이의 간격 조정 */
+}
+
+.my-div {
+    background-color: gray; /* 회색 배경 */
+}
