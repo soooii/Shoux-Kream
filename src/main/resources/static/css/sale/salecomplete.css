@@ -1,0 +1,145 @@
+.modal-card-title {
+    text-align: center; /* 가운데 정렬 */
+    font-weight: bold; /* 굵게 설정 */
+    width: 90%; /* 전체 너비 사용 */
+}
+
+.red-txt {
+    color: red;
+}
+
+ul {
+    list-style-type: disc; /* 기본 스타일 설정 */
+    padding-left: 20px; /* 들여쓰기 */
+    color: #7c7c7c;
+}
+
+.modal-card-body {
+    max-height: 70vh; /* 원하는 최대 높이 설정 (예: 60%의 뷰포트 높이) */
+    overflow-y: auto; /* 세로 스크롤이 필요할 경우 스크롤 추가 */
+    padding: 3rem; /* 적당한 패딩 추가 */
+}
+
+table {
+    width: 100%; /* 테이블 너비를 100%로 설정 */
+    border-collapse: collapse; /* 테두리 겹침 방지 */
+    table-layout: fixed; /* 고정 레이아웃 */
+}
+
+td {
+    border: 1px solid #ccc; /* 회색 테두리 설정 */
+    padding: 10px; /* 내부 여백 */
+    text-align: center; /* 가로 가운데 정렬 */
+    vertical-align: middle; /* 세로 가운데 정렬 */
+    width: 33.33%; /* 각 셀의 너비를 동일하게 설정 (3개 열 기준) */
+    height: 70px; /* 고정 세로 높이 설정 */
+    color: #555; /* 글자색을 회색으로 설정 */
+}
+
+.container {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.button-container {
+    margin-left: 8px; /* 버튼과 제목 사이의 간격 조정 */
+}
+
+.my-div {
+    background-color: #e6e6e6; /* 상위 div 배경색 */
+    padding: 20px; /* 패딩 추가 */
+}
+
+.custom-box {
+    width: 800px; /* 원하는 너비 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+.sell-item {
+    display: flex; /* 이미지와 텍스트를 나란히 배치 */
+    align-items: flex-start; /* 수직 정렬 */
+}
+
+.sell-item .image {
+    width: 100px;
+    height: 100px;
+    margin-right: 1.2rem; /* 이미지와 텍스트 간의 간격 */
+    cursor: pointer;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column; /* p 태그를 세로로 나열 */
+}
+
+.bold-text {
+    font-weight: bold; /* 굵은 글씨체 */
+    font-size: 1.2em; /* 약간 크게 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.normal-black {
+    color: black; /* 검은색 */
+    font-weight: normal; /* 보통 굵기 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.normal-gray {
+    color: gray; /* 회색 */
+    font-weight: normal; /* 보통 굵기 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+hr {
+    border: none; /* 기본 테두리 제거 */
+    border-top: 1px solid #ccc; /* 회색 선 */
+    margin: 20px 0; /* 상하 여백 조정 */
+}
+
+.txt-bolder {
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+dl {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    padding: 0; /* 전체 패딩 제거 */
+}
+
+dl > div {
+    display: flex; /* 각 줄을 flexbox로 설정 */
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center; /* 수직 정렬 */
+    margin: 0; /* 기본 마진 제거 */
+    padding: 2px 0; /* 줄 간격 조정 */
+}
+
+.left-info {
+    margin-right: 20px; /* dt와 dd 사이의 간격 조정 */
+    flex: 1; /* dt가 가능한 만큼 공간을 차지하게 함 */
+    color: #b5b5b5;
+}
+
+.left-info-hope {
+    margin-right: 20px; /* dt와 dd 사이의 간격 조정 */
+    flex: 1; /* dt가 가능한 만큼 공간을 차지하게 함 */
+    color: #020000;
+}
+
+dd {
+    margin: 5px; /* dd의 기본 마진 제거 */
+    text-align: right; /* dd 내용을 오른쪽 정렬 */
+}
+
+.settlement-amount {
+    font-size: 30px;
+    font-weight: bolder;
+    color: #485FC7;
+    text-align: right;
+}
+
+.button.is-link.is-large {
+    font-size: 18px; /* 원하는 크기로 조정 */
+    font-weight: bold; /* 글씨를 굵게 설정 */
+}
