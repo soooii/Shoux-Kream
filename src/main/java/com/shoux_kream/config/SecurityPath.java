@@ -18,7 +18,9 @@ public class SecurityPath {
             "/cart/summary",
             "/checkout",
             "/checkout-each",
-            "/checkout/complete"
+            "/checkout/complete",
+            "/sale",
+            "/sale/complete"
     };
     public static final String[] ONLY_POST_WHITELIST = {
             "/api/users/login",

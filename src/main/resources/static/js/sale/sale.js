@@ -7,7 +7,6 @@ let nowDate;
 let sellingPrice; // 변수를 전역으로 선언
 
 document.addEventListener('DOMContentLoaded', function() {
-    checkLoginButton(); // login-logout.js의 로그인 버튼 체크
     getItemInfo();      // getItemInfo 함수 호출
 });
 
