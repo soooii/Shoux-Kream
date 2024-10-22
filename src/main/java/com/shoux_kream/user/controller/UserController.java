@@ -54,17 +54,14 @@ public class UserController {
     //회원 탈퇴
     @DeleteMapping("/me")
     public ResponseEntity<String> delete() {
-        //TODO BUILD 에러로 임시 바활성화
-//        userService.deleteUser();
+        userService.deleteUser();
         return ResponseEntity.ok("탈퇴가 완료되었습니다.");
     }
 
     //배송지 목록 가져오기
     @GetMapping("/userAddress")
-    public ResponseEntity<List<UserAddressDto>> getUserAddress(@AuthenticationPrincipal User principal){
-        //recipientName, recipientPhone, postalCode, address1, address2 user에서 얻어오기
-        String email = principal.getUsername();
-        List<UserAddressDto> userAddresses = userService.getAddresses(email);
+    public ResponseEntity<List<UserAddressDto>> getUserAddress(){
+        List<UserAddressDto> userAddresses = userService.getAddresses();
         return ResponseEntity.ok(userAddresses);
     }
 

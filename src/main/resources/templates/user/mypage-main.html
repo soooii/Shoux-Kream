@@ -30,7 +30,7 @@
   <!-- 커스텀 css, js -->
   <link rel="stylesheet" href="css/home/home.css" />
   <script src="js/home/home.js" type="module" defer></script>
-  <script src="/js/login-logout.js"></script>
+  <script src="/js/login-logout.js" type="module" defer></script>
   <script src="/js/user/me.js" type="module" defer></script>
 
   <style>
@@ -93,7 +93,7 @@
             <span>로그아웃</span>
           </a>
 
-          <a href="api/admin" aria-current="page">
+          <a id="adminButton" onclick="adminButtonClick(event)" aria-current="page">
             <span class="icon">
               <i class="fa fa-address-book-o" aria-hidden="true"></i>
             </span>

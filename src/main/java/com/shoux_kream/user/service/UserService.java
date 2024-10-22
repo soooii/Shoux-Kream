@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.shoux_kream.cart.entity.Cart;
+import com.shoux_kream.cart.repository.CartRepository;
 import com.shoux_kream.checkout.entity.CheckOut;
 import com.shoux_kream.checkout.repository.CheckOutRepository;
 import com.shoux_kream.config.jwt.impl.AuthTokenImpl;
@@ -46,6 +48,7 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserAddressRepository userAddressRepository;
     private final CheckOutRepository checkOutRepository;
+    private final CartRepository cartRepository;
 
     //회원가입
     public Long signup(UserRequest dto) {
@@ -103,31 +106,15 @@ public class UserService {
         userRepository.save(updatedUser);
     }
 
-    /* 수정중
+    //회원 탈퇴
     public void deleteUser() {
         Long userId = getUser().getUserId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
-
-        // 유저의 주문 내역을 먼저 가져옴
         List<CheckOut> checkOuts = checkOutRepository.findByUserId(userId);
-
-        // CheckOut에서 관련된 주소를 먼저 null로 설정 (주문에서 주소 참조 제거)
-        for (CheckOut checkOut : checkOuts) {
-            checkOut.removeAddress(); // 주소를 null로 설정
-        }
-
-        // 변경사항을 db에 반영
-        checkOutRepository.saveAll(checkOuts);
-
-        // 주문 삭제
-        checkOutRepository.deleteAll(checkOuts);
-
-        // 유저 삭제
+        List<Cart> carts = cartRepository.findByUserId(userId);
+        if(!checkOuts.isEmpty()){checkOutRepository.deleteAll(checkOuts);}
+        if(!carts.isEmpty()){cartRepository.deleteAll(carts);}
         userRepository.deleteById(userId);
-    }*/
-
-
+    }
 
     //로그인
     public JwtTokenDto login(JwtTokenLoginRequest request) {
@@ -167,11 +154,10 @@ public class UserService {
 
 
     //유저의 모든 배송지 목록 가져오기
-    public List<UserAddressDto> getAddresses(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
-        //optional 예외처리 적용
-
+    public List<UserAddressDto> getAddresses() {
+        Long userId = getUser().getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
         List<UserAddress> userAddresses = user.getAddresses();
 
         return userAddresses.stream()
