@@ -4,6 +4,7 @@ public class UserSecurityPath {
     public static final String[] ONLY_GET_WHITELIST = {
             // => 그냥 기본 view 반환 경로(ViewController)
             "/api/cart/selected",
+            "/api/cart/summary",
             "/api/checkout",
             "/api/checkout/{detailId}",
             "/api/sale/item/{itemId}"

@@ -39,9 +39,13 @@ async function handleSubmit(e) {
     return alert("빈 칸이 없어야 합니다.");
   }
 
-  if (!themeClass) {
+  if (themeClass==="default") {
     return alert("테마를 선택해 주세요.");
   }
+
+  if (!image) {
+      return alert("사진을 넣어주세요.");
+    }
 
   if (image.size > 3e6) {
     return alert("사진은 최대 2.5MB 크기까지 가능합니다.");
@@ -69,6 +73,7 @@ async function handleSubmit(e) {
     fileNameSpan.innerText = "";
     themeSelectBox.style.backgroundColor = "white";
     themeSelectBox.style.color = "black";
+    window.close();
   } catch (err) {
     console.error(err.stack);
     alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
