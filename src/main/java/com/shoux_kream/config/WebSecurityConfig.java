@@ -48,12 +48,19 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, SecurityPath.ONLY_GET_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.POST, SecurityPath.ONLY_POST_WHITELIST).permitAll()
+                        .requestMatchers(HttpMethod.GET, UserSecurityPath.ONLY_GET_WHITELIST).hasAuthority("USER")
+                        .requestMatchers(HttpMethod.POST, UserSecurityPath.ONLY_POST_WHITELIST).hasAuthority("USER")
+                        .requestMatchers(HttpMethod.PATCH, UserSecurityPath.ONLY_PATCH_WHITELIST).hasAuthority("USER")
+                        .requestMatchers(HttpMethod.DELETE, UserSecurityPath.ONLY_DELETE_WHITELIST).hasAuthority("USER")
                         .requestMatchers("/js/**", "/css/**", "/html/**","/img/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/admin/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET, "api/users/admin-check").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(request -> {
                     var config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:9000", "https://txqfegberfyqzheq.tunnel-pt.elice.io/")); // 허용할 도메인
+                    config.setAllowedOrigins(List.of("https://jrqggzccfxaqcbkg.tunnel-pt.elice.io/","http://localhost:9000", "https://txqfegberfyqzheq.tunnel-pt.elice.io/")); // 허용할 도메인
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH")); // 허용할 메서드
                     config.setAllowCredentials(true); // 인증 정보 포함 여부
                     config.setAllowedHeaders(List.of("*")); // 허용할 헤더

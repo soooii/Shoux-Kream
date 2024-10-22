@@ -36,7 +36,7 @@ public class CheckOut extends BaseEntity {
 
     //TODO hibernate 오류 해결하기 위한 cascadetype all
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "addresses_id")
+    @JoinColumn(name = "addresses_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserAddress address;
 
     private String request;

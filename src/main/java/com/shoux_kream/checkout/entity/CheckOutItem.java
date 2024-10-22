@@ -15,7 +15,7 @@ public class CheckOutItem {
 
     @ManyToOne
     //TODO 테이블 이름이 items!
-    @JoinColumn(name = "items_id")
+    @JoinColumn(name = "item_id")
     private Item item;
 
     private int quantity;

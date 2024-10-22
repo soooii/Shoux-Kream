@@ -30,7 +30,7 @@
   <!-- 커스텀 css, js -->
   <link rel="stylesheet" href="css/home/home.css" />
   <script src="js/home/home.js" type="module" defer></script>
-  <script src="/js/login-logout.js"></script>
+  <script src="/js/login-logout.js" type="module" defer></script>
   <script src="/js/user/me.js" type="module" defer></script>
 
   <style>
@@ -93,7 +93,7 @@
             <span>로그아웃</span>
           </a>
 
-          <a href="api/admin" aria-current="page">
+          <a id="adminButton" onclick="adminButtonClick(event)" aria-current="page">
             <span class="icon">
               <i class="fa fa-address-book-o" aria-hidden="true"></i>
             </span>
@@ -125,7 +125,7 @@
             <li><a href="#sales-history">판매 내역</a></li>
             <li class="larger-text">내 정보</li>
             <li><a href="/users/me/account">계정 관리</a></li>
-            <li><a href="#address-book">주소록</a></li>
+            <li><a href="/users/me/address">주소록</a></li>
           </ul>
         </nav>
       </aside>

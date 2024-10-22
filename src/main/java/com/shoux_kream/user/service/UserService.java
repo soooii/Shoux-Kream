@@ -5,11 +5,13 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.shoux_kream.cart.entity.Cart;
+import com.shoux_kream.cart.repository.CartRepository;
 import com.shoux_kream.checkout.entity.CheckOut;
 import com.shoux_kream.checkout.repository.CheckOutRepository;
 import com.shoux_kream.config.jwt.impl.AuthTokenImpl;
 import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
-import com.shoux_kream.exception.AddressInUseException;
+import com.shoux_kream.exception.AddressNotFoundException;
 import com.shoux_kream.exception.InvalidPasswordException;
 import com.shoux_kream.user.dto.JwtTokenDto;
 import com.shoux_kream.user.dto.request.AccountRequest;
@@ -46,21 +48,7 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserAddressRepository userAddressRepository;
     private final CheckOutRepository checkOutRepository;
-
-    //TODO 초기값 중복 init 문제, mysql은 인메모리 DB가 아니라 unique 중복값 문제가 존재함
-//    @jakarta.annotation.PostConstruct
-//    public void init() {
-//        User user = User.builder()
-//                .email("1@1")
-//                .password(bCryptPasswordEncoder.encode("1"))
-//                .name("elice")
-//                .nickname("e")
-//                .createdAt(LocalDateTime.now())
-//                .updatedAt(LocalDateTime.now())
-//                .role(Role.USER)
-//                .build();
-//        userRepository.save(user);
-//    }
+    private final CartRepository cartRepository;
 
     //회원가입
     public Long signup(UserRequest dto) {
@@ -118,30 +106,15 @@ public class UserService {
         userRepository.save(updatedUser);
     }
 
+    //회원 탈퇴
     public void deleteUser() {
         Long userId = getUser().getUserId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
-
-        // 유저의 주문 내역을 먼저 가져옴
         List<CheckOut> checkOuts = checkOutRepository.findByUserId(userId);
-
-        // CheckOut에서 관련된 주소를 먼저 null로 설정 (주문에서 주소 참조 제거)
-        for (CheckOut checkOut : checkOuts) {
-            checkOut.removeAddress(); // 주소를 null로 설정
-        }
-
-        // 변경사항을 db에 반영
-        checkOutRepository.saveAll(checkOuts);
-
-        // 주문 삭제
-        checkOutRepository.deleteAll(checkOuts);
-
-        // 유저 삭제
+        List<Cart> carts = cartRepository.findByUserId(userId);
+        if(!checkOuts.isEmpty()){checkOutRepository.deleteAll(checkOuts);}
+        if(!carts.isEmpty()){cartRepository.deleteAll(carts);}
         userRepository.deleteById(userId);
     }
-
-
 
     //로그인
     public JwtTokenDto login(JwtTokenLoginRequest request) {
@@ -180,15 +153,26 @@ public class UserService {
     }
 
 
-    public List<UserAddressDto> getAddresses(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("user doesn't exist"));
-        //optional 예외처리 적용
-
+    //유저의 모든 배송지 목록 가져오기
+    public List<UserAddressDto> getAddresses() {
+        Long userId = getUser().getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
         List<UserAddress> userAddresses = user.getAddresses();
 
         return userAddresses.stream()
                 .map(UserAddress -> new UserAddressDto(UserAddress))
                 .collect(Collectors.toList());
+    }
+
+    // 특정 배송지 가져오기
+    public UserAddressDto getAddressById(Long addressId) {
+        UserAddress address = userAddressRepository.findById(addressId)
+                .orElseThrow(() -> new AddressNotFoundException("해당 주소가 없습니다."));
+
+        return UserAddressDto.builder()
+                .userAddress(address)
+                .build();
     }
 
     //배송지 추가
@@ -197,25 +181,29 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
 
-        // UserAddressDto를 UserAddress 엔티티로 변환
-        UserAddress userAddress = userAddressRequest.toEntity(user); // User 객체를 설정하여 엔티티로 변환
+        UserAddress userAddress = userAddressRequest.toEntity(user);
+        user.getAddresses().add(userAddress);
+        userAddressRepository.save(userAddress);
+    }
 
-        // 사용자 주소 목록에 추가
-        user.getAddresses().add(userAddress); // 사용자의 주소 목록에 추가
+    //배송지 수정
+    public UserAddressDto updateAddress(Long addressId, UserAddressDto userAddressDto) {
+        UserAddress address = userAddressRepository.findById(addressId)
+                .orElseThrow(() -> new AddressNotFoundException("해당 주소가 없습니다."));
 
-        // 주소 저장 (CascadeType.ALL을 설정했을 경우 user.save()만 호출하면 된다)
-        userAddressRepository.save(userAddress); // 주소 저장
+        address.update(userAddressDto);
+        UserAddress updatedAddress = userAddressRepository.save(address);
+
+        return new UserAddressDto(updatedAddress);
     }
 
     //배송지 삭제
-    public void deleteAddress(Long id) {
-        if (!checkOutRepository.findByAddressId(id).isEmpty()) {
-            throw new AddressInUseException("해당 주소를 사용하는 주문이 있어 삭제할 수 없습니다.");
-        }
-        UserAddress address = userAddressRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 주소가 없습니다."));
+    public void deleteAddress(Long addressId) {
+        UserAddress address = userAddressRepository.findById(addressId)
+                .orElseThrow(() -> new AddressNotFoundException("해당 주소가 없습니다."));
         userAddressRepository.delete(address);
     }
+
 }
 
 

@@ -1,4 +1,4 @@
-import { checkLogin, fetchNewAccessToken } from "/js/useful-functions.js";
+import { checkLogin, fetchNewAccessToken, logout } from "/js/useful-functions.js";
 
 checkLogin();
 
@@ -24,7 +24,6 @@ async function fetchUserData() {
         });
 
         if (!response.ok) {
-            console.error('Error:', response.status);
             if (response.status === 401) {
                 await fetchNewAccessToken();
                 const newToken = sessionStorage.getItem('accessToken');
@@ -37,7 +36,6 @@ async function fetchUserData() {
         if (!data) {
             throw new Error('User data is undefined');
         }
-        //document.getElementById('name').innerHTML = `<p>Your email: ${data.name}</p>`;
         document.getElementById('name').innerText = data.name;
     } catch (error) {
         alert(`오류가 발생했습니다: ${error.message}`);
@@ -71,7 +69,8 @@ async function deleteAccount() {
             }
 
             alert('회원탈퇴가 완료되었습니다.');
-            window.location.href = '/';
+            logout();
+
         } catch (error) {
             alert(`오류가 발생했습니다: ${error.message}`);
         }
