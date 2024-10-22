@@ -52,11 +52,11 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, UserSecurityPath.ONLY_POST_WHITELIST).hasAuthority("USER")
                         .requestMatchers(HttpMethod.PATCH, UserSecurityPath.ONLY_PATCH_WHITELIST).hasAuthority("USER")
                         .requestMatchers(HttpMethod.DELETE, UserSecurityPath.ONLY_DELETE_WHITELIST).hasAuthority("USER")
+                        .requestMatchers(HttpMethod.GET, AdminSecurityPath.ONLY_GET_WHITELIST).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, AdminSecurityPath.ONLY_POST_WHITELIST).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, AdminSecurityPath.ONLY_PATCH_WHITELIST).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, AdminSecurityPath.ONLY_DELETE_WHITELIST).hasAuthority("ADMIN")
                         .requestMatchers("/js/**", "/css/**", "/html/**","/img/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "api/users/admin-check").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(request -> {
                     var config = new CorsConfiguration();
