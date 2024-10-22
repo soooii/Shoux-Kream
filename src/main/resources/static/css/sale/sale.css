@@ -180,40 +180,44 @@ dd {
 .deadline-container {
     display: flex;
     flex-direction: column; /* 세로 방향으로 정렬 */
-    align-items: center;
+    align-items: center; /* 전체 컨테이너 중앙 정렬 */
 }
 
 .deadline-title {
-    text-align: left;
-    font-weight: bold;
+    text-align: left; /* 왼쪽 정렬 */
+    font-weight: bold; /* 글씨 굵게 */
+    width: 100%; /* 전체 너비 사용 */
+    margin-bottom: 5px; /* 아래쪽 간격 */
 }
 
 .deadline-txt {
-    text-align: left;
+    text-align: left; /* 왼쪽 정렬 */
+    width: 100%; /* 전체 너비 사용 */
+    margin-bottom: 15px; /* 아래쪽 간격 */
 }
 
 .deadline-links {
-    display: flex;
+    display: flex; /* 플렉스 박스 사용 */
     flex-wrap: wrap; /* 여러 줄로 나누기 */
     justify-content: center; /* 중앙 정렬 */
 }
 
 .deadline-link {
-    display: inline-block;
-    padding: 15px 25px;
-    background-color: #485FC7;
-    font-size: 17px;
-    color: white;
-    text-decoration: none;
+    display: inline-block; /* 인라인 블록 요소 */
+    padding: 15px 25px; /* 패딩 */
+    background-color: #485FC7; /* 배경색 */
+    font-size: 17px; /* 글자 크기 */
+    color: white; /* 글자색 */
+    text-decoration: none; /* 밑줄 제거 */
     border-radius: 15px; /* 동그란 모양 */
-    transition: background-color 0.3s;
+    transition: background-color 0.3s; /* 호버 시 배경색 변화 */
     margin: 5px; /* 각 버튼 간의 간격 */
-    font-weight: bolder;
+    font-weight: bolder; /* 글씨 굵게 */
 }
 
 .deadline-link:hover {
-    background-color: #ffffff; /* 호버 시 색상 변화 */
-    border: 1px solid #485FC7;
+    background-color: #ffffff; /* 호버 시 배경색 변화 */
+    border: 1px solid #485FC7; /* 테두리 색상 */
 }
 
 .settlement-container {
