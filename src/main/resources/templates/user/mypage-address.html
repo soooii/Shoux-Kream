@@ -19,7 +19,7 @@
 
     <!-- 커스텀 CSS, JS -->
     <script src="/js/user/mypage-address.js" type="module" defer></script>
-
+    <script src="/js/login-logout.js" type="module" defer></script>
 
 </head>
 <body>
@@ -49,36 +49,36 @@
             <ul id="navbar">
                 <li>
                     <a href="/cart/summary" aria-current="page">
-                <span class="icon">
-                  <i class="fas fa-cart-shopping"></i>
-                </span>
+                        <span class="icon">
+                            <i class="fas fa-cart-shopping"></i>
+                        </span>
                         <span>카트</span>
                     </a>
                     <a id="loginButton" href="/users/login">
-            <span class="icon">
-              <i class="fa fa-sign-in" aria-hidden="true"></i>
-            </span>
+                        <span class="icon">
+                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                         </span>
                         <span>로그인</span>
                     </a>
 
                     <a id="logoutButton" href="/">
-            <span class="icon">
-              <i class="fa fa-sign-out" aria-hidden="true"></i>
-            </span>
+                        <span class="icon">
+                             <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        </span>
                         <span>로그아웃</span>
                     </a>
 
-                    <a href="api/admin" aria-current="page">
-            <span class="icon">
-              <i class="fa fa-address-book-o" aria-hidden="true"></i>
-            </span>
+                    <a id="adminButton" onclick="adminButtonClick(event)" aria-current="page">
+                        <span class="icon">
+                         <i class="fa fa-address-book-o" aria-hidden="true"></i>
+                        </span>
                         <span>관리자</span>
                     </a>
 
                     <a href="/users/me">
-            <span class="icon">
-              <i class="fas fa-user" aria-hidden="true"></i>
-            </span>
+                        <span class="icon">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        </span>
                         <span>My</span>
                     </a>
                 </li>
@@ -87,22 +87,20 @@
     </div>
 </nav>
 
-<!-- 메인 컨텐츠 -->
 <section class="section">
     <div class="container">
         <div class="columns">
-            <!-- 왼쪽 네비게이션 바 -->
             <aside class="column is-3">
                 <nav class="menu">
                     <p class="menu-label mypage-title">
-                        <a href="/users/me">마이페이지</a>
+                        <a href="/users/me">마이 페이지</a>
                     </p>
                     <ul class="menu-list">
-                        <li class="larger-text">쇼핑정보</li>
-                        <li><a href="#purchase-history">구매내역</a></li>
-                        <li><a href="#sales-history">판매내역</a></li>
-                        <li class="larger-text">내정보</li>
-                        <li><a href="/users/me/account">계정관리</a></li>
+                        <li class="larger-text">쇼핑 정보</li>
+                        <li><a href="#purchase-history">구매 내역</a></li>
+                        <li><a href="#sales-history">판매 내역</a></li>
+                        <li class="larger-text">내 정보</li>
+                        <li><a href="/users/me/account">계정 관리</a></li>
                         <li><a href="/users/me/address">주소록</a></li>
                     </ul>
                 </nav>

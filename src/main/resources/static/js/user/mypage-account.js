@@ -1,4 +1,4 @@
-import { checkLogin, fetchNewAccessToken } from "/js/useful-functions.js";
+import { checkLogin, fetchNewAccessToken, logout } from "/js/useful-functions.js";
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -114,8 +114,7 @@ async function updateUserData() {
         passwordMatchMessage.style.display = 'none';
         newPasswordMatchMessage.style.display = 'none';
         alert('회원정보가 수정되었습니다. 다시 로그인해 주세요.');
-        sessionStorage.removeItem('accessToken');
-        checkLogin();
+        logout();
 
 
     } catch (error) {
