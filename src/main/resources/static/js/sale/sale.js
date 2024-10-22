@@ -56,11 +56,92 @@ function getItemInfo() {
     }
 }
 
-// ... (기타 코드 생략)
+// 수수료를 동적으로 계산해 화면에 보여줌
+const inputSellPrice = document.getElementById('input-sell-price');
+const inspectionElement = document.querySelector('.inspection');
+const feeElement = document.querySelector('.fee');
+const amountElement = document.querySelector('.amount');
+
+inputSellPrice.addEventListener('input', function () {
+    const sellPrice = parseFloat(inputSellPrice.value);
+    if (!isNaN(sellPrice)) {
+        const fee = sellPrice * 0.1; // 10% 계산
+        inspectionElement.innerText = '무료'; // 검수비 업데이트
+        feeElement.innerText = `-${fee.toLocaleString()}원`; // 가격 업데이트
+
+        const amount = sellPrice - fee; // sellPrice - fee 계산
+        amountElement.innerText = `${amount.toLocaleString()}원`; // 최종 금액 업데이트
+    } else {
+        feeElement.innerText = ''; // 입력값이 없을 때는 비우기
+        amountElement.innerText = ''; // 입력값이 없을 때는 비우기
+    }
+});
+
+// 입찰 마감기한 동적 계산
+document.querySelectorAll('.deadline-link').forEach(link => {
+    link.addEventListener('click', function (event) {
+        event.preventDefault(); // 링크 클릭 시 기본 동작 방지
+
+        const days = parseInt(this.dataset.days); // 선택한 일수
+        const today = new Date(); // 오늘 날짜
+        nowDate = today;
+        today.setDate(today.getDate() + days); // 오늘 날짜에 일수 추가
+
+        // 날짜 포맷 yyyy/mm/dd
+        const formattedDate = today.toISOString().split('T')[0].replace(/-/g, '/');
+
+        // 결과 출력
+        const deadlineText = `${days}일 (${formattedDate} 마감)`;
+        document.querySelector('.deadline-txt').innerText = deadlineText;
+    });
+});
+
+// 검수기준 모달창
+document.addEventListener('DOMContentLoaded', () => {
+    // Functions to open and close a modal
+    function openModal($el) {
+        $el.classList.add('is-active');
+    }
+
+    function closeModal($el) {
+        $el.classList.remove('is-active');
+    }
+
+    function closeAllModals() {
+        (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+            closeModal($modal);
+        });
+    }
+
+    // Add a click event on buttons to open a specific modal
+    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+        const modal = $trigger.dataset.target;
+        const $target = document.getElementById(modal);
+
+        $trigger.addEventListener('click', () => {
+            openModal($target);
+        });
+    });
+
+    // Add a click event on various child elements to close the parent modal
+    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+        const $target = $close.closest('.modal');
+
+        $close.addEventListener('click', () => {
+            closeModal($target);
+        });
+    });
+
+    // Add a keyboard event to close all modals
+    document.addEventListener('keydown', (event) => {
+        if(event.key === "Escape") {
+            closeAllModals();
+        }
+    });
+});
 
 // 폼 전달
 const form = document.getElementById('submit-form');
-const inputSellPrice = document.getElementById('input-sell-price'); // 판매 가격 입력 요소
 const deadlineLinks = document.querySelectorAll('.deadline-link');
 let daysToAdd; // 변수를 선언해줍니다.
 
