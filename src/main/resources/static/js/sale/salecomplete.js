@@ -142,8 +142,18 @@ if (bidButton) {
         })
             .then(response =>{
             if(response.ok){
-                window.location.href = `/item/item-detail/${itemIdFinal}`;
                 alert('판매 등록이 완료되었습니다.');
+                // 세션 스토리지에서 값 삭제
+                sessionStorage.removeItem('sellingPrice');
+                sessionStorage.removeItem('daysToAdd');
+                sessionStorage.removeItem('imageUrl');
+                sessionStorage.removeItem('itemName');
+                sessionStorage.removeItem('itemPrice');
+                sessionStorage.removeItem('shortDescription');
+                sessionStorage.removeItem('detailDescription');
+                sessionStorage.removeItem('itemId');
+
+                window.location.href = `/item/item-detail/${itemIdFinal}`;
                 return response.json();
             }else{
                 alert('판매 등록을 다시 진행해주세요.');
