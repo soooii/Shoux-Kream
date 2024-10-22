@@ -5,12 +5,14 @@ public class UserSecurityPath {
             // => 그냥 기본 view 반환 경로(ViewController)
             "/api/cart/selected",
             "/api/checkout",
-            "/api/checkout/{detailId}"
+            "/api/checkout/{detailId}",
+            "/api/sale/item/{itemId}"
     };
     public static final String[] ONLY_POST_WHITELIST = {
             "/api/cart/add/{itemId}",
             "/api/checkout",
-            "/api/checkout-item"
+            "/api/checkout-item",
+            "/api/sale/sell"
     };
     public static final String[] ONLY_PATCH_WHITELIST = {
             "/api/cart/selected",
