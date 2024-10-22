@@ -1,51 +1,31 @@
-/* category-edit.css */
+.account-header {
+  display: block;
+  border-bottom: #ddd 1px solid;
+  padding-bottom: 0.7rem;
+}
 
-/* 폼의 배경 및 레이아웃 스타일 */
 .register-category-form-container {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* 폼 박스 스타일 */
-.register-category-form-box {
-  padding: 20px;
-}
-
-/* 사진 업로드 영역 스타일 */
-.file.has-name.is-fullwidth {
   display: flex;
+  justify-content: center;
   align-items: center;
+  margin-top: 5rem;
 }
 
-.file-label {
-  width: 100%;
+.register-category-form-box {
+  width: 40rem;
 }
 
-.file-name {
-  margin-left: 10px;
+.register-category-form-box .title {
+  text-align: center;
 }
 
-/* 테마 색상 변경 미리보기 (동적으로 클래스 적용 시 사용) */
-.is-primary.is-light {
-  background-color: #e3f2fd;
+.register-category-form-box .button {
+  font-weight: bold;
 }
 
-.is-link.is-light {
-  background-color: #f3e5f5;
-}
-
-.is-info.is-light {
-  background-color: #e0f7fa;
-}
-
-.is-success.is-light {
-  background-color: #e8f5e9;
-}
-
-.is-warning.is-light {
-  background-color: #fffde7;
-}
-
-.is-danger.is-light {
-  background-color: #ffebee;
+.register-category-form-box .input:focus,
+.register-category-form-box .textarea:focus,
+.register-category-form-box select:focus {
+  border-color: #00d1b2;
+  box-shadow: 0 0 0 0.125em rgba(0, 209, 178, 0.25);
 }

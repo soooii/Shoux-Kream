@@ -84,9 +84,19 @@ async function handleEditSubmit(e) {
   if (!title || !manufacturer || !shortDescription || !detailDescription || !inventory || !price) {
     return alert("빈 칸 및 0이 없어야 합니다.");
   }
+  if (!fileNameSpan.innerText){
+      if (!image) {
+              return alert("사진을 넣어주세요.");
+      }
+  }
+  if(image){
+      if (image.size > 3e6) {
+              return alert("사진은 최대 2.5MB 크기까지 가능합니다.");
+          }
+  }
 
-  if (image && image.size > 3e6) {
-    return alert("사진은 최대 2.5MB 크기까지 가능합니다.");
+  if(categoryId==="default"){
+    return alert("카테고리를 선택해 주세요.");
   }
 
   try {
@@ -109,7 +119,7 @@ async function handleEditSubmit(e) {
 
     // FormData 전송 - 수정 API 호출
     await fetch(`/item/${itemId}`, {
-      method: "PUT",
+      method: "PATCH",
       body: formData,
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`

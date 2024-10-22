@@ -2,9 +2,12 @@ package com.shoux_kream.config;
 
 public class SecurityPath {
     public static final String[] ONLY_GET_WHITELIST = {
+            "/**.png",
+            "/**.jpg",
             "/sale",
             "/users/login",
             "/users/signup",
+            "/api/users/logout",
             "/",
             "/users/me",
             "/users/me/account",
@@ -13,7 +16,8 @@ public class SecurityPath {
             "/item/item-detail/{id}",
             "/item/edit/{id}",
             "/item/item-add",
-            "/category/category-add",
+            "/category/{id}",
+            "/category/add",
             "/category/edit/{id}",
             "/cart/summary",
             "/checkout",
