@@ -20,28 +20,23 @@ window.onload = function () {
             return response.json();
         })
         .then(data => {
-            // 데이터가 리스트인 경우 반복하여 처리
-            const cartContainer = document.getElementById('cart-container'); // 카트 항목을 담을 컨테이너
-            cartContainer.innerHTML = ''; // 기존 내용 초기화
+            const cartContainer = document.getElementById('cart-container');
+            cartContainer.innerHTML = '';
 
-            // 장바구니가 빈 경우
             if (!data || data.length === 0) {
                 const message = document.createElement('p');
                 message.classList.add('content');
                 message.innerText = '장바구니가 비었습니다.';
-                // 결제정보 업데이트
                 document.getElementById('productsCount').innerText = '0개';
                 document.getElementById('productsTotal').innerText = '0원';
                 document.getElementById('deliveryFee').innerText = '0원';
                 document.getElementById('orderTotal').innerText = '0원';
                 cartContainer.appendChild(message);
-                return; // 더 이상 진행하지 않음
+                return;
             }
 
-            // 결제정보를 위한 변수 초기화
             let totalQuantity = 0;
             let totalPrice = 0;
-
 
             data.forEach((item) => {
                 const id = item.cartId;
@@ -52,43 +47,55 @@ window.onload = function () {
                 const quantity = document.createElement('span');
                 const price = document.createElement('p');
 
-                const cartItemDiv = document.createElement('div'); // 목록을 담음
+                const cartItemDiv = document.createElement('div');
                 cartItemDiv.classList.add('cart-product-item');
 
-                const checkbox = document.createElement('input'); // 체크박스 요소 생성
-                checkbox.type = 'checkbox'; // 체크박스 타입 설정
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
                 checkbox.name = `checkbox`;
                 checkbox.value = id;
                 checkbox.checked = true;
+                checkbox.classList.add('custom-checkbox');
 
-                checkbox.classList.add('custom-checkbox')
                 itemImage.classList.add('image');
-                itemName.classList.add('content'); // 클래스 추가
-                quantity.classList.add('quantity'); // 클래스 추가
-                price.classList.add('content'); // 클래스 추가
+                itemName.classList.add('content');
+                quantity.classList.add('content');
+                price.classList.add('content');
 
                 itemImage.src = `${item.imageUrl}`;
                 itemName.innerText = `${item.itemName}`;
                 quantity.innerText = `${item.quantity}개`;
-                price.innerText = `${item.totalPrice.toLocaleString()}원`;
+                price.innerText = '\\' + `${item.totalPrice.toLocaleString()}`;
 
-                // 링크 추가
+                // 링크 추가: 이미지와 상품명, 수량, 가격을 포함
                 const itemLink = document.createElement('a');
-                itemLink.href = `/item/item-detail/${itemId}`; // 링크 설정
-                itemLink.style.textDecoration = 'none'; // 밑줄 없애기
-                itemLink.style.color = 'inherit'; // 부모 요소의 색상 상속
+                itemLink.href = `/item/item-detail/${itemId}`;
+                itemLink.style.textDecoration = 'none';
+                itemLink.style.color = 'inherit';
 
-                // 체크박스 클릭 시 이벤트 처리
-                checkbox.addEventListener('change', updateOrderSummary);
+                // itemLink에 내용 추가
+                const itemLinkDiv = document.createElement('div');
+                itemLinkDiv.style.display = 'flex'; // Flexbox 사용
+                itemLinkDiv.style.alignItems = 'center'; // 세로 정렬
+                itemLinkDiv.appendChild(itemImage);
+                itemLinkDiv.appendChild(itemName);
+                itemLinkDiv.appendChild(quantity);
+                itemLinkDiv.appendChild(price);
+
+                itemLink.appendChild(itemLinkDiv); // 링크에 itemLinkDiv 추가
+
+                // 체크박스 추가
+                cartItemDiv.appendChild(checkbox);
+                cartItemDiv.appendChild(itemLink); // 링크를 cartItemDiv에 추가
 
                 // 개별 삭제 버튼
                 const deleteButton = document.createElement('button');
                 deleteButton.innerText = '삭제';
                 deleteButton.classList.add('delete-button');
                 deleteButton.setAttribute('data-bs-toggle', 'modal');
-                deleteButton.setAttribute('data-bs-target', '#staticDeleteBackdrop'); // 모달 ID 설정
-                // 개별 삭제를 위한 모달 실행 시 id 저장
-                deleteButton.addEventListener('click', () => {
+                deleteButton.setAttribute('data-bs-target', '#staticDeleteBackdrop');
+                deleteButton.addEventListener('click', (event) => {
+                    event.stopPropagation(); // 이벤트 전파 중단
                     cartId = id; // 선택된 cartId 저장
                 });
 
@@ -98,15 +105,15 @@ window.onload = function () {
                 editButton.classList.add('edit-button');
                 editButton.setAttribute('data-bs-toggle', 'modal');
                 editButton.setAttribute('data-bs-target', '#staticBackdrop');
-                // 모달창 실행
-                editButton.addEventListener('click', () => {
+                editButton.addEventListener('click', (event) => {
+                    event.stopPropagation(); // 이벤트 전파 중단
                     cartId = id; // 선택된 cartId 저장
                     quantityCheck = `${item.quantity}`;
                     priceCheck = `${item.itemPrice}`;
 
-                    const increaseBtn = document.getElementById('increaseBtn'); // 증가 버튼
-                    const decreaseBtn = document.getElementById('decreaseBtn'); // 감소 버튼
-                    const cartQuantity = document.getElementById('quantity'); // 수량을 표시하는 input
+                    const increaseBtn = document.getElementById('increaseBtn');
+                    const decreaseBtn = document.getElementById('decreaseBtn');
+                    const cartQuantity = document.getElementById('quantity');
                     const cartItemPrice = document.querySelector('.modal-body .fw-bold.text-primary');
 
                     cartQuantity.value = quantityCheck;
@@ -114,44 +121,36 @@ window.onload = function () {
 
                     // 수량 증가
                     increaseBtn.addEventListener('click', function () {
-                        let currentQuantity = parseInt(cartQuantity.value); // 현재 수량을 정수로 변환
+                        let currentQuantity = parseInt(cartQuantity.value);
                         currentQuantity++;
                         cartQuantity.value = currentQuantity;
-                        cartItemPrice.innerText = (priceCheck * currentQuantity).toLocaleString() + '원'; // 가격 업데이트
+                        cartItemPrice.innerText = (priceCheck * currentQuantity).toLocaleString() + '원';
                         quantityCheck = currentQuantity;
                     });
 
                     // 수량 감소
                     decreaseBtn.addEventListener('click', function () {
-                        let currentQuantity = parseInt(cartQuantity.value); // 현재 수량을 정수로 변환
+                        let currentQuantity = parseInt(cartQuantity.value);
                         if (currentQuantity > 1) {
                             currentQuantity--;
                             cartQuantity.value = currentQuantity;
-                            cartItemPrice.innerText = (priceCheck * currentQuantity).toLocaleString() + '원'; // 가격 업데이트
+                            cartItemPrice.innerText = (priceCheck * currentQuantity).toLocaleString() + '원';
                             quantityCheck = currentQuantity;
                         }
                     });
                 });
 
-                // 목록에 내용 추가
-                itemLink.appendChild(checkbox); // 체크박스는 링크 안에 넣지 않음
-                cartItemDiv.appendChild(itemImage);
-                cartItemDiv.appendChild(itemName);
-                cartItemDiv.appendChild(quantity);
-                cartItemDiv.appendChild(price);
+                // cartItemDiv에 버튼 추가
                 cartItemDiv.appendChild(deleteButton);
                 cartItemDiv.appendChild(editButton);
-
-                itemLink.appendChild(cartItemDiv);
 
                 // 가격 및 수량 업데이트
                 totalQuantity += item.quantity;
                 totalPrice += item.totalPrice;
 
-                cartContainer.appendChild(itemLink); // 컨테이너에 추가
+                cartContainer.appendChild(cartItemDiv); // 컨테이너에 추가
             });
 
-            // 결제정보 업데이트 함수
             function updateOrderSummary() {
                 let selectedItemsTotalQuantity = 0;
                 let selectedItemsTotalPrice = 0;
@@ -169,19 +168,16 @@ window.onload = function () {
                         selectedItemsTotalPrice += itemPrice;
                         deliveryFee = 3000;
                     } else {
-                        allSelectCheckbox.checked = false; // 전체선택 체크박스 해제
+                        allSelectCheckbox.checked = false;
                     }
                 });
 
-
-                // 결제정보 업데이트
                 document.getElementById('productsCount').innerText = selectedItemsTotalQuantity + '개';
                 document.getElementById('productsTotal').innerText = selectedItemsTotalPrice.toLocaleString() + '원';
                 document.getElementById('deliveryFee').innerText = deliveryFee.toLocaleString() + '원';
                 document.getElementById('orderTotal').innerText = (selectedItemsTotalPrice + deliveryFee).toLocaleString() + '원';
             }
 
-            // 초기 결제정보 업데이트
             updateOrderSummary();
 
             const allSelectCheckbox = document.getElementById('allSelectCheckbox');
@@ -191,7 +187,7 @@ window.onload = function () {
                 checkboxes.forEach((checkbox) => {
                     checkbox.checked = allSelectCheckbox.checked;
                 });
-                updateOrderSummary(); // 체크박스 변경 시 결제정보 업데이트
+                updateOrderSummary();
             });
         })
         .catch(error => {
@@ -199,6 +195,8 @@ window.onload = function () {
             window.location.href = '/';
         });
 };
+
+
 
 
 // 옵션/수량 수정
