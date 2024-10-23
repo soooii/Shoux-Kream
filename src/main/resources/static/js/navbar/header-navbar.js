@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 async function navbarCheckAdmin() {
-
+  console.log('123123123');
   const token = sessionStorage.getItem("accessToken");
   // 우선 토큰 존재 여부 확인
   if (!token) {
