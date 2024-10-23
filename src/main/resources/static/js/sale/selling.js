@@ -29,7 +29,9 @@ async function getSaleList() {
         }
 
         const saleData = await response.json();
-        console.log(saleData);
+
+        // saleId 기준으로 내림차순 정렬
+        saleData.sort((a, b) => b.saleId - a.saleId);
 
         const saleContainer = document.getElementById('sale-container');
         saleContainer.innerHTML = '';
