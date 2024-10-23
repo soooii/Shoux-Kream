@@ -323,6 +323,7 @@ if (checkoutButton) {
 
         if (cartIds.length === 0) {
             alert('구매할 상품을 선택하세요.');
+            window.location.href = '/';
             return;
         }
 
