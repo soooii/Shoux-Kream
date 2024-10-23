@@ -69,6 +69,18 @@ public class CheckOut extends BaseEntity {
                 .build();
     }
 
+    public CheckOutResponseDto toAdminDto() {
+        return CheckOutResponseDto.builder()
+                .id(this.id)
+                .summaryTitle(this.summaryTitle)
+                .totalPrice(this.totalPrice)
+                .userId(this.getUser().getId())
+                .deliveryStatus(deliveryStatus)
+                .address(UserAddressDto.builder().userAddress(this.address).build())
+                .request(this.request)
+                .build();
+    }
+
     public void updateAddress(UserAddress address){
         this.address = address;
     }
