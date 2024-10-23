@@ -27,10 +27,16 @@ public class SaleViewController {
         return "sale/selling";
     }
 
-    // TODO 마이페이지 판매 내역 -> 상세 내역
+    // 마이페이지 판매 상세 내역
     @GetMapping("/sale/{saleId}")
     public String getSaleById() {
         return "sale/sale-detail";
+    }
+
+    // 판매 입찰 수정
+    @GetMapping("/selling/{saleId}")
+    public String editSale() {
+        return "sale/sale-edit";
     }
 
 }
