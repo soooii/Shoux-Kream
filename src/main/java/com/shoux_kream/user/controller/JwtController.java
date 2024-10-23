@@ -1,13 +1,15 @@
 package com.shoux_kream.user.controller;
 
+import com.shoux_kream.config.jwt.JwtTokenResolver;
 import com.shoux_kream.config.jwt.impl.AuthTokenImpl;
 import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
 import com.shoux_kream.user.dto.JwtTokenDto;
 import com.shoux_kream.user.dto.request.JwtTokenLoginRequest;
 import com.shoux_kream.user.dto.response.JwtTokenResponse;
-import com.shoux_kream.user.dto.response.UserResponse;
+import com.shoux_kream.user.entity.BlacklistToken;
 import com.shoux_kream.user.entity.RefreshToken;
 import com.shoux_kream.user.entity.Role;
+import com.shoux_kream.user.repository.JwtBlacklistRepository;
 import com.shoux_kream.user.repository.RefreshTokenRepository;
 import com.shoux_kream.user.service.UserService;
 import io.jsonwebtoken.Claims;
@@ -18,13 +20,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -34,7 +33,9 @@ import java.util.Optional;
 public class JwtController {
     private final UserService userService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final JwtBlacklistRepository jwtBlacklistRepository;
     private final JwtProviderImpl tokenProvider;
+    private final JwtTokenResolver tokenResolver;
 
     //로그인
     @PostMapping("/login")
@@ -59,18 +60,29 @@ public class JwtController {
         );
     }
 
+    //로그아웃
     @GetMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-        // 쿠키에서 refreshToken 가져오기
+        Optional<String> accessToken = tokenResolver.resolveToken(request);
         Optional<String> cookieToken = resolveRefreshToken(request);
+
+        if (accessToken.isPresent()) {
+            AuthTokenImpl jwtTokenAccess = tokenProvider.convertAuthToken(accessToken.get().split(" ")[1]);
+            if (jwtTokenAccess.validate()) {
+                String jtiAccess = jwtTokenAccess.getDate().getId();
+                Date expired = jwtTokenAccess.getDate().getExpiration();
+                BlacklistToken blacklistToken = new BlacklistToken(jtiAccess, expired);
+                jwtBlacklistRepository.save(blacklistToken);
+            }
+        }
 
         if (cookieToken.isPresent()) {
             String refreshToken = cookieToken.get();
-            AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(refreshToken);
-            if (jwtToken.validate()) {
-                String jti = jwtToken.getDate().getId();
+            AuthTokenImpl jwtTokenRefresh = tokenProvider.convertAuthToken(refreshToken);
+            if (jwtTokenRefresh.validate()) {
+                String jtiRefresh = jwtTokenRefresh.getDate().getId();
                 // jti를 통해 해당 리프레시 토큰만 삭제
-                refreshTokenRepository.deleteByJti(jti);
+                refreshTokenRepository.deleteByJti(jtiRefresh);
             }
         }
 

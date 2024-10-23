@@ -18,6 +18,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.setStatus(401);
 
         JSONObject json = new JSONObject();

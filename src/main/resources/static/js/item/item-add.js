@@ -57,9 +57,16 @@ async function handleSubmit(e) {
   if (!title || !manufacturer || !shortDescription || !detailDescription || !inventory || !price) {
     return alert("빈 칸 및 0이 없어야 합니다.");
   }
+  if (!image) {
+        return alert("사진을 넣어주세요.");
+  }
 
   if (image.size > 3e6) {
     return alert("사진은 최대 2.5MB 크기까지 가능합니다.");
+  }
+
+  if(categoryId==="default"){
+      return alert("카테고리를 선택해 주세요.");
   }
 
   try {
@@ -97,11 +104,24 @@ async function handleSubmit(e) {
     fileNameSpan.innerText = "";
     keywordsContainer.innerHTML = "";
     searchKeywords = [];
+    // 부모 창에 reload 메시지 전송
+    window.opener.postMessage("reloadPage", "*");
+    // 현재 창 닫기
+    window.close();
   } catch (err) {
     console.log("등록 오류:", err.stack);
     alert(`문제가 발생하였습니다. 확인 후 다시 시도해 주세요: ${err.message}`);
   }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    // 상품 등록 후 모달창 종료 처리
+    window.addEventListener("message", (event) => {
+        if (event.data === "reloadPage") {
+            location.reload();
+        }
+    });
+});
 
 // 사용자가 사진을 업로드했을 때, 파일 이름이 화면에 나타나도록 함.
 function handleImageUpload() {

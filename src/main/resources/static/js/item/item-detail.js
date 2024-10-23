@@ -108,3 +108,20 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }
 });
+
+// 판매하기
+const sellButton = document.getElementById('sellButton');
+
+if (sellButton) {
+    sellButton.addEventListener('click', event => {
+        const itemId = document.getElementById('item-id-sell').value;
+
+        const token = sessionStorage.getItem('accessToken');
+        if (token === null) {
+            window.location.href = `/users/login`;
+        } else {
+            // token이 있을 때 /sell 페이지로 이동
+            window.location.href = `/sale?itemId=${itemId}`; // itemId를 쿼리 파라미터로 전달
+        }
+    });
+}
