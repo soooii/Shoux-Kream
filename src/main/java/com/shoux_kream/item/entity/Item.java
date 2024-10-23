@@ -107,4 +107,20 @@ public class Item extends BaseEntity {
         this.price = price;
         this.keyWords = keyWords;
     }
+
+    // 재고 증가
+    public void increaseStock(int quantity) {
+        this.inventory += quantity;
+    }
+
+    // 재고 감소
+    public void removeStock(int quantity) {
+        int restStock = this.inventory -quantity;
+        if (restStock<0){
+            //상품의 재고가 주문 수량보다 작은 경우 재고 부족 예외를 발생시킵니다.
+            throw new OptimisticLockException("상품의 재고가 부족합니다.(현재 재고 수량:" + this.inventory +")");
+        }
+        //주문 후 남은 재고 수량을 상품의 현재 재고 값으로 할당합니다.
+        this.inventory = restStock;
+    }
 }

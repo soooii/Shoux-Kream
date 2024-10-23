@@ -38,6 +38,10 @@ public class SaleService {
                 user, item);
 
         saleRepository.save(newSale);
+
+        // 판매 등록 후 재고 증가
+        int quantity = 1;
+        item.increaseStock(quantity);
         return newSale.getId();
     }
     
