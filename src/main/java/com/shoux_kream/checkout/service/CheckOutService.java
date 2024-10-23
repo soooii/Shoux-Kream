@@ -120,4 +120,12 @@ public class CheckOutService {
     public void deleteCheckOutEach(Long checkOutEacId) {
         checkOutEachRepository.deleteById(checkOutEacId);
     }
+
+    // 어드민 주문 내역 전체 조회
+    public List<CheckOutResponseDto> getAllCheckOuts() {
+        List<CheckOut> checkOuts = checkOutRepository.findAll();
+        return checkOuts.stream()
+                .map(checkOut -> checkOut.toAdminDto())
+                .collect(Collectors.toList());
+    }
 }
