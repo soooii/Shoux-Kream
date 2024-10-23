@@ -24,6 +24,9 @@ public class Sale extends BaseEntity {
     @Column(name = "selling_price", nullable = false)
     private Long sellingPrice;
 
+    @Column(name = "days_to_add", nullable = false)
+    private int daysToAdd;
+
     @Column(name = "due_date", nullable = false)
     private LocalDateTime dueDate;
 
@@ -37,14 +40,16 @@ public class Sale extends BaseEntity {
 
     public Sale(Long sellingPrice, int daysToAdd, User user, Item item) {
         this.sellingPrice = sellingPrice;
-        this.dueDate = LocalDateTime.now().plusDays(daysToAdd);
+        this.daysToAdd = daysToAdd;
+        this.dueDate = LocalDateTime.now().plusDays(this.daysToAdd);
         this.user = user;
         this.item = item;
     }
 
     // 마감 기한 변경
     public void updateDaysToAdd(int daysToAdd) {
-        this.dueDate = LocalDateTime.now().plusDays(daysToAdd);
+        this.daysToAdd = daysToAdd;
+        this.dueDate = this.getCreatedAt().plusDays(this.daysToAdd);
     }
 
     // 판매 희망가 변경

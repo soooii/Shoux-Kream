@@ -28,23 +28,23 @@
   <!-- AWS S3 사진 업로드용 -->
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
   <!-- 커스텀 css, js -->
-  <link rel="stylesheet" href="css/home/home.css" />
+  <link rel="stylesheet" href="/css/sale/selling.css" />
   <script src="js/home/home.js" type="module" defer></script>
   <script src="/js/login-logout.js" type="module" defer></script>
-  <script src="/js/user/me.js" type="module" defer></script>
+  <script src="/js/sale/selling.js" type="module" defer></script>
 
   <style>
-  .mypage-title a {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: black;
-  text-decoration: none;
-  }
+    .mypage-title a {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: black;
+      text-decoration: none;
+    }
 
-  .larger-text {
-  font-size: 1rem;
-  font-weight: bold;
-  }
+    .larger-text {
+      font-size: 1rem;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -131,15 +131,27 @@
       </aside>
 
       <div class="column is-9">
-        <div class="box">
-          <p><span id="name"></span>님 환영합니다.</p>
-          <p>여기서 구매내역, 판매내역, 계정관리, 주소록을 확인할 수 있습니다.</p>
+        <div>
+          <p class="sale-list">판매내역</p>
         </div>
+        <div class="column is-narrow has-text-right">
+          <div class="labels">
+            <div class="label-item">
+              <p>판매 희망가</p>
+            </div>
+            <div class="label-item">
+              <p>만료일</p>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <!--판매내역 목록-->
+          <div class="sale-container" id="sale-container">
 
-        <button class="button is-danger" id="delete-account-button">회원탈퇴</button>
+          </div>
+        </div>
       </div>
 
-    </div>
     </div>
   </div>
 </section>

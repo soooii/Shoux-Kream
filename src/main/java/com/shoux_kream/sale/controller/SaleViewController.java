@@ -3,6 +3,7 @@ package com.shoux_kream.sale.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RequiredArgsConstructor
 @Controller
@@ -20,12 +21,22 @@ public class SaleViewController {
         return "sale/salecomplete";
     }
 
-    // TODO 판매 입찰 후 마이페이지에서 판매 내역 확인
-//    @GetMapping("/selling")
-//    public String getSelling() {
-//        return "sale/selling";
-//    }
+    // 판매 입찰 후 마이페이지에서 판매 내역 목록 확인
+    @GetMapping("/selling")
+    public String getSelling() {
+        return "sale/selling";
+    }
 
-    // TODO 마이페이지 판매 내역 -> 상세 내역
+    // 마이페이지 판매 상세 내역
+    @GetMapping("/sale/{saleId}")
+    public String getSaleById() {
+        return "sale/sale-detail";
+    }
+
+    // 판매 입찰 수정
+    @GetMapping("/selling/{saleId}")
+    public String editSale() {
+        return "sale/sale-edit";
+    }
 
 }

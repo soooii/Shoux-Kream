@@ -1,0 +1,92 @@
+.sale-list {
+    font-size: 27px;
+    font-weight: bolder;
+}
+
+.sell-item {
+    display: flex; /* 이미지와 텍스트를 나란히 배치 */
+    align-items: flex-start; /* 수직 정렬 */
+}
+
+.sell-item .image {
+    width: 100px;
+    height: 100px;
+    margin-right: 1.2rem; /* 이미지와 텍스트 간의 간격 */
+    cursor: pointer;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column; /* p 태그를 세로로 나열 */
+}
+
+.bold-text {
+    font-weight: bold; /* 굵은 글씨체 */
+    font-size: 1.2em; /* 약간 크게 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.normal-black {
+    color: black; /* 검은색 */
+    font-weight: normal; /* 보통 굵기 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.normal-gray {
+    color: gray; /* 회색 */
+    font-weight: normal; /* 보통 굵기 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.item-price {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.sale-title {
+    font-weight: bold; /* 굵은 글씨체 */
+    font-size: 22px; /* 약간 크게 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.custom-background {
+    padding: 1rem;
+    background-color: #f8f8f8; /* 더 연한 회색 */
+}
+
+.price-text {
+    font-weight: bold; /* 굵은 글씨체 */
+    font-size: 1.5em; /* 약간 크게 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+dl {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    padding: 0; /* 전체 패딩 제거 */
+}
+
+dl > div {
+    display: flex; /* 각 줄을 flexbox로 설정 */
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center; /* 수직 정렬 */
+    margin: 0; /* 기본 마진 제거 */
+    padding: 2px 0; /* 줄 간격 조정 */
+}
+
+.left-info {
+    margin-right: 20px; /* dt와 dd 사이의 간격 조정 */
+    flex: 1; /* dt가 가능한 만큼 공간을 차지하게 함 */
+    color: #b5b5b5;
+}
+
+.left-info-hope {
+    margin-right: 20px; /* dt와 dd 사이의 간격 조정 */
+    flex: 1; /* dt가 가능한 만큼 공간을 차지하게 함 */
+    color: #020000;
+}
+
+dd {
+    margin: 5px; /* dd의 기본 마진 제거 */
+    text-align: right; /* dd 내용을 오른쪽 정렬 */
+}
