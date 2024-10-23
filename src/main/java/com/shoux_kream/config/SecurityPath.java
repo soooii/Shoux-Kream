@@ -13,6 +13,7 @@ public class SecurityPath {
             "/users/me",
             "/users/me/account",
             "/users/me/address",
+            "/users/me/purchase",
             "/item/item-list",
             "/item/item-detail/{id}",
             "/item/edit/{id}",
