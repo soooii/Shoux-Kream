@@ -1,24 +1,24 @@
 -- 카테고리 추가
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('아티스트협업', '아티스트와의 협업 상품', 'artist-collab', 'https://example.com/artist-collab.jpg', NOW(), NOW());
+VALUES ('아티스트협업', '아티스트와의 협업 상품', '#ebfffc', '/img/item/item1.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('#러닝', '러닝 관련 상품', 'running', 'https://example.com/running.jpg', NOW(), NOW());
+VALUES ('#러닝', '러닝 관련 상품', '#eff1fa', '/img/item/item2.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('추천', '추천 상품', 'recommended', 'https://example.com/recommended.jpg', NOW(), NOW());
+VALUES ('추천', '추천 상품', '#eff5fb', '/img/item/item3.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('랭킹', '랭킹 상위 상품', 'ranking', 'https://example.com/ranking.jpg', NOW(), NOW());
+VALUES ('랭킹', '랭킹 상위 상품', '#effaf5', '/img/item/item4.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('럭셔리', '럭셔리 상품', 'luxury', 'https://example.com/luxury.jpg', NOW(), NOW());
+VALUES ('럭셔리', '럭셔리 상품', '#fffaeb', '/img/item/item5.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('남성', '남성용 상품', 'mens', 'https://example.com/mens.jpg', NOW(), NOW());
+VALUES ('남성', '남성용 상품', '#feecf0', '/img/item/item6.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('여성', '여성용 상품', 'womens', 'https://example.com/womens.jpg', NOW(), NOW());
+VALUES ('여성', '여성용 상품', '#00d1b2', '/img/item/item7.png', NOW(), NOW());
 
 -- 상품 추가
 -- Item 데이터 삽입
