@@ -133,4 +133,10 @@ public class CheckOutService {
                 .map(checkOut -> checkOut.toAdminDto())
                 .collect(Collectors.toList());
     }
+
+    public Long deleteUserCheckOut(Long detailId) {
+        CheckOut checkOut = checkOutRepository.findById(detailId).orElseThrow(() -> new IllegalArgumentException("checkoutId not found"));
+        checkOutRepository.delete(checkOut);
+        return detailId;
+    }
 }

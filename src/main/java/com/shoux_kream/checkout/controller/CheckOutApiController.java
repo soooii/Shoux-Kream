@@ -120,10 +120,9 @@ public class CheckOutApiController {
         //TODO patch => 업데이트 방법? update
     }
 
-    //todo principal 필요없음
-    @DeleteMapping("/admin/checkout/{detailId}") //TODO param에 checkout 번호를 입력받아야함, user의 토큰 권한도 확인
-    public ResponseEntity<Long> deleteCheckOutByAdmin(@AuthenticationPrincipal User principal, @PathVariable("detailId") Long detailId) {
-        Long deletedId = checkOutService.deleteCheckOut(principal.getUsername(), detailId);
+    @DeleteMapping("/admin/checkout/{detailId}")
+    public ResponseEntity<Long> deleteCheckOutByAdmin(@PathVariable("detailId") Long detailId) {
+        Long deletedId = checkOutService.deleteUserCheckOut(detailId);
         return ResponseEntity.ok(deletedId);
     }
 
