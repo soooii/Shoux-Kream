@@ -1,8 +1,11 @@
 package com.shoux_kream.item.controller;
 
 
+import com.shoux_kream.category.dto.CategoryDto;
+import com.shoux_kream.category.service.CategoryService;
 import com.shoux_kream.item.dto.response.ItemResponse;
 import com.shoux_kream.item.service.ItemService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,19 +14,19 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/item")
+@RequiredArgsConstructor
 public class ItemController {
 
     private final ItemService itemService;
-
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
+    private final CategoryService categoryService;
 
     // 모든 인증된 사용자가 접근 가능 (유저 및 관리자) - 모든 상품의 목록을 조회하여 응답
     @GetMapping("/item-list")
     public String getItems(Model model) {
         List<ItemResponse> items = itemService.findAll();
+        List<CategoryDto> categories = categoryService.getAllCategories();
         model.addAttribute("items", items);
+        model.addAttribute("categories", categories);
         return "item/item-list";
     }
 
@@ -31,7 +34,9 @@ public class ItemController {
     @GetMapping("/item-detail/{id}")
     public String getItemPage(@PathVariable("id") Long id, Model model) {
         ItemResponse item = itemService.findById(id); // 특정 ID의 상품을 조회
+        List<CategoryDto> categories = categoryService.getAllCategories();
         model.addAttribute("item", item);
+        model.addAttribute("categories", categories);
         return "item/item-detail";
     }
 

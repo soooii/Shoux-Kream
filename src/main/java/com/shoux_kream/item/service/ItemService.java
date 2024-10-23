@@ -173,6 +173,7 @@ public class ItemService {
     }
 
     // 모든 상품의 목록을 조회하고 dto 리스트로 반환
+    // TODO 추가
     public List<ItemResponse> findAll() {
         return itemRepository.findAll().stream()
                 .map(ItemResponse::fromEntity)
