@@ -36,88 +36,17 @@
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
   <!-- 커스텀 css, js -->
   <link rel="stylesheet" href="css/home/home.css" />
+  <link rel="stylesheet" href="css/category/category-list.css" />
   <script src="/js/home/home.js" type="module" defer></script>
   <script src="/js/login-logout.js" type="module" defer></script>
 </head>
 
 <body>
-<!-- 헤더 -->
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="container mt-3">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-        <img src="/img/elice-rabbit.png" width="30" height="30" />
-        <span class="has-text-link">Shopping Mall</span>
-      </a>
+<!-- 네비게이션 바 -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-      <a
-              role="button"
-              class="navbar-burger"
-              aria-label="menu"
-              aria-expanded="false"
-              data-target="navbarBasicExample"
-      >
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-
-    <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
-      <ul id="navbar">
-        <li>
-          <a href="/cart/summary" aria-current="page">
-                <span class="icon">
-                  <i class="fas fa-cart-shopping"></i>
-                </span>
-            <span>카트</span>
-          </a>
-          <a id="loginButton" href="/users/login">
-            <span class="icon">
-              <i class="fa fa-sign-in" aria-hidden="true"></i>
-            </span>
-            <span>로그인</span>
-          </a>
-
-          <a id="logoutButton" href="/">
-            <span class="icon">
-              <i class="fa fa-sign-out" aria-hidden="true"></i>
-            </span>
-            <span>로그아웃</span>
-          </a>
-
-          <a id="adminButton" onclick="adminButtonClick(event)" aria-current="page">
-            <span class="icon">
-              <i class="fa fa-address-book-o" aria-hidden="true"></i>
-            </span>
-            <span>관리자</span>
-          </a>
-
-          <a href="/users/me">
-            <span class="icon">
-              <i class="fas fa-user" aria-hidden="true"></i>
-            </span>
-            <span>My</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<div class="container mt-3">
-  <div class="flex-box">
-    <li
-        th:unless="${#lists.isEmpty(categories)}"
-        th:each="category : ${categories}"
-        class="category-list"
-    >
-      <a class="category-li-tab" href="/item/item-list">
-        <span th:text="${category.title}" class="category-li-span"></span>
-      </a>
-    </li>
-
-  </div>
-</div>
+<!-- 카테고리 리스트 -->
+<div th:replace="~{category/category-list :: categoryList}"></div>
 
 <!-- 슬라이드 이미지 -->
 <section>
