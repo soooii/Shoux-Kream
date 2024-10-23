@@ -57,6 +57,11 @@ public class CheckOutService {
                 .checkOut(checkOutRepository.findById(checkoutItemRequestDto.getCheckOutId()).orElseThrow(() -> new IllegalArgumentException("checkoutId not found")))
                 .build();
         checkOutItemRepository.save(checkOutItem);
+
+        // 주문 완료 후 재고 감소
+        Item item = itemRepository.findById(checkoutItemRequestDto.getItemId())
+                .orElseThrow(() -> new IllegalArgumentException("itemId not found"));
+        item.removeStock(checkoutItemRequestDto.getQuantity());
     }
 
     public List<CheckOutResponseDto> getCheckOuts(Long userId) {
