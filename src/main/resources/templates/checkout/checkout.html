@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -80,12 +80,18 @@
             <p class="is-size-6">&gt; &nbsp;주문완료</p>
           </div>
         </div>
-
         <div class="tile is-ancestor">
           <div class="tile is-parent cart-items">
             <div class="box delivery-info">
               <!-- 배송지 정보 -->
-              <p class="subtitle is-4">배송지정보</p>
+              <div class="level">
+                  <div class="level-left">
+                      <p class="title">배송지 정보</p>
+                  </div>
+                  <div class="level-right">
+                      <button class="button is-link" id="checkAddress">배송지 확인</button>
+                  </div>
+              </div>
               <div class="field is-horizontal">
                 <div class="field-label is-normal">
                   <label class="label" for="receiverName">이름</label>
@@ -143,7 +149,7 @@
                   <div>
                     <button
                       class="button is-light is-hovered"
-                      id="searchAddressButton"
+                      id="mainSearchAddressButton"
                     >
                       주소찾기
                     </button>
@@ -193,7 +199,7 @@
                 <div class="field-body">
                   <div class="select">
                     <select id="requestSelectBox">
-                      <option value="0">
+                      <option value="0" selected disabled hidden>
                         배송시 요청사항을 선택해 주세요.
                       </option>
                       <option value="1" class="select-option">
@@ -274,5 +280,28 @@
         </div>
       </div>
     </section>
+    <!-- 주소록 표현할 아티클 -->
+    <section class="modal" id="addressListModal">
+      <div class="column is-9">
+        <div class="box">
+            <div class="level">
+                <div class="level-left">
+                    <p class="title">주소록</p>
+                </div>
+                <div class="level-right">
+                    <button class="button is-link" id="addAddress">새 배송지 추가</button>
+                </div>
+            </div>
+            <hr />
+            <!-- 배송지 정보를 표시할 영역 -->
+            <div id="address-container"></div>
+            <footer class="modal-card-foot">
+              <button class="button" id="listClose">닫기</button>
+            </footer>
+        </div>
+      </div>
+    </section>
+  </div>
+    <div th:insert="~{/user/mypage-address :: addressFragment}"></div>
   </body>
 </html>
