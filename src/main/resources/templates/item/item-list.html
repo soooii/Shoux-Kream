@@ -21,7 +21,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- 카테고리 리스트 -->
-<div th:replace="~{category/category-list :: categoryList}"></div>
+<div th:replace="~{fragments/category-list :: categoryList}"></div>
 
 <!-- 아이템 리스트 -->
 <div class="home-item-container">
@@ -39,7 +39,7 @@
             <div class="info_box">
                 <div class="brand">
                     <p class="brand-text">
-                        <span th:text="${item.manufacturer}"></span>
+                        <span th:text="${item.title}"></span>
                     </p>
                 </div>
                 <p class="detail-description" th:text="${item.detailDescription}"></p>
