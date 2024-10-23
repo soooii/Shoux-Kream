@@ -15,9 +15,12 @@ public class SaleResponseDto {
     private Long userId;
     private Long itemId;
 
+    private LocalDateTime createdAt;
+    private int daysToAdd;
     private LocalDateTime dueDate;
     private Long sellingPrice;
 
+    private double itemPrice;
     private String itemName;
     private String imageUrl;
     private String shortDescription;
@@ -29,8 +32,11 @@ public class SaleResponseDto {
         this.saleId = sale.getId();
         this.userId = sale.getUser().getId();
         this.itemId = sale.getItem().getId();
+        this.createdAt = sale.getCreatedAt();
+        this.daysToAdd = sale.getDaysToAdd();
         this.dueDate = sale.getDueDate();
         this.sellingPrice = sale.getSellingPrice();
+        this.itemPrice = sale.getItem().getPrice();
         this.itemName = sale.getItem().getTitle();
         this.imageUrl = sale.getItem().getImageKey();
         this.shortDescription = sale.getItem().getShortDescription();
