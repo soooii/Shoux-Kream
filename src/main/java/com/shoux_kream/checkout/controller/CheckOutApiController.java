@@ -103,8 +103,8 @@ public class CheckOutApiController {
         // TODO role authorities => admin일때
         //String email = principal.getUsername();
         //UserResponse userResponse = userService.getUser(email);
-        UserResponse userResponse = userService.getUser();
-        List<CheckOutResponseDto> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
+//        UserResponse userResponse = userService.getUser();
+        List<CheckOutResponseDto> checkOuts = checkOutService.getAllCheckOuts();
         return ResponseEntity.ok(checkOuts);
     }
 
