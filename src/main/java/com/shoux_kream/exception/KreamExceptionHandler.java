@@ -36,7 +36,7 @@ public class KreamExceptionHandler {
     //입력한 기존 비밀번호가 db 비밀번호와 다를 경우 발생하는 Exception
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException ex) {
-        return ResponseEntity.status(418).body(ex.getMessage());
+        return ResponseEntity.status(403).body(ex.getMessage());
     }
 
     //해당 아이디의 주소가 없을 경우 발생하는 Exception

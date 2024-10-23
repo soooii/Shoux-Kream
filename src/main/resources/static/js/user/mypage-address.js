@@ -147,7 +147,6 @@ async function loadAddressForEdit(addressId) {
 
         if (!response.ok) {
             if (response.status === 401) {
-                console.log('토큰이 만료되었습니다. 새로운 토큰을 발급 받습니다.');
                 await fetchNewAccessToken();
                 return loadAddressForEdit(addressId);
             }
@@ -190,7 +189,6 @@ async function updateAddress(addressId) {
         if (!response.ok) {
             console.error('Error:', response.status);
             if (response.status === 401) {
-                console.log('토큰이 만료되었습니다. 새로운 토큰을 발급 받습니다.');
                 await fetchNewAccessToken();
                 return updateAddress(addressId);
             }
@@ -224,7 +222,6 @@ async function deleteAddress(addressId) {
         if (!response.ok) {
             console.error('Error:', response.status);
             if (response.status === 401) {
-                console.log('토큰이 만료되었습니다. 새로운 토큰을 발급 받습니다.');
                 await fetchNewAccessToken();
                 return deleteAddress(addressId);
             }
@@ -267,7 +264,6 @@ async function saveAddress() {
         if (!response.ok) {
             console.error('Error:', response.status);
             if (response.status === 401) {
-                console.log('토큰이 만료되었습니다. 새로운 토큰을 발급 받습니다.');
                 await fetchNewAccessToken();
                 return saveAddress();
             }

@@ -36,14 +36,11 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<String> token = tokenResolver.resolveToken(request);
 
-        // 토큰 존재 검사
         if (token.isPresent()) {
             AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(token.get().split(" ")[1]);
             String jti = jwtToken.getDate().getId();
-            if(blacklistService.isBlacklisted(jti)){
-                throw new AuthenticationException("잘못된 접근입니다.");
-            };
-            if (jwtToken.validate()) {
+
+            if (!blacklistService.isBlacklisted(jti) && jwtToken.validate()) {
                 Authentication authentication = tokenProvider.getAuthentication(jwtToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
