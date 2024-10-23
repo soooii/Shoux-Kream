@@ -1,20 +1,24 @@
 package com.shoux_kream.config.jwt.filter;
 
+import com.shoux_kream.config.jwt.JwtTokenResolver;
 import com.shoux_kream.config.jwt.impl.AuthTokenImpl;
 import com.shoux_kream.config.jwt.impl.JwtProviderImpl;
 import com.shoux_kream.exception.JwtAuthenticationEntryPoint;
+import com.shoux_kream.user.service.JwtBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -25,17 +29,20 @@ import static com.shoux_kream.config.jwt.UserConstants.AUTHORIZATION_TOKEN_KEY;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtProviderImpl tokenProvider;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtTokenResolver tokenResolver;
+    private final JwtBlacklistService blacklistService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Optional<String> token = resolveToken(request);
+        Optional<String> token = tokenResolver.resolveToken(request);
 
         // 토큰 존재 검사
         if (token.isPresent()) {
             AuthTokenImpl jwtToken = tokenProvider.convertAuthToken(token.get().split(" ")[1]);
-
-            // 유효성 검사
+            String jti = jwtToken.getDate().getId();
+            if(blacklistService.isBlacklisted(jti)){
+                throw new AuthenticationException("잘못된 접근입니다.");
+            };
             if (jwtToken.validate()) {
                 Authentication authentication = tokenProvider.getAuthentication(jwtToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -46,13 +53,4 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
 
-    private Optional<String> resolveToken(HttpServletRequest request) {
-        String authToken = request.getHeader(AUTHORIZATION_TOKEN_KEY);
-
-        if (StringUtils.hasText(authToken)) {
-            return Optional.of(authToken);
-        } else {
-            return Optional.empty();
-        }
-    }
 }
