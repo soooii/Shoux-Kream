@@ -2,13 +2,13 @@
 **Java + Spring + MySQL + Spring Boot + HTML5 + CSS3 + JS + Vue.js**를 사용한 웹 애플리케이션
 
 ## 🖥️ 프로젝트 소개 ##
-크림 사이트를 참고하여 사용자와 관리자
+본 웹사이트는 크림 사이트를 참고하여 구현되었습니다.
 
 ## 개발 기간 ##
 - 2024.09.30 ~ 2024.10.24
 
 ## 🧑‍🤝‍🧑 개발 인원 ##
-이하 인원이 구현하였습니다:
+이하 인원이 개발하였습니다:
 
 - **User**: 안송희
 - **Admin**: 김준수
@@ -50,7 +50,7 @@
 - 상품 구매시 사이즈 추가 기능과 입찰 기능을 보완할 예정입니다.
 <br/><br/>
 ## <b> ERD </b> ##
-![main](src/main/resources/static/img/readmeimg/erd.png)
+![main](src/main/resources/static/img/readmeimg/shoux_kream_erd.png)
 <br/><br/>
 
 ## <b>구동 화면</b> ##
