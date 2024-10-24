@@ -25,7 +25,7 @@
 <body>
     <!-- 헤더 -->
     <div th:replace="~{fragments/navbar :: navbar}"></div>
-
+<div id="wrapper">
     <section class="section">
         <div class="container">
             <div class="columns">
@@ -63,35 +63,35 @@
 
                         <!--  -->
                         <!-- 주문 정보 요약 -->
-                        <div class="tile is-parent tile-checkout-summary">
-                          <div class="box checkout-summary">
-                            <div class="header">
+                        <div class="box is-parent tile-checkout-summary">
+                          <div class="container is-fullhd checkout-summary">
+                            <div class="is-size-3">
                               <p><strong>결제정보</strong></p>
                             </div>
                             <div class="checkout-info">
-                              <div class="info">
-                                <p>상품총액</p>
-                                <p id="itemsTotal"></p>
+                              <div>
+                                <p class="info is-size-4">상품총액</p>
+                                <p class="info is-size-5" id="itemsTotal"></p>
                               </div>
-                              <div class="info">
-                                <p>배송비</p>
-                                <p id="deliveryFee"></p>
+                              <div>
+                                <p class="info is-size-4">배송비</p>
+                                <p class="info is-size-5" id="deliveryFee"></p>
                               </div>
                             </div>
                             <div class="total">
-                              <p class="total-label">총 결제금액</p>
-                              <p class="total-price" id="checkOutTotal"></p>
+                              <p class="total-label is-size-4"><strong>총 결제금액</strong></p>
+                              <strong><p class="total-price is-size-4" id="checkOutTotal"></p></strong>
                             </div>
                           </div>
                         </div>
                         
                         <div class="tile is-ancestor">
-                            <div class="tile is-parent cart-items">
+                            <div class="container is-fullhd cart-items">
                               <div class="box delivery-info">
                                 <!-- 배송지 정보 -->
                                 <div class="level">
                                     <div class="level-left">
-                                        <p class="title">배송지 정보</p>
+                                        <p class="is-size-4"><strong>배송지 정보</strong></p>
                                     </div>
                                     <div class="level-right">
                                         <button class="button is-link" id="checkAddress">배송지 확인</button>
@@ -252,9 +252,9 @@
                             </div>
                   
                             
-                          </div>
+                        
                         </div>
-                        <div class="column is-narrow has-text-right">
+                        <div class="columns is-centered">
                           <button class="button is-small is-link" id="editCheckOut">수정</button>
                           <button class="button is-small is-light" id="cancel">취소</button>
                           <button class="button is-small is-danger" id="deleteCheckOut">삭제</button>
@@ -283,6 +283,7 @@
     </div>
     <!-- 배송지 선택창을 표시할 영역 -->
     <div th:insert="~{fragments/address :: addressFragment}"></div>
+</div>
 
 <style>
     .mypage-title a {
