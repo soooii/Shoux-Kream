@@ -1,5 +1,6 @@
 package com.shoux_kream.checkout.entity;
 
+import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.timestamp.BaseEntity;
 import com.shoux_kream.user.dto.response.UserAddressDto;
@@ -81,8 +82,8 @@ public class CheckOut extends BaseEntity {
                 .build();
     }
 
-    public void updateAddress(UserAddress address){
-        this.address = address;
+    public void updateAddress(CheckOutRequestDto checkOutRequestDto){
+        this.address = checkOutRequestDto.getAddress().toEntity();
     }
 
     public void updateDeliveryStatus(DeliveryStatus deliveryStatus){
