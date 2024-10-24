@@ -34,21 +34,6 @@ function checkAddress() {
       addressModal.classList.remove('is-active');
   });
 
-
-
-  // 수정하기 부분 필요없음!
-
-  // 수정하기 버튼
-  editSaveButton.addEventListener('click', function() {
-      updateAddress(currentAddressId);
-  });
-
-  //수정하기 모달 닫기
-  editCloseButton.addEventListener('click', function(){
-      const editModal = document.getElementById('editModal');
-      editModal.classList.remove('is-active');
-  });
-
 };
 
 // 배송지 목록 가져오기 오버라이딩 방법 몰라서 재정의
@@ -170,6 +155,10 @@ const requestSelectBox = document.querySelector("#requestSelectBox");
 const customRequestContainer = document.querySelector(
   "#customRequestContainer"
 );
+
+//배송지 리스트 모달 먼저 선언!
+const addressListModal = document.getElementById('addressListModal');
+
 const customRequestInput = document.querySelector("#customRequest");
 const itemsTitleElem = document.querySelector("#itemsTitle");
 const itemsTotalElem = document.querySelector("#itemsTotal");
@@ -197,14 +186,12 @@ function addAllElements() {
   insertUserData();
 }
 
-//배송지 리스트 모달
-const addressListModal = document.getElementById('addressListModal');
+
 
 // addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 function addAllEvents() {
   // 배송지 입력 모달 열기
   checkAddressButton.addEventListener('click', function() {
-    document.getElementById('addressForm').reset();
     addressListModal.classList.add('is-active');
     checkAddress();
   });
