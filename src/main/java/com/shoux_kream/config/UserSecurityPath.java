@@ -18,8 +18,8 @@ public class UserSecurityPath {
             "/api/checkout-item",
             "/api/sale/sell",
             "/api/sale/{saleId}",
+            "/api/checkout-item/{checkoutId}",
             "/api/users/**"
-            
     };
     public static final String[] ONLY_PATCH_WHITELIST = {
             "/api/cart/selected",
@@ -27,8 +27,6 @@ public class UserSecurityPath {
             "/api/checkout/{detailId}",
             "/api/sale/{saleId}",
             "/api/users/**"
-
-            
     };
     public static final String[] ONLY_DELETE_WHITELIST = {
             "/api/cart/",
@@ -36,6 +34,5 @@ public class UserSecurityPath {
             "/api/checkout/{detailId}",
             "/api/sale/{saleId}",
             "/api/users/**"
-            
     };
 }
