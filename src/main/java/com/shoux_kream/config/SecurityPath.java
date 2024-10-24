@@ -17,6 +17,7 @@ public class SecurityPath {
             "/item/item-detail/{id}",
             "/item/edit/{id}",
             "/item/item-add",
+            "/item/item-search*",
             "/category/{id}",
             "/category/category-add",
             "/category/add",

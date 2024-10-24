@@ -1,11 +1,12 @@
 /* 카테고리 */
 .flex-box {
     display: flex;
+    justify-content: space-between;
 }
 
 .category-list {
     list-style: none;
-    margin-left: 27px;
+    margin-right: 27px;
 }
 
 .category-li-tab {
@@ -13,7 +14,24 @@
     height: 100%;
     padding-bottom: 6px;
     padding-top: 15px;
-    text-decoration: none; /* 링크의 밑줄을 없애고 싶다면 추가 */
+	text-decoration: none; /* 링크의 밑줄을 없애고 싶다면 추가 */
+}
+
+.search-box {
+    display: inline-flex;
+}
+
+.search-box-input {
+    margin-top: 10px;
+    margin-right: 4px;
+    height: 30px;
+    border-color: black !important;
+}
+
+.search-box-button {
+    margin-top: 8px;
+    height: 33px;
+    background-color: black !important;
 }
 
 .category-li-span {
