@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>카테고리 리스트</title>
+</head>
+<body>
+</body>
+
+<footer th:fragment="footer">
+    <div class="footer-container">
+        <!-- 회사 정보 섹션 -->
+        <div class="footer-section">
+            <h3>회사 정보</h3>
+            <p>
+                Shoux Kream Corporation<br>
+                서울특별시 종로구 사직로8길 60<br>
+                전화: 070-8893-1955<br>
+                FAX : 02-6021-2195<br>
+            </p>
+        </div>
+        <!-- 소셜 미디어 섹션 -->
+        <div class="footer-section">
+            <h3>소셜 미디어</h3>
+            <div class="social-media">
+                <p><a href="https://www.notion.so/elice-track/994412a5eb0b49148d746c793e44d390?pvs=4" target="_blank">Notion</a></p>
+                <p><a href="https://cloudtrack.elice.io/explore" target="_blank">Elice Cloud Track</a></p>
+                <p><a href="https://kdt-gitlab.elice.io/cloud_track/class_04/web_project2/team06/Shoux-Kream" target="_blank">Shoux-Kream Gitlab</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 하단 카피라이트 -->
+    <div class="footer-bottom">
+        &copy; 2024 Shoux Kream Corporation. All rights reserved.
+    </div>
+    <style>
+    footer{
+        background-color : rgb(0,0,0); opacity : 0.7;
+        color: white;
+        padding: 20px 0;
+        position: fixed;
+        margin-top: 40px;
+        height: 205px;
+        width: 100%;
+        bottom: 0;
+        text-align: center;
+    }
+
+     .footer-container {
+     display: flex;
+     justify-content: space-around;
+     max-width: 1200px;
+     margin: 0 auto;
+     padding: 0 20px;
+     }
+
+     .footer-section {
+     flex: 1;
+     margin: 0 15px;
+     }
+
+     .footer-section h3 {
+     margin-bottom: 20px;
+     }
+
+     .footer-section ul {
+     list-style-type: none;
+     padding: 0;
+     }
+
+     .footer-section ul li {
+     margin-bottom: 10px;
+     }
+
+     .footer-section ul li a {
+     color: white;
+     text-decoration: none;
+     }
+
+     .footer-section ul li a:hover {
+     text-decoration: underline;
+     }
+
+     .social-media a {
+     margin-right: 10px;
+     color: white;
+     font-size: 20px;
+     text-decoration: none;
+     }
+
+     .social-media a:hover {
+     color: #f0c14b;
+     }
+
+     .footer-bottom {
+     text-align: center;
+     padding-top: 20px;
+     font-size: 14px;
+     color: #ccc;
+     }
+    </style>
+</footer>
+</html>
