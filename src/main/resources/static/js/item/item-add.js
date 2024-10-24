@@ -22,7 +22,7 @@ const fileNameSpan = document.querySelector("#fileNameSpan"); // 파일 이름 �
 
 //TODO 아이템 등록을 위해 로그인 비활성화
 checkLogin();
-checkAdmin();
+//checkAdmin();
 addAllElements();
 addAllEvents();
 
