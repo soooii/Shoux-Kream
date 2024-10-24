@@ -114,7 +114,7 @@ window.onload = function () {
                     const increaseBtn = document.getElementById('increaseBtn');
                     const decreaseBtn = document.getElementById('decreaseBtn');
                     const cartQuantity = document.getElementById('quantity');
-                    const cartItemPrice = document.querySelector('.modal-body .fw-bold.text-primary');
+                    const cartItemPrice = document.querySelector('.modal-body .fw-bold.has-text-link');
 
                     cartQuantity.value = quantityCheck;
                     cartItemPrice.innerText = (priceCheck * quantityCheck).toLocaleString() + '원';
