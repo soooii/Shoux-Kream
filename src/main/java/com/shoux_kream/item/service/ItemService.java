@@ -200,4 +200,12 @@ public class ItemService {
                 .map(ItemResponse::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    //카테고리에 따른 상품 리스트
+    public List<ItemResponse> findItemsByCategoryId(Long categoryId) {
+        return itemRepository.findByCategoryId(categoryId).stream()
+                .map(ItemResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 }

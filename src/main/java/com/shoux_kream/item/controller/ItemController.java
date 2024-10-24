@@ -62,4 +62,15 @@ public class ItemController {
         model.addAttribute("items", items);
         return "item/item-list";
     }
+
+    //카테고리에 따른 상품 목록
+    @GetMapping("/item-list/{categoryId}")
+    public String getItemsByCategory(@PathVariable("categoryId") Long categoryId, Model model) {
+        List<ItemResponse> items = itemService.findItemsByCategoryId(categoryId);
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        model.addAttribute("items", items);
+        model.addAttribute("categories", categories);
+        return "item/item-list";
+    }
+
 }
