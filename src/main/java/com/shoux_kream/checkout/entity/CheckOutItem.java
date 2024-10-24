@@ -1,6 +1,9 @@
 package com.shoux_kream.checkout.entity;
 
+import com.shoux_kream.checkout.dto.CheckOutItemResponseDto;
+import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.item.entity.Item;
+import com.shoux_kream.user.dto.response.UserAddressDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,4 +40,13 @@ public class CheckOutItem {
     }
 
     // Getters and setters
+
+    public CheckOutItemResponseDto toDto() {
+        return CheckOutItemResponseDto.builder()
+                .itemId(item.getId())
+                .quantity(quantity)
+                .totalPrice(totalPrice)
+                .checkOutId(checkOut.getId())
+                .build();
+    }
 }
