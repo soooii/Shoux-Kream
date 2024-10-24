@@ -51,4 +51,15 @@ public class ItemController {
         model.addAttribute("itemId", id);
         return "item/item-edit";
     }
+
+    // 상품 검색
+    @GetMapping("/item-search")
+    public String getItems(@RequestParam(value = "searchKeyword", required = false) String searchKeyword, Model model) {
+        if (searchKeyword == null || searchKeyword.trim().isEmpty()) {
+            return "redirect:/";
+        }
+        List<ItemResponse> items = itemService.searchItems(searchKeyword);
+        model.addAttribute("items", items);
+        return "item/item-list";
+    }
 }

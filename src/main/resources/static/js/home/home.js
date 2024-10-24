@@ -11,6 +11,32 @@ const sliderDiv = document.querySelector("#slider");
 
 addAllElements();
 addAllEvents();
+homeCheckAdmin()
+
+setTimeout(() => {
+    homeCheckAdmin();
+}, 100);
+
+async function homeCheckAdmin() {
+  console.log('qweqweqwe');
+  const token = sessionStorage.getItem("accessToken");
+  // 우선 토큰 존재 여부 확인
+  if (token) {
+    const res = await fetch("/api/admin/check", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+    });
+
+    const result = await res.text();
+    if (result === "ADMIN") {
+        document.getElementById('adminButton').style.display = 'inline';
+        return;
+    } else {
+        document.getElementById('adminButton').style.display = 'none';
+    }
+  }
+};
 
 // html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 async function addAllElements() {
