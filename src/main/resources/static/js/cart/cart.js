@@ -65,7 +65,7 @@ window.onload = function () {
                 itemImage.src = `${item.imageUrl}`;
                 itemName.innerText = `${item.itemName}`;
                 quantity.innerText = `${item.quantity}개`;
-                price.innerText = '\\' + `${item.totalPrice.toLocaleString()}`;
+                price.innerText = `${item.totalPrice.toLocaleString()}원`;
 
                 // 링크 추가: 이미지와 상품명, 수량, 가격을 포함
                 const itemLink = document.createElement('a');
