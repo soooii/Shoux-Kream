@@ -112,23 +112,23 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <div class="d-flex align-items-center justify-content-between">
-                    <div class="mb-3">
-                      <div class="fw-semibold">구매가격</div>
-                      <div class="fw-bold text-primary">3000원</div>
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div>
+                      <div class="fw-semibold has-text-dark">구매가격</div>
+                      <div class="fw-bold has-text-link">3000원</div>
                     </div>
                     <div class="d-flex align-items-center justify-content-end">
-                      <button class="btn btn-outline-dark btn-custom quantity-custom-button" type="button" id="decreaseBtn"> - </button>
+                      <button class="button is-dark quantity-custom-button" type="button" id="decreaseBtn"> - </button>
                       <div class="input-group" style="width: 100px;">
                         <label for="quantity" class="form-label"></label>
                         <input type="text" class="form-control text-center" id="quantity" name="quantity" readonly>
                       </div>
-                      <button class="btn btn-outline-dark btn-custom quantity-custom-button" type="button" id="increaseBtn"> + </button>
+                      <button class="button is-dark quantity-custom-button" type="button" id="increaseBtn"> + </button>
                       <br />
                     </div>
                   </div>
                   <div class="d-grid gap-2">
-                    <button type="button" class="btn btn-dark btn-lg" id="edit-submit-btn">확인</button>
+                    <button type="button" class="button is-dark is-medium is-fullwidth" id="edit-submit-btn">확인</button>
                   </div>
                 </div>
               </div>
@@ -149,14 +149,14 @@
                   <div class="col-lg-15 col-sm-12 text-center">
                     <button
                             type="button"
-                            class="btn btn-secondary"
+                            class="button is-light"
                             data-bs-dismiss="modal"
                     >
                       취소
                     </button>
                     <button
                             type="button"
-                            class="btn btn-primary"
+                            class="button is-link"
                             id="delete-btn"
                     >
                       삭제
@@ -174,7 +174,7 @@
       <div class="tile is-parent tile-order-summary">
         <div class="box order-summary">
           <div class="header">
-            <p>결제정보</p>
+            <p><strong>결제정보</strong></p>
           </div>
           <div class="order-info">
             <div class="info">
@@ -195,7 +195,7 @@
             <p class="total-price" id="orderTotal"></p>
           </div>
           <div class="purchase">
-              <button class="button is-info" id="purchaseButton">
+              <button class="button is-link" id="purchaseButton">
                 구매하기
               </button>
             </a>
