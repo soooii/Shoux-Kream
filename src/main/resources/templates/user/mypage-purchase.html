@@ -24,13 +24,24 @@
 </head>
 <body>
 <!-- 헤더 -->
-<nav class="navbar" role="navigation" aria-label="main navigation" th:replace="~{/user/mypage-address :: mypageNav}">
-</nav>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <section class="section">
     <div class="container">
         <div class="columns">
-            <aside class="column is-3" th:replace="~{/user/mypage-address :: mypageAsside}">
+            <aside class="column is-3">
+                <nav class="menu">
+                    <p class="menu-label mypage-title">
+                        <a href="/users/me">마이 페이지</a></p>
+                    <ul class="menu-list">
+                        <li class="larger-text">쇼핑 정보</li>
+                        <li><a href="/users/me/purchase">구매 내역</a></li>
+                        <li><a href="#sales-history">판매 내역</a></li>
+                        <li class="larger-text">내 정보</li>
+                        <li><a href="/users/me/account">계정 관리</a></li>
+                        <li><a href="/users/me/address">주소록</a></li>
+                    </ul>
+                </nav>
             </aside>
 
             <!-- 구매페이지 섹션 -->
