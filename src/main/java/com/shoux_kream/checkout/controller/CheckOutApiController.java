@@ -71,7 +71,7 @@ public class CheckOutApiController {
     }
 
     //TODO 검증 필요!
-    @PostMapping("/checkout-item/") //checkoutItem의 checkoutId로 checkout과 1:N연관관계를 맺음
+    @PostMapping("/checkout-item") //checkoutItem의 checkoutId로 checkout과 1:N연관관계를 맺음
     public ResponseEntity addCheckoutItem(@RequestBody CheckOutItemRequestDto checkOutItemRequestDto) {
         try {
             checkOutService.addCheckOutItem(checkOutItemRequestDto);
