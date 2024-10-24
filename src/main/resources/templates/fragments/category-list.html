@@ -14,9 +14,14 @@
                         th:each="category : ${categories}"
                         class="category-list"
                 >
-                    <a class="category-li-tab" href="/item/item-list">
+                    <!--
+                   <a class="category-li-tab" href="/item/item-list">
+                       <span th:text="${category.title}" class="category-li-span"></span>
+                   </a>-->
+                    <a class="category-li-tab" th:href="@{/item/item-list/{categoryId}(categoryId=${category.id})}">
                         <span th:text="${category.title}" class="category-li-span"></span>
                     </a>
+
                 </li>
             </div>
             <form action="/item/item-search" method="GET" class="search-box">
