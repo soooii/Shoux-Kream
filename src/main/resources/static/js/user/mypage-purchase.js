@@ -45,8 +45,8 @@ async function fetchUserCheckOuts() {
                             <p>배송 주소 : (${checkout.address.postalCode}) ${checkout.address.address1}, ${checkout.address.address2}</p>
                         </div>
                         <div class="column is-narrow has-text-right">
-                            <button class="button is-light is-small mb-2 edit-button" data-delivery-status="${checkout.deliveryStatus}" data-id="${checkout.id}">아이템 디테일 페이지 확인</button>
-                            <button class="button is-danger is-small delete-button" data-delivery-status="${checkout.deliveryStatus}" data-id="${checkout.id}">삭제</button>
+                            <button class="button is-light is-small mb-2 edit-button" data-delivery-status="${checkout.deliveryStatus}" data-id="${checkout.id}">주문 확인/배송 수정</button>
+                            <button class="button is-danger is-small delete-button" data-delivery-status="${checkout.deliveryStatus}" data-id="${checkout.id}">주문 취소</button>
                         </div>
                     </div>
                     <hr /></div>`;
