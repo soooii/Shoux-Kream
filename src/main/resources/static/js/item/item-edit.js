@@ -23,7 +23,7 @@ const itemId = window.location.pathname.split("/").pop();
 
 // 로그인 확인, 네비게이션 및 초기 데이터 로드
 checkLogin();
-checkAdmin();
+//checkAdmin();
 addAllElements();
 addAllEvents();
 loadItemData(); // 아이템 데이터 로드
