@@ -4,9 +4,11 @@ import com.shoux_kream.item.entity.Item;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class CheckOutItem {
 
     @Id

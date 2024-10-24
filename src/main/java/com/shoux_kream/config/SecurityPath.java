@@ -14,6 +14,7 @@ public class SecurityPath {
             "/users/me/account",
             "/users/me/address",
             "/users/me/purchase",
+            "/users/me/purchase/{checkoutId}",
             "/item/item-list",
             "/item/item-detail/{id}",
             "/item/edit/{id}",

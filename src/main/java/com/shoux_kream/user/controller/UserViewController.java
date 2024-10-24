@@ -26,6 +26,9 @@ public class UserViewController {
     @GetMapping("/me/purchase")
     public String getPurchasePage() {return "user/mypage-purchase";}
 
+    @GetMapping("/me/purchase/{checkoutId}")
+    public String getCheckOutDetailPage() {return "user/mypage-checkout-detail";}
+
     @GetMapping("/me/address")
     public String getAddressPage() {return "user/mypage-address";}
 
