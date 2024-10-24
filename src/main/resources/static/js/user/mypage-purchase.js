@@ -84,7 +84,12 @@ function buttonMethod() {
             console.log(this.dataset.deliveryStatus);
             if(this.dataset.deliveryStatus==="READY"){
                 const checkoutId = this.dataset.id;
-                await deleteCheckOut(checkoutId);
+                if(confirm("삭제하시겠습니까?")){
+                    await deleteCheckOut(checkoutId);
+                    alert("정상적으로 삭제되었습니다.");
+                }else{
+                    return alert("삭제 취소");
+                }
             }else{
                 return alert("배송이 진행중입니다. 배송정보 삭제가 불가능합니다.");
             }
@@ -100,7 +105,6 @@ async function openCheckOutDetail(checkoutId) {
 //주문 삭제
 async function deleteCheckOut(checkoutId) {
     const token = sessionStorage.getItem('accessToken');
-
     try {
         let response = await fetch(`/api/checkout/${checkoutId}`, {
             method: 'DELETE',

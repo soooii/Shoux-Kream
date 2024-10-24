@@ -34,6 +34,13 @@ public class CheckOutService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
+    public List<CheckOutItemResponseDto> getCheckOutItem(Long checkoutId){
+        List<CheckOutItem> checkOuts = checkOutItemRepository.findByCheckOutId(checkoutId);
+        return checkOuts.stream()
+                .map(checkOutItem -> checkOutItem.toDto())
+                .collect(Collectors.toList());
+    }
+
     //TODO Transactional을 언제, 왜, 어떻게 써야할까요?
     @Transactional
     public CheckOutResponseDto createCheckout(Long userId, CheckOutRequestDto checkOutRequestDto) {
@@ -71,9 +78,9 @@ public class CheckOutService {
                 .collect(Collectors.toList());
     }
 
-    public CheckOutResponseDto updateCheckOut(Long detailId, UserAddressDto userAddressDto) {
+    public CheckOutResponseDto updateCheckOut(Long detailId, CheckOutRequestDto checkOutRequestDto) {
         CheckOut checkOut =  checkOutRepository.findById(detailId).orElseThrow(() -> new IllegalArgumentException("checkoutId not found"));
-        checkOut.updateAddress(userAddressDto.toEntity());
+        checkOut.updateAddress(checkOutRequestDto);
         checkOutRepository.save(checkOut);
         return  checkOut.toDto();
     }

@@ -12,6 +12,86 @@ import {
   loadAddressForEdit, updateAddress, deleteAddress, saveAddress, searchAddress as modalSearchAddress
 }from "../user/mypage-address.js";
 
+//TODO 이 부분 모듈화 필요
+//배송지 확인 버튼
+const checkAddressButton = document.querySelector("#checkAddress");
+//배송지 추가 버튼
+const addAddressButton = document.getElementById('addAddress');
+//저장하기 버튼
+const saveButton = document.getElementById('save');
+//취소 버튼
+const closeButton = document.getElementById('close');
+//배송지 입력 모달
+const addressModal = document.getElementById('addressModal');
+//우편번호 찾기
+const searchAddressButton = document.getElementById('searchAddressButton');
+const editSearchAddressButton = document.getElementById('editSearchAddressButton');
+const listCloseButton = document.getElementById('listClose');
+let currentAddressId = null; // 수정할 주소의 ID 저장
+
+
+// 요소(element), input 혹은 상수
+const subtitleCart = document.querySelector("#subtitleCart");
+const receiverNameInput = document.querySelector("#receiverName");
+const receiverPhoneNumberInput = document.querySelector("#receiverPhoneNumber");
+const postalCodeInput = document.querySelector("#postalCode");
+const mainSearchAddressButton = document.querySelector("#mainSearchAddressButton");
+const address1Input = document.querySelector("#address1");
+const address2Input = document.querySelector("#address2");
+const requestSelectBox = document.querySelector("#requestSelectBox");
+const customRequestContainer = document.querySelector(
+  "#customRequestContainer"
+);
+
+//배송지 리스트 모달 먼저 선언!
+const addressListModal = document.getElementById('addressListModal');
+
+const customRequestInput = document.querySelector("#customRequest");
+const itemsTitleElem = document.querySelector("#itemsTitle");
+const itemsTotalElem = document.querySelector("#itemsTotal");
+const deliveryFeeElem = document.querySelector("#deliveryFee");
+const checkOutTotalElem = document.querySelector("#checkOutTotal");
+const checkOutButton = document.querySelector("#checkOutButton");
+
+const requestOption = {
+  1: "직접 수령하겠습니다.",
+  2: "배송 전 연락바랍니다.",
+  3: "부재 시 경비실에 맡겨주세요.",
+  4: "부재 시 문 앞에 놓아주세요.",
+  5: "부재 시 택배함에 넣어주세요.",
+  6: "직접 입력",
+};
+
+checkLogin();
+addAllElements();
+addAllEvents();
+
+// html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
+function addAllElements() {
+  createNavbar();
+  insertCheckOutSummary();
+}
+
+
+
+// addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
+function addAllEvents() {
+  // 배송지 입력 모달 열기
+  checkAddressButton.addEventListener('click', function() {
+    addressListModal.classList.add('is-active');
+    checkAddress();
+  });
+  // 취소 누르면 닫힘
+  listCloseButton.addEventListener('click', function() {
+    addressListModal.classList.remove('is-active');
+  });
+  subtitleCart.addEventListener("click", navigate("/cart"));
+  mainSearchAddressButton.addEventListener("click", searchAddress);
+  requestSelectBox.addEventListener("change", handleRequestChange);
+  checkOutButton.addEventListener("click", doCheckOut);
+}
+
+
 function checkAddress() {
   fetchUserAddress();
   //우편번호 찾기
@@ -122,89 +202,6 @@ async function insertUserData(addressData) {
     currentAddressId = addressData.id;
     addressListModal.classList.remove('is-active');
 }
-
-//TODO 이 부분 모듈화 필요
-//배송지 확인 버튼
-const checkAddressButton = document.querySelector("#checkAddress");
-//배송지 추가 버튼
-const addAddressButton = document.getElementById('addAddress');
-//저장하기 버튼
-const saveButton = document.getElementById('save');
-//취소 버튼
-const closeButton = document.getElementById('close');
-//배송지 입력 모달
-const addressModal = document.getElementById('addressModal');
-//우편번호 찾기
-const searchAddressButton = document.getElementById('searchAddressButton');
-const editSearchAddressButton = document.getElementById('editSearchAddressButton');
-const editSaveButton = document.getElementById('editSave');
-const editCloseButton = document.getElementById('editClose');
-const listCloseButton = document.getElementById('listClose');
-let currentAddressId = null; // 수정할 주소의 ID 저장
-
-
-// 요소(element), input 혹은 상수
-const subtitleCart = document.querySelector("#subtitleCart");
-const receiverNameInput = document.querySelector("#receiverName");
-const receiverPhoneNumberInput = document.querySelector("#receiverPhoneNumber");
-const postalCodeInput = document.querySelector("#postalCode");
-const mainSearchAddressButton = document.querySelector("#mainSearchAddressButton");
-const address1Input = document.querySelector("#address1");
-const address2Input = document.querySelector("#address2");
-const requestSelectBox = document.querySelector("#requestSelectBox");
-const customRequestContainer = document.querySelector(
-  "#customRequestContainer"
-);
-
-//배송지 리스트 모달 먼저 선언!
-const addressListModal = document.getElementById('addressListModal');
-
-const customRequestInput = document.querySelector("#customRequest");
-const itemsTitleElem = document.querySelector("#itemsTitle");
-const itemsTotalElem = document.querySelector("#itemsTotal");
-const deliveryFeeElem = document.querySelector("#deliveryFee");
-const checkOutTotalElem = document.querySelector("#checkOutTotal");
-const checkOutButton = document.querySelector("#checkOutButton");
-
-const requestOption = {
-  1: "직접 수령하겠습니다.",
-  2: "배송 전 연락바랍니다.",
-  3: "부재 시 경비실에 맡겨주세요.",
-  4: "부재 시 문 앞에 놓아주세요.",
-  5: "부재 시 택배함에 넣어주세요.",
-  6: "직접 입력",
-};
-
-checkLogin();
-addAllElements();
-addAllEvents();
-
-// html에 요소를 추가하는 함수들을 묶어주어서 코드를 깔끔하게 하는 역할임.
-function addAllElements() {
-  createNavbar();
-  insertCheckOutSummary();
-  insertUserData();
-}
-
-
-
-// addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
-function addAllEvents() {
-  // 배송지 입력 모달 열기
-  checkAddressButton.addEventListener('click', function() {
-    addressListModal.classList.add('is-active');
-    checkAddress();
-  });
-  // 취소 누르면 닫힘
-  listCloseButton.addEventListener('click', function() {
-    addressListModal.classList.remove('is-active');
-  });
-  subtitleCart.addEventListener("click", navigate("/cart"));
-  mainSearchAddressButton.addEventListener("click", searchAddress);
-  requestSelectBox.addEventListener("change", handleRequestChange);
-  checkOutButton.addEventListener("click", doCheckOut);
-}
-
 
 // Daum 주소 API (사용 설명 https://postcode.map.daum.net/guide)
 function searchAddress() {

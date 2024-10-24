@@ -9,8 +9,8 @@ public class UserSecurityPath {
             "/api/checkout/{detailId}",
             "/api/sale/item/{itemId}",
             "/api/sale",
-            "/api/users/**"
-            
+            "/api/users/**",
+            "/api/checkout-item/{checkoutId}"
     };
     public static final String[] ONLY_POST_WHITELIST = {
             "/api/cart/add/{itemId}",
