@@ -2,7 +2,7 @@ package com.shoux_kream.config;
 
 public class SecurityPath {
     public static final String[] ONLY_GET_WHITELIST = {
-            "/fragment/**",
+            "/fragments/**",
             "/**.png",
             "/**.jpg",
             "/sale",
