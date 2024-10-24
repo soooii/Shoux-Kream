@@ -193,4 +193,11 @@ public class ItemService {
 
         return new SaleItemResponseDto(item);
     }
+
+    // 상품 검색
+    public List<ItemResponse> searchItems(String searchKeyword) {
+        return itemRepository.findByTitleContaining(searchKeyword).stream()
+                .map(ItemResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 }
