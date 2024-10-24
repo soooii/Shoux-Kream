@@ -1,0 +1,128 @@
+
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <div th:fragment="addressFragment">
+            <!-- 새 배송지 추가 모달 -->
+        <div class="modal" id="addressModal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">새 배송지 추가</p>
+                </header>
+                <section class="modal-card-body">
+                    <form id="addressForm">
+                        <div class="field">
+                            <label class="label">이름</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="수령인을 입력하세요" />
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">휴대폰번호</label>
+                            <div class="control">
+                                <input class="input" type="tel" placeholder="휴대폰 번호를 입력하세요" />
+                            </div>
+                        </div>
+
+                        <!-- 우편번호 필드 -->
+                        <div class="field">
+                            <label class="label">우편 번호</label>
+                            <div class="control has-icons-right">
+                                <input class="input" type="text" id="postalCodeInput" placeholder="우편 번호를 검색하세요" readonly />
+                                <span class="icon is-small is-right">
+                    <i class="fas fa-search"></i>
+                    </span>
+                                <button class="button is-link" id="searchAddressButton"
+                                        style="background-color: #4d70f4; color: white;"
+                                >우편번호 검색</button>
+                            </div>
+                        </div>
+
+                        <!-- 주소 필드 -->
+                        <div class="field">
+                            <label class="label">주소</label>
+                            <div class="control">
+                                <input class="input" id="address1Input" type="text" placeholder="주소가 자동으로 입력됩니다." readonly />
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">상세 주소</label>
+                            <div class="control">
+                                <input class="input" id="address2Input" type="text" placeholder="상세 주소를 입력하세요" />
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button" id="save">저장하기</button>
+                    <button class="button" id="close">취소</button>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 배송지 수정 모달 -->
+        <div class="modal" id="editModal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">배송지 수정하기</p>
+                </header>
+                <section class="modal-card-body">
+                    <form id="editForm">
+                        <div class="field">
+                            <label class="label">이름</label>
+                            <div class="control">
+                                <input class="input" id="editNameInput" type="text" placeholder="수령인을 입력하세요" />
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">휴대폰번호</label>
+                            <div class="control">
+                                <input class="input" id="editPhoneInput" type="tel" placeholder="휴대폰 번호를 입력하세요" />
+                            </div>
+                        </div>
+
+                        <!-- 우편번호 필드 -->
+                        <div class="field">
+                            <label class="label">우편 번호</label>
+                            <div class="control has-icons-right">
+                                <input class="input" type="text" id="editPostalCodeInput" placeholder="우편 번호를 검색하세요" readonly />
+                                <span class="icon is-small is-right">
+                    <i class="fas fa-search"></i>
+                    </span>
+                                <button class="button is-link" id="editSearchAddressButton"
+                                        style="background-color: #4d70f4; color: white;"
+                                >우편번호 검색</button>
+                            </div>
+                        </div>
+
+                        <!-- 주소 필드 -->
+                        <div class="field">
+                            <label class="label">주소</label>
+                            <div class="control">
+                                <input class="input" id="editAddress1Input" type="text" placeholder="주소가 자동으로 입력됩니다." readonly />
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">상세 주소</label>
+                            <div class="control">
+                                <input class="input" id="editAddress2Input" type="text" placeholder="상세 주소를 입력하세요" />
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button" id="editSave">저장하기</button>
+                    <button class="button" id="editClose">취소</button>
+                </footer>
+            </div>
+        </div>
+    </div>
+    
+</html>

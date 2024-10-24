@@ -71,8 +71,8 @@ public class CheckOutApiController {
         return ResponseEntity.ok(checkOutResponseDto);
     }
     @DeleteMapping("/checkout/{detailId}") //TODO param에 checkout 번호를 입력받아야함, user의 토큰 권한도 확인
-    public ResponseEntity<Long> deleteCheckOut(@AuthenticationPrincipal User principal, @PathVariable("detailId") Long detailId) {
-        Long deletedId = checkOutService.deleteCheckOut(principal.getUsername(), detailId);
+    public ResponseEntity<Long> deleteCheckOut(@PathVariable("detailId") Long detailId) {
+        Long deletedId = checkOutService.deleteCheckOut(detailId);
         return ResponseEntity.ok(deletedId);
     }
 

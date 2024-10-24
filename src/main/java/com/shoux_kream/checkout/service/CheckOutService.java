@@ -83,9 +83,8 @@ public class CheckOutService {
         return checkOut.toDto();
     }
 
-    public Long deleteCheckOut(String email, Long detailId) {
-        CheckOut checkOut = checkOutRepository.findByUserAndId(userRepository.findByEmail(email).orElseThrow(), detailId);
-        checkOutRepository.delete(checkOut);
+    public Long deleteCheckOut(Long detailId) {
+        checkOutRepository.deleteById(detailId);
         return detailId;
     }
 
