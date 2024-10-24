@@ -86,6 +86,7 @@ window.onload = function () {
 
                 // 체크박스 추가
                 cartItemDiv.appendChild(checkbox);
+                checkbox.addEventListener('change', updateOrderSummary);
                 cartItemDiv.appendChild(itemLink); // 링크를 cartItemDiv에 추가
 
                 // 개별 삭제 버튼
