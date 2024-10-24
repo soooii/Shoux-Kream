@@ -51,50 +51,51 @@
 <body>
 <!-- 헤더 -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
+<div id ="wrapper">
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <aside class="column is-3">
+          <nav class="menu">
+            <p class="menu-label mypage-title">
+              <a href="/users/me">마이 페이지</a></p>
+            <ul class="menu-list">
+              <li class="larger-text">쇼핑 정보</li>
+              <li><a href="/users/me/purchase">구매 내역</a></li>
+              <li><a href="/selling">판매 내역</a></li>
+              <li class="larger-text">내 정보</li>
+              <li><a href="/users/me/account">계정 관리</a></li>
+              <li><a href="/users/me/address">주소록</a></li>
+            </ul>
+          </nav>
+        </aside>
 
-<section class="section">
-  <div class="container">
-    <div class="columns">
-      <aside class="column is-3">
-        <nav class="menu">
-          <p class="menu-label mypage-title">
-            <a href="/users/me">마이 페이지</a></p>
-          <ul class="menu-list">
-            <li class="larger-text">쇼핑 정보</li>
-            <li><a href="/users/me/purchase">구매 내역</a></li>
-            <li><a href="/selling">판매 내역</a></li>
-            <li class="larger-text">내 정보</li>
-            <li><a href="/users/me/account">계정 관리</a></li>
-            <li><a href="/users/me/address">주소록</a></li>
-          </ul>
-        </nav>
-      </aside>
-
-      <div class="column is-9">
-        <div>
-          <p class="sale-list">판매내역</p>
-        </div>
-        <div class="column is-narrow has-text-right">
-          <div class="labels">
-            <div class="label-item">
-              <p>판매 희망가</p>
+        <div class="column is-9">
+          <div>
+            <p class="sale-list">판매내역</p>
+          </div>
+          <div class="column is-narrow has-text-right">
+            <div class="labels">
+              <div class="label-item">
+                <p>판매 희망가</p>
+              </div>
+              <div class="label-item">
+                <p>만료일</p>
+              </div>
             </div>
-            <div class="label-item">
-              <p>만료일</p>
+          </div>
+          <div class="box">
+            <!--판매내역 목록-->
+            <div class="sale-container" id="sale-container">
+
             </div>
           </div>
         </div>
-        <div class="box">
-          <!--판매내역 목록-->
-          <div class="sale-container" id="sale-container">
 
-          </div>
-        </div>
       </div>
-
     </div>
-  </div>
-</section>
+  </section>
+</div>
 </body>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </html>

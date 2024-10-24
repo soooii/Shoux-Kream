@@ -179,20 +179,21 @@ async function fetchUserCheckOut() {
                 const itemImage = document.createElement('img');
                 const itemName = document.createElement('p');
                 const quantity = document.createElement('span');
-                const price = document.createElement('p');
+                const price = document.createElement('span');
         
                 const ItemDiv = document.createElement('div');
-                ItemDiv.classList.add('cart-product-item');
+                ItemDiv.classList.add('block');
         
                 itemImage.classList.add('image');
-                itemName.classList.add('content');
-                quantity.classList.add('content');
-                price.classList.add('content');
+                itemImage.classList.add('is-128x128');
+                itemName.classList.add('is-size-3');
+                quantity.classList.add('is-size-4');
+                price.classList.add('is-size-4');
         
                 itemImage.src = `${item.imageKey}`;
                 itemName.innerText = `${item.title}`;
                 quantity.innerText = `${checkOutItem.quantity}개`;
-                price.innerText = '\\' + `${checkOutItem.totalPrice.toLocaleString()}`;
+                price.innerText = '\\' + `${checkOutItem.totalPrice.toLocaleString()}`+`원`;
         
                 // 링크 추가: 이미지와 상품명, 수량, 가격을 포함
                 const itemLink = document.createElement('a');

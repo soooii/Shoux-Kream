@@ -53,131 +53,132 @@
 
 <!-- 네비게이션 바 -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
+<div id ="wrapper">
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <aside class="column is-3">
+          <nav class="menu">
+            <p class="menu-label mypage-title">
+              <a href="/users/me">마이 페이지</a></p>
+            <ul class="menu-list">
+              <li class="larger-text">쇼핑 정보</li>
+              <li><a href="/users/me/purchase">구매 내역</a></li>
+              <li><a href="/selling">판매 내역</a></li>
+              <li class="larger-text">내 정보</li>
+              <li><a href="/users/me/account">계정 관리</a></li>
+              <li><a href="/users/me/address">주소록</a></li>
+            </ul>
+          </nav>
+        </aside>
 
-<section class="section">
-  <div class="container">
-    <div class="columns">
-      <aside class="column is-3">
-        <nav class="menu">
-          <p class="menu-label mypage-title">
-            <a href="/users/me">마이 페이지</a></p>
-          <ul class="menu-list">
-            <li class="larger-text">쇼핑 정보</li>
-            <li><a href="/users/me/purchase">구매 내역</a></li>
-            <li><a href="/selling">판매 내역</a></li>
-            <li class="larger-text">내 정보</li>
-            <li><a href="/users/me/account">계정 관리</a></li>
-            <li><a href="/users/me/address">주소록</a></li>
-          </ul>
-        </nav>
-      </aside>
-
-      <div class="column is-9">
-        <div class="menu-container">
-          <div class="form-container">
-            <form class="box form-box" id="loginForm">
-              <div class="level-left">
-                <p class="title">회원 정보</p>
-              </div>
-              <div class="field">
-                <label class="label" for="fullEmailInput">이메일 주소</label>
-                <div class="control">
-                  <input
-                          class="input"
-                          id="fullEmailInput"
-                          type="email"
-                          autocomplete="off"
-                  />
-
+        <div class="column is-9">
+          <div class="menu-container">
+            <div class="form-container">
+              <form class="box form-box" id="loginForm">
+                <div class="level-left">
+                  <p class="title">회원 정보</p>
                 </div>
-              </div>
+                <div class="field">
+                  <label class="label" for="fullEmailInput">이메일 주소</label>
+                  <div class="control">
+                    <input
+                            class="input"
+                            id="fullEmailInput"
+                            type="email"
+                            autocomplete="off"
+                    />
 
-              <div class="field">
-                <label class="label" for="fullNameInput">이름</label>
-                <div class="control">
-                  <input
-                          class="input"
-                          id="fullNameInput"
-                          type="text"
-                          autocomplete="off"
-                  />
-
+                  </div>
                 </div>
-              </div>
 
-              <div class="field">
-                <label class="label" for="fullNicknameInput">닉네임</label>
-                <div class="control">
-                  <input
-                          class="input"
-                          id="fullNicknameInput"
-                          type="text"
-                          autocomplete="off"
-                          placeholder="닉네임을 입력해주세요."
-                  />
+                <div class="field">
+                  <label class="label" for="fullNameInput">이름</label>
+                  <div class="control">
+                    <input
+                            class="input"
+                            id="fullNameInput"
+                            type="text"
+                            autocomplete="off"
+                    />
 
+                  </div>
                 </div>
-              </div>
 
-              <div class="field">
-                <label class="label" for="currentPasswordInput">현재 비밀번호</label>
-                <div class="control">
-                  <input
-                          class="input"
-                          id="currentPasswordInput"
-                          type="password"
-                          autocomplete="off"
-                  />
-                  <p id="passwordMatchMessage" class="help is-danger" style="display: none;">
-                    비밀번호가 일치하지 않습니다.
+                <div class="field">
+                  <label class="label" for="fullNicknameInput">닉네임</label>
+                  <div class="control">
+                    <input
+                            class="input"
+                            id="fullNicknameInput"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="닉네임을 입력해주세요."
+                    />
+
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="currentPasswordInput">현재 비밀번호</label>
+                  <div class="control">
+                    <input
+                            class="input"
+                            id="currentPasswordInput"
+                            type="password"
+                            autocomplete="off"
+                    />
+                    <p id="passwordMatchMessage" class="help is-danger" style="display: none;">
+                      비밀번호가 일치하지 않습니다.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="newPasswordInput">새 비밀번호</label>
+                  <div class="control">
+                    <input
+                            class="input"
+                            id="newPasswordInput"
+                            type="password"
+                            autocomplete="off"
+                    />
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="confirmPasswordInput">비밀번호 확인</label>
+                  <div class="control">
+                    <input
+                            class="input"
+                            id="confirmPasswordInput"
+                            type="password"
+                            autocomplete="off"
+                    />
+                  </div>
+                  <p id="newPasswordMatchMessage" class="help is-danger" style="display: none;">
+                    비밀번호를 확인해주세요.
                   </p>
                 </div>
-              </div>
 
-              <div class="field">
-                <label class="label" for="newPasswordInput">새 비밀번호</label>
-                <div class="control">
-                  <input
-                          class="input"
-                          id="newPasswordInput"
-                          type="password"
-                          autocomplete="off"
-                  />
-                </div>
+                <button
+                        class="button is-link is-fullwidth"
+                        id="saveButton"
+                        type="submit"
+                >
+                  저장하기
+                </button>
+              </form>
+              <div class="level-right" style="margin-top: 1rem;">
+                <button class="button is-danger" id="delete-account-button">회원탈퇴</button>
               </div>
-
-              <div class="field">
-                <label class="label" for="confirmPasswordInput">비밀번호 확인</label>
-                <div class="control">
-                  <input
-                          class="input"
-                          id="confirmPasswordInput"
-                          type="password"
-                          autocomplete="off"
-                  />
-                </div>
-                <p id="newPasswordMatchMessage" class="help is-danger" style="display: none;">
-                  비밀번호를 확인해주세요.
-                </p>
-              </div>
-
-              <button
-                      class="button is-link is-fullwidth"
-                      id="saveButton"
-                      type="submit"
-              >
-                저장하기
-              </button>
-            </form>
-            <div class="level-right" style="margin-top: 1rem;">
-              <button class="button is-danger" id="delete-account-button">회원탈퇴</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 </body>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </html>
