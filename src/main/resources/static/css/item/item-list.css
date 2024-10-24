@@ -1,7 +1,8 @@
 .home-item-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
+    justify-content: flex-start;
     flex-wrap: wrap;
     margin-left: auto;
     margin-right: auto;
@@ -11,7 +12,9 @@
 .home-items {
     width: 230px;
     text-align: left;
+    margin-top: 10px;
     margin-bottom: 28px;
+    margin-left: 16px;
 }
 
 .img_box {
