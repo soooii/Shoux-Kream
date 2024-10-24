@@ -20,7 +20,7 @@ async function navbarCheckAdmin() {
 
       const result = await res.text();
       if (result === "ADMIN") {
-        document.getElementById('adminButton').style.display = 'inline';
+        document.getElementById('adminButton').style.display = 'none';
         document.getElementById('cartButton').style.display = 'none';
         document.getElementById('myButton').style.display = 'none';
         return;
