@@ -97,6 +97,8 @@
 }
 
 .cart-product-item p, .cart-product-item span {
+    width: 100px;
+    white-space: nowrap;
     margin: 0 10px; /* 왼쪽과 오른쪽에 10픽셀 여백 추가 */
 }
 
