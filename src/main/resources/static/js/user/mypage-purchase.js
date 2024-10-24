@@ -40,7 +40,9 @@ async function fetchUserCheckOuts() {
                     <div class="columns is-vcentered">
                         <div class="column">
                             <p><strong>${checkout.summaryTitle}</strong></p>
-                            <p><strong>배송 상태: </strong></p> <p data-id="${checkout.id}"><strong>${checkout.deliveryStatus}</strong></p> 
+                            <div>
+                            <span><strong>배송 상태: </strong></span> <span data-id="${checkout.id}"><strong>${checkout.deliveryStatus}</strong></span> 
+                            <div>
                             <p>구매 금액 : ${checkout.totalPrice}</p>
                             <p>배송 주소 : (${checkout.address.postalCode}) ${checkout.address.address1}, ${checkout.address.address2}</p>
                         </div>

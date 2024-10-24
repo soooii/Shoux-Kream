@@ -48,50 +48,51 @@
 
 <!-- 카테고리 리스트 -->
 <div th:replace="~{fragments/category-list :: categoryList}"></div>
-
-<!-- 슬라이드 이미지 -->
-<section>
-  <div class="container is-clipped">
-    <div id="slider"></div>
-  </div>
-</section>
-
-<!-- 상품 or 카테고리 이미지 -->
-<section class="section">
-  <div class="title_wrap ">
-    <div class="item-title"> Just Dropped</div>
-    <div class="item-sub_title"> 발매 상품 </div>
-  </div>
-  <div class="home-item-container">
-    <div
-      th:unless="${#lists.isEmpty(items)}"
-      th:each="item : ${items}"
-      class="home-items"
-    >
-      <a href="/users/me"
-         th:href="@{/item/item-detail/{id}(id=${item.id})}"
-      >
-        <div class="img_box">
-          <img th:src="@{${item.imageKey}}" />
-        </div>
-        <div class="info_box">
-          <div class="brand">
-            <p class="brand-text">
-              <span th:text="${item.title}"></span>
-            </p>
-          </div>
-          <p class="detail-description" th:text="${item.detailDescription}"></p>
-          <div class="item-price">
-            <p class="item-price-text">
-              <span th:text="${item.price}"></span>
-              <span>원</span>
-            </p>
-          </div>
-        </div>
-      </a>
+<div id ="wrapper">
+  <!-- 슬라이드 이미지 -->
+  <section>
+    <div class="container is-clipped">
+      <div id="slider"></div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- 상품 or 카테고리 이미지 -->
+  <section class="section">
+    <div class="title_wrap ">
+      <div class="item-title"> Just Dropped</div>
+      <div class="item-sub_title"> 발매 상품 </div>
+    </div>
+    <div class="home-item-container">
+      <div
+        th:unless="${#lists.isEmpty(items)}"
+        th:each="item : ${items}"
+        class="home-items"
+      >
+        <a href="/users/me"
+          th:href="@{/item/item-detail/{id}(id=${item.id})}"
+        >
+          <div class="img_box">
+            <img th:src="@{${item.imageKey}}" />
+          </div>
+          <div class="info_box">
+            <div class="brand">
+              <p class="brand-text">
+                <span th:text="${item.title}"></span>
+              </p>
+            </div>
+            <p class="detail-description" th:text="${item.detailDescription}"></p>
+            <div class="item-price">
+              <p class="item-price-text">
+                <span th:text="${item.price}"></span>
+                <span>원</span>
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
 <script>
   const adminButtonClick=(event)=>{
     const token = sessionStorage.getItem("accessToken");
