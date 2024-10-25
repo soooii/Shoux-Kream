@@ -33,7 +33,8 @@ public class SecurityPath {
             "/sale/complete",
             "/selling",
             "/sale/{saleId}",
-            "/selling/{saleId}"
+            "/selling/{saleId}",
+            "/swagger-ui/**"
     };
     public static final String[] ONLY_POST_WHITELIST = {
             "/api/users/login",
@@ -42,6 +43,7 @@ public class SecurityPath {
             "/item/item-add",
             "/category/category-add",
             "/category/add",
-            "/category/edit/{id}"
+            "/category/edit/{id}",
+            "/swagger-ui/**"
     };
 }
