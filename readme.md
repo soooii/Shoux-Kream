@@ -52,7 +52,9 @@
 ## <b> ERD </b> ##
 ![main](src/main/resources/static/img/readmeimg/shoux_kream_erd.png)
 <br/><br/>
-
+## <b> API 명세서 </b> ##
+[노션 링크](https://www.notion.so/elice-track/f99236941dc24e8f85bb14831953d1cd?v=1282bb98425781e79d80000c019e3c32)
+<br/><br/>
 ## <b>구동 화면</b> ##
 > 사용자 페이지
 * 메인
