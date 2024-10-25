@@ -1,6 +1,10 @@
 # Shoux-Kream 소개 페이지입니다.
 **Java + Spring + MySQL + Spring Boot + HTML5 + CSS3 + JS + Vue.js**를 사용한 웹 애플리케이션
 
+[노션페이지 링크] (https://www.notion.so/elice-track/994412a5eb0b49148d746c793e44d390?pvs=4 )
+[최종 발표자료] (https://www.notion.so/elice-track/994412a5eb0b49148d746c793e44d390?pvs=4#2760889736954aabb1f2df94f5a87c79)
+
+
 ## 🖥️ 프로젝트 소개 ##
 본 웹사이트는 크림 사이트를 참고하여 구현되었습니다.
 
