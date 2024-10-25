@@ -31,7 +31,7 @@
   </head>
   <body>
     <!-- 헤더 -->
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <div th:replace="~{fragments/navbar :: navbar}">
 
     <!-- 배송지 정보 입력 박스 -->
     <section class="section">
@@ -258,12 +258,13 @@
         <section class="modal-card-body" id="address-container">
           <!-- 배송지 정보를 표시할 영역 -->
         </section>
-        <footer class="modal-card-foot">
+        <div class="modal-card-foot">
           <button class="button" id="listClose">닫기</button>
-        </footer>
+        </div>
       </div>
     </div>
     <div th:insert="~{fragments/address :: addressFragment}"></div>
+    </div>
   </body>
   <footer th:replace="~{fragments/footer :: footer}"></footer>
 </html>

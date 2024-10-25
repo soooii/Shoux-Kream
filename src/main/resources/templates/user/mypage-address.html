@@ -81,6 +81,8 @@
             </div>
         </div>
     </section>
+</div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
     <!-- 새 배송지 추가 모달 -->
     <div class="modal" id="addressModal">
@@ -134,10 +136,10 @@
                     </div>
                 </form>
             </section>
-            <footer class="modal-card-foot">
+            <div class="modal-card-foot">
                 <button class="button" id="save">저장하기</button>
                 <button class="button" id="close">취소</button>
-            </footer>
+            </div>
         </div>
     </div>
 
@@ -199,10 +201,9 @@
             </footer>
         </div>
     </div>
-</div>
+
 
 
 
 </body>
-<footer th:replace="~{fragments/footer :: footer}"></footer>
 </html>
