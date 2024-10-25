@@ -26,6 +26,8 @@ const addressModal = document.getElementById('addressModal');
 //우편번호 찾기
 const searchAddressButton = document.getElementById('searchAddressButton');
 const editSearchAddressButton = document.getElementById('editSearchAddressButton');
+const editSaveButton = document.getElementById('editSave');
+const editCloseButton = document.getElementById('editClose');
 const listCloseButton = document.getElementById('listClose');
 let currentAddressId = null; // 수정할 주소의 ID 저장
 
@@ -92,7 +94,7 @@ function addAllEvents() {
 }
 
 
-function checkAddress() {
+async function checkAddress() {
   fetchUserAddress();
   //우편번호 찾기
   searchAddressButton.addEventListener('click', modalSearchAddress);
