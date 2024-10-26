@@ -1,11 +1,14 @@
 # Shoux-Kream 소개 페이지입니다.
 **Java + Spring + MySQL + Spring Boot + HTML5 + CSS3 + JS + Vue.js**를 사용한 웹 애플리케이션
 
+[최종 발표자료](https://www.notion.so/elice-track/994412a5eb0b49148d746c793e44d390?pvs=4#2760889736954aabb1f2df94f5a87c79)<br>
 도메인 redirect <http://shouxkream.kro.kr> <br>
 원 경로 <https://jrqggzccfxaqcbkg.tunnel-pt.elice.io/> <br>
 [swagger-ui api 프레임워크](https://jrqggzccfxaqcbkg.tunnel-pt.elice.io/swagger-ui/index.html)<br>
 [노션페이지 링크](https://www.notion.so/elice-track/994412a5eb0b49148d746c793e44d390?pvs=4) <br>
-[최종 발표자료](https://www.notion.so/elice-track/994412a5eb0b49148d746c793e44d390?pvs=4#2760889736954aabb1f2df94f5a87c79)<br>
+
+목업 유저 ID 1@1 , password 1234 <br>
+목업 어드민 ID 1@xx.xx , pasword 123 <br>
 
 ## 🖥️ 프로젝트 소개 ##
 본 웹사이트는 크림 사이트를 참고하여 구현되었습니다.
