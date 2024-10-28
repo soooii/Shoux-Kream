@@ -1,105 +1,57 @@
 -- 카테고리 추가
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('아티스트협업', '아티스트와의 협업 상품', 'artist-collab', 'https://example.com/artist-collab.jpg', NOW(), NOW());
+VALUES ('아티스트협업', '아티스트와의 협업 상품', '#ebfffc', '/img/item/item1.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('#러닝', '러닝 관련 상품', 'running', 'https://example.com/running.jpg', NOW(), NOW());
+VALUES ('#러닝', '러닝 관련 상품', '#eff1fa', '/img/item/item2.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('추천', '추천 상품', 'recommended', 'https://example.com/recommended.jpg', NOW(), NOW());
+VALUES ('추천', '추천 상품', '#eff5fb', '/img/item/item3.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('랭킹', '랭킹 상위 상품', 'ranking', 'https://example.com/ranking.jpg', NOW(), NOW());
+VALUES ('랭킹', '랭킹 상위 상품', '#effaf5', '/img/item/item4.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('럭셔리', '럭셔리 상품', 'luxury', 'https://example.com/luxury.jpg', NOW(), NOW());
+VALUES ('럭셔리', '럭셔리 상품', '#fffaeb', '/img/item/item5.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('남성', '남성용 상품', 'mens', 'https://example.com/mens.jpg', NOW(), NOW());
+VALUES ('남성', '남성용 상품', '#feecf0', '/img/item/item6.png', NOW(), NOW());
 
 INSERT INTO category (title, description, theme_class, image_url, created_at, updated_at)
-VALUES ('여성', '여성용 상품', 'womens', 'https://example.com/womens.jpg', NOW(), NOW());
-
---키워드 테이블 생성--
-CREATE TABLE IF NOT EXISTS keyword (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    word VARCHAR(255),
-    item_id BIGINT,
-    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES item(id)
-);
+VALUES ('여성', '여성용 상품', '#00d1b2', '/img/item/item7.png', NOW(), NOW());
 
 -- 상품 추가
 -- Item 데이터 삽입
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Laptop', 'Dell', 'Powerful laptop', 'A high-end laptop with 16GB RAM and 512GB SSD.', '/img/item/item1.png', 50, 1200.00);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Laptop', 'Dell', 'Powerful laptop', 'A high-end laptop with 16GB RAM and 512GB SSD.', '/img/item/item1.png', 50, 1200.00, 1);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Smartphone', 'Samsung', 'Latest smartphone', 'The newest model with 128GB storage.', '/img/item/item2.png', 200, 999.99);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Smartphone', 'Samsung', 'Latest smartphone', 'The newest model with 128GB storage.', '/img/item/item2.png', 200, 999.99, 2);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Headphones', 'Sony', 'Noise-cancelling headphones', 'Premium quality noise-cancelling headphones.', '/img/item/item3.png', 150, 299.99);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Headphones', 'Sony', 'Noise-cancelling headphones', 'Premium quality noise-cancelling headphones.', '/img/item/item3.png', 150, 299.99, 3);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Smart TV', 'LG', '4K Smart TV', 'Ultra HD 4K Smart TV with AI technology.', '/img/item/item4.png', 100, 799.99);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Smart TV', 'LG', '4K Smart TV', 'Ultra HD 4K Smart TV with AI technology.', '/img/item/item4.png', 100, 799.99, 4);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Gaming Console', 'Microsoft', 'Next-gen console', 'Next-generation gaming console with 1TB storage.', '/img/item/item5.png', 80, 499.99);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Gaming Console', 'Microsoft', 'Next-gen console', 'Next-generation gaming console with 1TB storage.', '/img/item/item5.png', 80, 499.99, 5);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Smartwatch', 'Apple', 'Stylish smartwatch', 'Advanced smartwatch with health tracking features.', '/img/item/item6.png', 300, 399.99);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Smartwatch', 'Apple', 'Stylish smartwatch', 'Advanced smartwatch with health tracking features.', '/img/item/item6.png', 300, 399.99, 6);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Bluetooth Speaker', 'JBL', 'Portable speaker', 'Compact portable Bluetooth speaker with high-quality sound.', '/img/item/item7.png', 250, 149.99);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Bluetooth Speaker', 'JBL', 'Portable speaker', 'Compact portable Bluetooth speaker with high-quality sound.', '/img/item/item7.png', 250, 149.99, 7);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Camera', 'Canon', 'Digital camera', 'High-resolution digital camera with interchangeable lenses.', '/img/item/item8.png', 60, 1099.99);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Camera', 'Canon', 'Digital camera', 'High-resolution digital camera with interchangeable lenses.', '/img/item/item8.png', 60, 1099.99, 1);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Tablet', 'Apple', 'Sleek and powerful tablet', 'High-performance tablet with 256GB storage and Retina display.', '/img/item/item9.png', 120, 799.99);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Tablet', 'Apple', 'Sleek and powerful tablet', 'High-performance tablet with 256GB storage and Retina display.', '/img/item/item9.png', 120, 799.99, 2);
 
-INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price)
-VALUES ('Wireless Mouse', 'Logitech', 'Ergonomic wireless mouse', 'Comfortable and precise wireless mouse with long battery life.', '/img/item/item10.png', 400, 49.99);
+INSERT INTO item (title, manufacturer, short_description, detail_description, image_key, inventory, price, category_id)
+VALUES ('Wireless Mouse', 'Logitech', 'Ergonomic wireless mouse', 'Comfortable and precise wireless mouse with long battery life.', '/img/item/item10.png', 400, 49.99, 3);
 
--- KeyWord 데이터 삽입 (각 item_id는 삽입된 아이템의 ID를 참조합니다)
--- Laptop 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('laptop', 1);
-
--- Smartphone 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('smartphone', 2), ('Samsung', 2), ('mobile', 2);
-
--- Headphones 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('headphones', 3), ('Sony', 3), ('audio', 3);
-
--- Smart TV 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('smart TV', 4), ('LG', 4), ('4K', 4);
-
--- Gaming Console 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('gaming console', 5), ('Microsoft', 5), ('Xbox', 5);
-
--- Smartwatch 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('smartwatch', 6), ('Apple', 6), ('wearable', 6);
-
--- Bluetooth Speaker 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('Bluetooth speaker', 7), ('JBL', 7), ('audio', 7);
-
--- Camera 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('camera', 8), ('Canon', 8), ('photography', 8);
-
--- Tablet 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('tablet', 9), ('Apple', 9), ('iPad', 9), ('mobile', 9);
-
--- Wireless Mouse 관련 키워드
-INSERT INTO keyword (word, item_id)
-VALUES ('wireless mouse', 10), ('Logitech', 10), ('computer accessories', 10);
 
 -- 유저 추가
 INSERT INTO users (email, password, name, nickname, role, created_at, updated_at)
@@ -146,20 +98,20 @@ VALUES ('Evelyn Brown', '321-654-0987', '50009', '987 Cedar Dr', 'Suite 100', 2)
 -- 주문 내역 추가
 
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 1', 10000, 'READY', 1, 1, 'Please leave at the door', NOW(), NOW());
+VALUES ('Order Summary 1', 10000, 'READY', 2, 1, 'Please leave at the door', NOW(), NOW());
 
 -- Insert into CheckOut with DeliveryStatus as START
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 2', 15000, 'START', 1, 2, 'Handle with care', NOW(), NOW());
+VALUES ('Order Summary 2', 15000, 'START', 2, 2, 'Handle with care', NOW(), NOW());
 
 -- Insert into CheckOut with DeliveryStatus as SHIPPING
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 3', 20000, 'SHIPPING', 1, 3, 'Call me upon arrival', NOW(), NOW());
+VALUES ('Order Summary 3', 20000, 'SHIPPING', 2, 3, 'Call me upon arrival', NOW(), NOW());
 
 -- Insert into CheckOut with DeliveryStatus as ARRIVED
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 4', 25000, 'ARRIVED', 1, 4, 'Leave it at the front desk', NOW(), NOW());
+VALUES ('Order Summary 4', 25000, 'ARRIVED', 2, 4, 'Leave it at the front desk', NOW(), NOW());
 
 -- Insert into CheckOut with DeliveryStatus as READY (another example)
 INSERT INTO check_out (summary_title, total_price, delivery_status, user_id, addresses_id, request, created_at, updated_at)
-VALUES ('Order Summary 5', 30000, 'READY', 1, 5, 'Ring the bell', NOW(), NOW());
+VALUES ('Order Summary 5', 30000, 'READY', 2, 5, 'Ring the bell', NOW(), NOW());

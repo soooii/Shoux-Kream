@@ -11,29 +11,30 @@ const sliderDiv = document.querySelector("#slider");
 
 addAllElements();
 addAllEvents();
-homeCheckAdmin();
+homeCheckAdmin()
+
+setTimeout(() => {
+    homeCheckAdmin();
+}, 100);
 
 async function homeCheckAdmin() {
+  console.log('qweqweqwe');
   const token = sessionStorage.getItem("accessToken");
-
   // 우선 토큰 존재 여부 확인
-  if (!token) {
-    document.getElementById('adminButton').style.display = 'none';
-  } else {
-    // 관리자 토큰 여부 확인
-      const res = await fetch("/api/admin/check", {
+  if (token) {
+    const res = await fetch("/api/admin/check", {
         headers: {
           'Authorization': `Bearer ${token}`
         },
-      });
+    });
 
-      const result = await res.text();
-      if (result === "ADMIN") {
+    const result = await res.text();
+    if (result === "ADMIN") {
         document.getElementById('adminButton').style.display = 'inline';
         return;
-      } else {
+    } else {
         document.getElementById('adminButton').style.display = 'none';
-      }
+    }
   }
 };
 

@@ -1,5 +1,6 @@
 package com.shoux_kream.checkout.entity;
 
+import com.shoux_kream.checkout.dto.CheckOutRequestDto;
 import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.timestamp.BaseEntity;
 import com.shoux_kream.user.dto.response.UserAddressDto;
@@ -36,7 +37,7 @@ public class CheckOut extends BaseEntity {
 
     //TODO hibernate 오류 해결하기 위한 cascadetype all
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "addresses_id")
+    @JoinColumn(name = "addresses_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserAddress address;
 
     private String request;
@@ -69,8 +70,20 @@ public class CheckOut extends BaseEntity {
                 .build();
     }
 
-    public void updateAddress(UserAddress address){
-        this.address = address;
+    public CheckOutResponseDto toAdminDto() {
+        return CheckOutResponseDto.builder()
+                .id(this.id)
+                .summaryTitle(this.summaryTitle)
+                .totalPrice(this.totalPrice)
+                .userId(this.getUser().getId())
+                .deliveryStatus(deliveryStatus)
+                .address(UserAddressDto.builder().userAddress(this.address).build())
+                .request(this.request)
+                .build();
+    }
+
+    public void updateAddress(CheckOutRequestDto checkOutRequestDto){
+        this.address = checkOutRequestDto.getAddress().toEntity();
     }
 
     public void updateDeliveryStatus(DeliveryStatus deliveryStatus){

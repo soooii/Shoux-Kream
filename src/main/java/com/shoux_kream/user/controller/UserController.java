@@ -6,6 +6,7 @@ import com.shoux_kream.user.dto.request.UserAddressRequest;
 import com.shoux_kream.user.dto.request.UserRequest;
 import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
+import com.shoux_kream.user.entity.UserAddress;
 import com.shoux_kream.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,11 +60,16 @@ public class UserController {
 
     //배송지 목록 가져오기
     @GetMapping("/userAddress")
-    public ResponseEntity<List<UserAddressDto>> getUserAddress(@AuthenticationPrincipal User principal){
-        //recipientName, recipientPhone, postalCode, address1, address2 user에서 얻어오기
-        String email = principal.getUsername();
-        List<UserAddressDto> userAddresses = userService.getAddresses(email);
+    public ResponseEntity<List<UserAddressDto>> getUserAddress(){
+        List<UserAddressDto> userAddresses = userService.getAddresses();
         return ResponseEntity.ok(userAddresses);
+    }
+
+    //특정 배송지 가져오기
+    @GetMapping("/userAddress/{addressId}")
+    public ResponseEntity<UserAddressDto> getAddress(@PathVariable Long addressId) {
+        UserAddressDto dto = userService.getAddressById(addressId);
+        return ResponseEntity.ok(dto);
     }
 
     //배송지 추가
@@ -73,10 +79,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userAddressRequest);
     }
 
+    //배송지 수정
+    @PatchMapping("userAddress/{addressId}")
+    public ResponseEntity<UserAddressDto> updateAddress(@PathVariable Long addressId, @RequestBody UserAddressDto userAddressDto) {
+        UserAddressDto updatedAddress = userService.updateAddress(addressId, userAddressDto);
+        return ResponseEntity.ok(updatedAddress);
+    }
+
     //배송지 삭제
-    @DeleteMapping("/userAddress/{id}")
-    public ResponseEntity<Void> deleteUserAddress(@PathVariable Long id) {
-        userService.deleteAddress(id);
+    @DeleteMapping("/userAddress/{addressId}")
+    public ResponseEntity<Void> deleteUserAddress(@PathVariable Long addressId) {
+        userService.deleteAddress(addressId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 삭제 후 204 응답
     }
 

@@ -14,6 +14,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     // 이름으로 Item 을 검색하는 메서드, Optional 로 감싸서 값이 없을 때 NPE 를 방지
     Optional<Item> findByTitle(String title);
+    Optional<Item> findByTitleContaining(String searchKeyword);
+    List<Item> findByCategoryId(Long categoryId);
 
     // Item 과 브랜드 이름으로 Item 리스트를 검색하는 JPQL 쿼리
 //    @Query("select i from Item i where i.title =:itemTitle and i.brand.title = :brandTitle")

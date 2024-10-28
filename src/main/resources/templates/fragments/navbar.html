@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>네비게이션바</title>
+</head>
+<body>
+<th:block laytout:fragment="navbar_css">
+    <link rel="stylesheet" href="/css/navbar/header-navbar.css" />
+</th:block>
+<nav class="navbar" role="navigation" aria-label="main navigation" th:fragment="navbar">
+    <div class="container mt-3">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <img src="/img/mainLogo.png" width="200" height="30" />
+            </a>
+
+            <a
+                    role="button"
+                    class="navbar-burger"
+                    aria-label="menu"
+                    aria-expanded="false"
+                    data-target="navbarBasicExample"
+            >
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
+            <ul id="navbar">
+                <li>
+                    <a class="navbar-button" style="display:none;" id="cartButton" href="/cart/summary" aria-current="page">
+                        <span class="icon">
+                          <i class="fas fa-cart-shopping"></i>
+                        </span>
+                        <span>카트</span>
+                    </a>
+
+                    <a class="navbar-button" style="display:none;" id="myButton" href="/users/me">
+                        <span class="icon">
+                          <i class="fas fa-user" aria-hidden="true"></i>
+                        </span>
+                        <span>My</span>
+                    </a>
+
+                    <a class="navbar-button" style="display:none;" id="loginButton" href="/users/login">
+                        <span class="icon">
+                          <i class="fa fa-sign-in" aria-hidden="true"></i>
+                        </span>
+                        <span>로그인</span>
+                    </a>
+
+                    <a class="navbar-button" style="display:none;" id="logoutButton" href="/">
+                        <span class="icon">
+                          <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        </span>
+                        <span>로그아웃</span>
+                    </a>
+
+                    <a class="navbar-button" style="display:none;" id="adminButton" onclick="adminButtonClick(event)" aria-current="page">
+                        <span class="icon">
+                          <i class="fa fa-address-book-o" aria-hidden="true"></i>
+                        </span>
+                        <span>관리자</span>
+                    </a>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+    <th:block laytout:fragment="navbar_js">
+        <link rel="stylesheet" href="/css/navbar/header-navbar.css" />
+        <script src="/js/navbar/header-navbar.js" type="module" defer></script>
+        <script src="/js/login-logout.js" type="module" defer></script>
+    </th:block>
+</nav>
+</body>
+</html>

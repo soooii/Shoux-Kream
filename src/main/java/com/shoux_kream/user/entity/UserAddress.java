@@ -1,5 +1,6 @@
 package com.shoux_kream.user.entity;
 
+import com.shoux_kream.user.dto.response.UserAddressDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,5 +41,15 @@ public class UserAddress {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    // 주소 정보 수정
+    public UserAddress update(UserAddressDto userAddressDto) {
+        this.recipientName = userAddressDto.getRecipientName();
+        this.recipientPhone = userAddressDto.getRecipientPhone();
+        this.postalCode = userAddressDto.getPostalCode();
+        this.address1 = userAddressDto.getAddress1();
+        this.address2 = userAddressDto.getAddress2();
+        return this;
+    }
 }
 

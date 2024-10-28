@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Shopping Mall</title>
+    <!-- 아이콘 -->
+    <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/elice-rabbit-favicon.png"
+    />
+    <!-- bulma css -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <!-- 슬라이드 이미지용 css, js -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/css/bulma-carousel.min.css"
+    />
+    <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/js/bulma-carousel.min.js"
+    ></script>
+
+    <!-- 폰트 어썸: 아이콘 -->
+    <script
+            defer
+            src="https://kit.fontawesome.com/9daa42bcef.js"
+            crossorigin="anonymous"
+    ></script>
+    <!-- AWS S3 사진 업로드용 -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+    <!-- 커스텀 css, js -->
+    <link rel="stylesheet" href="/css/sale/salecomplete.css"/>
+    <script src="/js/login-logout.js" type="module"></script>
+    <script src="/js/sale/salecomplete.js" type="module" defer></script>
+    <link rel="stylesheet" href="/css/common/common.css" />
+</head>
+<body>
+<!-- 헤더 -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div id ="wrapper">
+    <!--헤더-->
+    <div class="container is-fullhd">
+        <div class="is-flex is-justify-content-center align-items-center">
+            <h4 class="title is-4 mr-2">주문/정산</h4>
+            <div class="button-container">
+                <button class="button is-small js-modal-trigger" data-target="modal-js-example">검수기준</button>
+            </div>
+        </div>
+    </div>
+
+    <!--검수기준 모달창-->
+    <div class="modal" id="modal-js-example">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">검수기준</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div>
+                    <table>
+                        <tr>
+                            <td>신발</td>
+                            <td>아우터 · 상의 · 하의</td>
+                            <td>가방 · 시계 · 지갑 · 패션잡화</td>
+                        </tr>
+                        <tr>
+                            <td>테크</td>
+                            <td>뷰티 · 컬렉터블 · 캠핑 · 가구/리빙</td>
+                            <td>프리미엄 시계</td>
+                        </tr>
+                        <tr>
+                            <td>프리미엄 가방</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <br />
+                    <p>SHOUX KREAM의 검수기준은 거래 당사자간 원활한 거래와 보다 균형있는 검수기준 확립을 위해 지속적으로 업데이트 되고 있습니다. 거래에 앞서 최신 검수기준을 참고하시기 바랍니다.</p>
+                    <p>회원님께서 판매 또는 구매하신 모든 상품은 SHOUX KREAM의 전문 검수팀이 제품의 컨디션을 꼼꼼하게 확인한 후, 검수 합격 시에만 출고하고 있습니다.</p>
+                    <br />
+                    <p class="red-txt">※ 신발 거래 관련 주의사항</p>
+                    <p class="red-txt">SHOUX KREAM은 정가품 판정 및 검수기준에 의한 기본 품질 확인을 수행하고 있으나, 통신판매 중개자로서 제조업체의 제품별 보증에 대해서는 책임을 지지 않습니다.</p>
+                    <br />
+                    <p class="red-txt">제품 기능에 관한 사항이나 기타 제품 관련 질문은 제조업체에 문의하시기 바랍니다.</p>
+                    <p class="red-txt">단, 제조업체의 A/S 여부는 보장하지 않습니다. (이용약관 제22조 3항 참고)</p>
+                    <br />
+                    <p>SHOUX KREAM의 검수기준으로 고지된 사항 이외 아래와 같이 제조사에서 불량으로 인정하지 않는 기준, 또는 당사 검수기준에 따라 그 여부를 명확히 분별할 수 없는 상품의 경우 하자로 판단하지 않으며,이로 인한 구매 취소는 불가하므로 신중한 거래 부탁드립니다.</p>
+                    <br />
+                    <ul>
+                        <li>제조공정, 유통과정 또는 소재 특성 상 발생할 수 있는 사항</li>
+                        <li>도장, 마킹 등의 제조사 또는 판매처에서 진행되는 사항</li>
+                        <li>검수 중 발생할 수 있는 사항 (속지, 슈트리 손상 등)</li>
+                        <li>택배 개봉 또는 적재 및 상품 이동 중 발생할 수 있는 사항 (칼자국, 박스 눌림, 이염 등)</li>
+                        <li>상품택, 구성품 등의 고리 누락/이탈</li>
+                        <li>생산 시기에 따른 소재, 패턴, 색상 등 일부 디테일 차이</li>
+                    </ul>
+                    <br />
+                    <p>고지드린 검수 기준으로 판정하기 모호한 상품 상태, 비특정적 상품 상태, 특정 모델의 제조공정에 따른 개체차이와 관련하여서는 <strong>검수센터 책임자의 최종 판단 하에 결정하게 됩니다.</strong></p>
+                    <br />
+                    <p>SHOUX KREAM의 검수기준에 동의하지 않으실 경우 거래가 불가하오니 거래 당사자는 거래에 앞서 SHOUX KREAM의 검수기준을 반드시 검토하시기 바랍니다.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="my-div">
+        <!--판매 등록할 상품 상세 내역-->
+        <div class="box custom-box">
+            <!--상품 정보-->
+            <div class="sell-item">
+                <img class="image" src="" alt="상품 이미지"/>
+                <div class="text-container">
+                    <p class="bold-text">첫 번째 p 태그 (굵은 글씨)</p>
+                    <p class="normal-black">두 번째 p 태그 (검은색)</p>
+                    <p class="normal-gray">세 번째 p 태그 (회색)</p>
+                </div>
+            </div>
+        </div>
+        <div class="box custom-box">
+            <!--최종 주문 정보-->
+            <p class="txt-bolder">최종 주문정보</p>
+            <dl>
+                <div>
+                    <dt class="left-info-hope">판매 희망가</dt>
+                    <dd class="sell-price">-</dd>
+                </div>
+                <div>
+                    <dt class="left-info">검수비</dt>
+                    <dd class="inspection">-</dd>
+                </div>
+                <div>
+                    <dt class="left-info">수수료</dt>
+                    <dd class="fee">-</dd>
+                </div>
+                <div>
+                    <dt class="left-info">배송비</dt>
+                    <dd>선불 · 판매자 부담</dd>
+                </div>
+                <hr />
+                <div>
+                    <dt class="left-info-hope" id="due-date">입찰 마감기한</dt>
+                    <dd>-</dd>
+                </div>
+            </dl>
+        </div>
+        <div class="box custom-box">
+            <p class="bold-text">정산금액</p>
+            <p class="settlement-amount">-</p>
+        </div>
+        <div class="box custom-box">
+            <button type="button" class="button is-link is-large is-fullwidth" id="submit-btn">계속</button>
+        </div>
+        <br />
+        <br />
+    </div>
+</div>
+</body>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</html>

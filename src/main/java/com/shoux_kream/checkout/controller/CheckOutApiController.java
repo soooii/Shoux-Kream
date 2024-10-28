@@ -5,6 +5,7 @@ import com.shoux_kream.checkout.service.CheckOutService;
 import com.shoux_kream.user.controller.JwtController;
 import com.shoux_kream.user.dto.response.UserAddressDto;
 import com.shoux_kream.user.dto.response.UserResponse;
+import jakarta.websocket.server.PathParam;
 import org.springframework.security.core.userdetails.User;
 import com.shoux_kream.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,63 +21,58 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class CheckOutApiController {
-    private final JwtController jwtController;
     private final CheckOutService checkOutService;
     private final UserService userService;
 
     /*
     //TODO 최근주소지 정보에 등록하는 API=> checkout에 통합
     await Api.post("/api/user/recentdelivery", data);
-     */
-
+    */
+    //TODO checkout postmapping => 단건구매 내용을 저장할 checkout proxy entity => 단건구매 누를때마다 porxy 초기화
+    // TODO 재고뺴는 로직이 하나도 없음
 
     @PostMapping("/checkout") //TODO userId로 체크아웃 정보를 저장함, 저장한 entity를 id값을 포함해 반환
     public ResponseEntity<CheckOutResponseDto> processCheckOut(@AuthenticationPrincipal User principal,@RequestBody CheckOutRequestDto checkOutRequestDto) {
-        //String email = principal.getUsername();
-        //UserResponse userResponse = userService.getUser(email);
         UserResponse userResponse = userService.getUser();
         CheckOutResponseDto checkOutResponseDto = checkOutService.createCheckout(userResponse.getUserId(), checkOutRequestDto);
         // TODO 201 created(URI) 전환
+
+        //isEach true => cart정보를 checkoutporxy에서 가져옴
         return ResponseEntity.ok(checkOutResponseDto);
     }
     //TODO 검증 필요! => controller x , 검증 비즈니스 로직은 서비스에서!
     @GetMapping("/checkout") //userEmail로 checkout 정보 받기
     public ResponseEntity<List<CheckOutResponseDto>> getCheckOuts(@AuthenticationPrincipal User principal) {
-        // post맨에선 에러가 나옴 => 헤더 토큰정보 문제
-        //  private Long id;
-        //    private String summaryTitle;
-        //    private int totalPrice;
-        // 이 정보만 필요.
-        //String email = principal.getUsername();
-        //UserResponse userResponse = userService.getUser(email);
         UserResponse userResponse = userService.getUser();
         List<CheckOutResponseDto> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
         return ResponseEntity.ok(checkOuts);
     }
     @GetMapping("/checkout/{detailId}") //TODO param에 정보를 받을 checkoutdetail 번호를 입력받아야함, user의 토큰 권한도 확인
     public ResponseEntity<CheckOutResponseDto> getCheckOut(@PathVariable("detailId") Long detailId) {
-        //TODO 권한 확인 필요
         CheckOutResponseDto checkOutResponseDto = checkOutService.getCheckOutDetail(detailId);
         return ResponseEntity.ok(checkOutResponseDto);
     }
     @PatchMapping("/checkout/{detailId}") //TODO param에 수정할 checkoutdetail 번호를 입력받아야함, user의 토큰 권한도 확인, 배송지 정보 수정
-    public ResponseEntity<CheckOutResponseDto> updateCheckOutAddress(@PathVariable("detailId") Long detailId, @RequestBody UserAddressDto userAddressDto) {
+    public ResponseEntity<CheckOutResponseDto> updateCheckOutAddress(@PathVariable("detailId") Long detailId, @RequestBody CheckOutRequestDto checkOutRequestDto) {
         //TODO 권한 확인 필요
         //TODO 잘 되는데 주소 id번호까지 같이 바뀌어버림; CheckOut을 address랑 분리해야함!
         //service에서 email로 userid를 체크해서 update함
-        CheckOutResponseDto checkOutResponseDto = checkOutService.updateCheckOut(detailId, userAddressDto);
+        CheckOutResponseDto checkOutResponseDto = checkOutService.updateCheckOut(detailId, checkOutRequestDto);
         return ResponseEntity.ok(checkOutResponseDto);
     }
     @DeleteMapping("/checkout/{detailId}") //TODO param에 checkout 번호를 입력받아야함, user의 토큰 권한도 확인
-    public ResponseEntity<Long> deleteCheckOut(@AuthenticationPrincipal User principal, @PathVariable("detailId") Long detailId) {
-        Long deletedId = checkOutService.deleteCheckOut(principal.getUsername(), detailId);
+    public ResponseEntity<Long> deleteCheckOut(@PathVariable("detailId") Long detailId) {
+        Long deletedId = checkOutService.deleteCheckOut(detailId);
         return ResponseEntity.ok(deletedId);
+    }
+    @GetMapping("/checkout-item/{checkoutId}") // checkoutitem 가져오기
+    public ResponseEntity getCheckoutItems(@PathVariable("checkoutId") Long checkoutId){
+        return ResponseEntity.ok().body(checkOutService.getCheckOutItem(checkoutId));
     }
 
     //TODO 검증 필요!
     @PostMapping("/checkout-item") //checkoutItem의 checkoutId로 checkout과 1:N연관관계를 맺음
     public ResponseEntity addCheckoutItem(@RequestBody CheckOutItemRequestDto checkOutItemRequestDto) {
-
         try {
             checkOutService.addCheckOutItem(checkOutItemRequestDto);
             return ResponseEntity.ok().body(checkOutItemRequestDto.getCheckOutId());
@@ -88,20 +84,12 @@ public class CheckOutApiController {
 
     @GetMapping("/admin/checkout") //userEmail로 checkout 정보 받기
     public ResponseEntity<List<CheckOutResponseDto>> getCheckOutsByAdmin(@AuthenticationPrincipal User principal) {
-        // post맨에선 에러가 나옴 => 헤더 토큰정보 문제
-        //  private Long id;
-        //    private String summaryTitle;
-        //    private int totalPrice;
-        // 이 정보만 필요.
         //TODO        request의 cookies token값의 ROLE이 admin이 아니라면 작동 X
         //TODO role 어드민일때! 사용가능한 mapping
         // 그냥 모두 조회
-
         // TODO role authorities => admin일때
-        //String email = principal.getUsername();
-        //UserResponse userResponse = userService.getUser(email);
-        UserResponse userResponse = userService.getUser();
-        List<CheckOutResponseDto> checkOuts = checkOutService.getCheckOuts(userResponse.getUserId());
+
+        List<CheckOutResponseDto> checkOuts = checkOutService.getAllCheckOuts();
         return ResponseEntity.ok(checkOuts);
     }
 
@@ -117,10 +105,9 @@ public class CheckOutApiController {
         //TODO patch => 업데이트 방법? update
     }
 
-    //todo principal 필요없음
-    @DeleteMapping("/admin/checkout/{detailId}") //TODO param에 checkout 번호를 입력받아야함, user의 토큰 권한도 확인
-    public ResponseEntity<Long> deleteCheckOutByAdmin(@AuthenticationPrincipal User principal, @PathVariable("detailId") Long detailId) {
-        Long deletedId = checkOutService.deleteCheckOut(principal.getUsername(), detailId);
+    @DeleteMapping("/admin/checkout/{detailId}")
+    public ResponseEntity<Long> deleteCheckOutByAdmin(@PathVariable("detailId") Long detailId) {
+        Long deletedId = checkOutService.deleteUserCheckOut(detailId);
         return ResponseEntity.ok(deletedId);
     }
 

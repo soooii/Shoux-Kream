@@ -1,0 +1,281 @@
+.input-container {
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 수직 정렬 */
+}
+
+.input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #CCC;
+    color: #555;
+    box-sizing: border-box;
+    font-family: 'Arvo';
+    font-size: 18px;
+    height: 50px;
+    padding: 10px 0px;
+    width: 800px;
+    text-align: right; /* 오른쪽 정렬 */
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.circle {
+    margin-left: 10px; /* input과 원 사이 간격 조정 */
+    font-size: 24px; /* 원의 크기 조정 */
+    color: #555; /* 원의 색상 */
+    font-weight: bolder;
+}
+
+input::-webkit-input-placeholder {
+    color: #AAA;
+    text-align: right; /* 오른쪽 정렬 */
+}
+
+input:focus::-webkit-input-placeholder {
+    color: dodgerblue;
+}
+
+.input:focus + .underline {
+    transform: scale(1);
+}
+
+
+.container {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.button-container {
+    margin-left: 8px; /* 버튼과 제목 사이의 간격 조정 */
+}
+
+.my-div {
+    background-color: #e6e6e6; /* 상위 div 배경색 */
+    padding: 20px; /* 패딩 추가 */
+}
+
+.custom-box {
+    width: 800px; /* 원하는 너비 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+.sell-item {
+    display: flex; /* 이미지와 텍스트를 나란히 배치 */
+    align-items: flex-start; /* 수직 정렬 */
+}
+
+.sell-item .image {
+    width: 100px;
+    height: 100px;
+    margin-right: 1.2rem; /* 이미지와 텍스트 간의 간격 */
+    cursor: pointer;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column; /* p 태그를 세로로 나열 */
+}
+
+.bold-text {
+    font-weight: bold; /* 굵은 글씨체 */
+    font-size: 1.2em; /* 약간 크게 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.normal-black {
+    color: black; /* 검은색 */
+    font-weight: normal; /* 보통 굵기 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.normal-gray {
+    color: gray; /* 회색 */
+    font-weight: normal; /* 보통 굵기 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+hr {
+    border: none; /* 기본 테두리 제거 */
+    border-top: 1px solid #ccc; /* 회색 선 */
+    margin: 20px 0; /* 상하 여백 조정 */
+}
+
+.gray-bar {
+    background-color: #ededed;
+    border-radius: 30px;
+    padding: 5px;
+    display: flex; /* 가로로 나란히 배치 */
+    align-items: center; /* 세로 정렬을 가운데로 */
+}
+
+.blue-bar {
+    background-color : #485FC7;
+    border-radius: 30px;
+    color: white;
+    text-align: center;
+    padding: 12px; /* 패딩을 줄여서 크기를 절반으로 */
+    font-weight: bold;
+    flex: 0 0 50%; /* 너비를 50%로 설정 */
+}
+
+.text {
+    margin-left: auto;
+    margin-right: 160px;
+    font-weight: bold;
+}
+
+.item-price {
+    text-align: center; /* 가로 가운데 정렬 */
+    display: flex; /* Flexbox 사용 */
+    flex-direction: column; /* 세로 방향으로 배치 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+.item-price .now-price {
+    font-size: 14px; /* 글씨 크기 조정 (원하는 크기로 변경) */
+    color: gray; /* 글씨 색상 변경 */
+    margin: 0; /* 기본 여백 제거 */
+}
+
+#item-price-now {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.normal-text {
+    font-weight: bold;
+}
+
+.custom-info {
+    margin: 20px; /* 필요에 따라 여백 추가 */
+}
+
+dl {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    padding: 0; /* 전체 패딩 제거 */
+}
+
+dl > div {
+    display: flex; /* 각 줄을 flexbox로 설정 */
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center; /* 수직 정렬 */
+    margin: 0; /* 기본 마진 제거 */
+    padding: 2px 0; /* 줄 간격 조정 */
+}
+
+.left-info {
+    margin-right: 20px; /* dt와 dd 사이의 간격 조정 */
+    flex: 1; /* dt가 가능한 만큼 공간을 차지하게 함 */
+    color: #b5b5b5;
+}
+
+dd {
+    margin: 0; /* dd의 기본 마진 제거 */
+    text-align: right; /* dd 내용을 오른쪽 정렬 */
+}
+
+.deadline-container {
+    display: flex;
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    align-items: center; /* 전체 컨테이너 중앙 정렬 */
+}
+
+.deadline-title {
+    text-align: left; /* 왼쪽 정렬 */
+    font-weight: bold; /* 글씨 굵게 */
+    width: 100%; /* 전체 너비 사용 */
+    margin-bottom: 5px; /* 아래쪽 간격 */
+}
+
+.deadline-txt {
+    text-align: left; /* 왼쪽 정렬 */
+    width: 100%; /* 전체 너비 사용 */
+    margin-bottom: 15px; /* 아래쪽 간격 */
+}
+
+.deadline-links {
+    display: flex; /* 플렉스 박스 사용 */
+    flex-wrap: wrap; /* 여러 줄로 나누기 */
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.deadline-link {
+    display: inline-block; /* 인라인 블록 요소 */
+    padding: 15px 25px; /* 패딩 */
+    background-color: #485FC7; /* 배경색 */
+    font-size: 17px; /* 글자 크기 */
+    color: white; /* 글자색 */
+    text-decoration: none; /* 밑줄 제거 */
+    border-radius: 15px; /* 동그란 모양 */
+    transition: background-color 0.3s; /* 호버 시 배경색 변화 */
+    margin: 5px; /* 각 버튼 간의 간격 */
+    font-weight: bolder; /* 글씨 굵게 */
+}
+
+.deadline-link:hover {
+    background-color: #ffffff; /* 호버 시 배경색 변화 */
+    border: 1px solid #485FC7; /* 테두리 색상 */
+}
+
+.settlement-container {
+    display: flex; /* flexbox 사용 */
+    justify-content: space-between;
+    align-items: center; /* 수직 중앙 정렬 */
+}
+
+.settlement-container p {
+    margin: 0; /* 기본 margin 제거 */
+    margin-right: 10px; /* p와 span 사이에 간격 추가 */
+}
+
+.amount {
+    font-size: 25px;
+    font-weight: bolder;
+    color: #485FC7;
+}
+
+.button.is-link.is-large {
+    font-size: 18px; /* 원하는 크기로 조정 */
+    font-weight: bold; /* 글씨를 굵게 설정 */
+}
+
+.modal-card-title {
+    text-align: center; /* 가운데 정렬 */
+    font-weight: bold; /* 굵게 설정 */
+    width: 90%; /* 전체 너비 사용 */
+}
+
+.red-txt {
+    color: red;
+}
+
+ul {
+    list-style-type: disc; /* 기본 스타일 설정 */
+    padding-left: 20px; /* 들여쓰기 */
+    color: #7c7c7c;
+}
+
+.modal-card-body {
+    max-height: 70vh; /* 원하는 최대 높이 설정 (예: 60%의 뷰포트 높이) */
+    overflow-y: auto; /* 세로 스크롤이 필요할 경우 스크롤 추가 */
+    padding: 3rem; /* 적당한 패딩 추가 */
+}
+
+table {
+    width: 100%; /* 테이블 너비를 100%로 설정 */
+    border-collapse: collapse; /* 테두리 겹침 방지 */
+    table-layout: fixed; /* 고정 레이아웃 */
+}
+
+td {
+    border: 1px solid #ccc; /* 회색 테두리 설정 */
+    padding: 10px; /* 내부 여백 */
+    text-align: center; /* 가로 가운데 정렬 */
+    vertical-align: middle; /* 세로 가운데 정렬 */
+    width: 33.33%; /* 각 셀의 너비를 동일하게 설정 (3개 열 기준) */
+    height: 70px; /* 고정 세로 높이 설정 */
+    color: #555; /* 글자색을 회색으로 설정 */
+}

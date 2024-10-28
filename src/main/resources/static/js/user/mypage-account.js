@@ -1,13 +1,17 @@
-import { checkLogin, fetchNewAccessToken } from "/js/useful-functions.js";
+import { checkLogin, fetchNewAccessToken, logout } from "/js/useful-functions.js";
 
-checkLogin();
 
 document.addEventListener('DOMContentLoaded', function() {
+    checkLogin();
     fetchUserData();
     document.getElementById('saveButton').addEventListener('click', function(event) {
         event.preventDefault();
         updateUserData();
     });
+    const deleteButton = document.getElementById('delete-account-button');
+    if (deleteButton) {
+        deleteButton.addEventListener('click', deleteAccount);
+    }
 });
 
 // 유저 정보 가져오기
@@ -99,11 +103,10 @@ async function updateUserData() {
         if (!response.ok) {
             console.error('Error:', response.status);
             if (response.status === 401) {
-                console.log('토큰이 만료되었습니다. 새로운 토큰을 발급 받습니다.');
                 await fetchNewAccessToken();
                 return updateUserData();
             }
-            else if(response.status === 418) {
+            else if(response.status === 403) {
                 passwordMatchMessage.style.display = 'block';
                 passwordMatchMessage.textContent = '현재 비밀번호가 잘못되었습니다.';
                 return;
@@ -113,10 +116,45 @@ async function updateUserData() {
 
         passwordMatchMessage.style.display = 'none';
         newPasswordMatchMessage.style.display = 'none';
-        alert('회원정보가 수정되었습니다.');
-        fetchUserData();
+        alert('회원정보가 수정되었습니다. 다시 로그인해 주세요.');
+        logout();
+
 
     } catch (error) {
         alert(`오류가 발생했습니다: ${error.message}`);
+    }
+}
+
+async function deleteAccount() {
+    if (confirm('정말로 회원탈퇴를 하시겠습니까?')) {
+        const token = sessionStorage.getItem('accessToken');
+        try {
+            let response = await fetch('/api/users/me', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    await fetchNewAccessToken();
+                    const newToken = sessionStorage.getItem('accessToken');
+                    console.log('new Access Token:', newToken);
+                    return deleteAccount();
+                }
+
+                if (!response.ok) {
+                    throw new Error('회원탈퇴 중 오류가 발생했습니다.');
+                }
+            }
+
+            alert('회원탈퇴가 완료되었습니다.');
+            logout();
+
+        } catch (error) {
+            alert(`오류가 발생했습니다: ${error.message}`);
+        }
     }
 }

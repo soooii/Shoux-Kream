@@ -1,12 +1,17 @@
 package com.shoux_kream.checkout.entity;
 
+import com.shoux_kream.checkout.dto.CheckOutItemResponseDto;
+import com.shoux_kream.checkout.dto.CheckOutResponseDto;
 import com.shoux_kream.item.entity.Item;
+import com.shoux_kream.user.dto.response.UserAddressDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class CheckOutItem {
 
     @Id
@@ -15,7 +20,7 @@ public class CheckOutItem {
 
     @ManyToOne
     //TODO 테이블 이름이 items!
-    @JoinColumn(name = "items_id")
+    @JoinColumn(name = "item_id")
     private Item item;
 
     private int quantity;
@@ -35,4 +40,13 @@ public class CheckOutItem {
     }
 
     // Getters and setters
+
+    public CheckOutItemResponseDto toDto() {
+        return CheckOutItemResponseDto.builder()
+                .itemId(item.getId())
+                .quantity(quantity)
+                .totalPrice(totalPrice)
+                .checkOutId(checkOut.getId())
+                .build();
+    }
 }

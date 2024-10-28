@@ -22,6 +22,26 @@ public class CategoryController {
     @Autowired
     private final CategoryService categoryService;
 
+    // URL 변경: GET 메소드는 /category-add 로 호출
+    @GetMapping("/add")
+    public String addCategoryPage() {
+        return "category/category-add"; }// category-add.html 템플릿 파일 반환
+
+    @GetMapping("/edit/{id}")
+    public String editCategoryPage(){ return "category/category-edit"; }
+
+    @GetMapping("/category-list") // 모든 카테고리 조회
+    public ResponseEntity<List<CategoryDto>> getAllCategories() {
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/{id}") // 특정 ID에 해당하는 카테고리 조회 기능 추가
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable(name = "id") Long id) {
+        CategoryDto categoryDto = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(categoryDto);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/category-add")
     public ResponseEntity<CategoryDto> createCategory(
@@ -43,27 +63,9 @@ public class CategoryController {
         return ResponseEntity.ok(createdCategory);
     }
 
-    // URL 변경: GET 메소드는 /category-add 로 호출
-    @GetMapping("/add")
-    public String addCategoryPage() {
-        return "category/category-add";  // category-add.html 템플릿 파일 반환
-    }
-
-    @GetMapping("/category-list") // 모든 카테고리 조회
-    public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        List<CategoryDto> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
-    }
-
-    @GetMapping("/{id}") // 특정 ID에 해당하는 카테고리 조회 기능 추가
-    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
-        CategoryDto categoryDto = categoryService.getCategoryById(id);
-        return ResponseEntity.ok(categoryDto);
-    }
-
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<CategoryDto> updateCategory(
-            @PathVariable Long id,
+            @PathVariable(name ="id") Long id,
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("themeClass") String themeClass,
