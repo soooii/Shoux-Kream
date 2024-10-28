@@ -8,19 +8,46 @@ import {
   createNavbar,
 } from "../useful-functions.js";
 
+import {
+  loadAddressForEdit, updateAddress, deleteAddress, saveAddress, searchAddress as modalSearchAddress
+}from "../user/mypage-address.js";
+
+//TODO 이 부분 모듈화 필요
+//배송지 확인 버튼
+const checkAddressButton = document.querySelector("#checkAddress");
+//배송지 추가 버튼
+const addAddressButton = document.getElementById('addAddress');
+//저장하기 버튼
+const saveButton = document.getElementById('save');
+//취소 버튼
+const closeButton = document.getElementById('close');
+//배송지 입력 모달
+const addressModal = document.getElementById('addressModal');
+//우편번호 찾기
+const searchAddressButton = document.getElementById('searchAddressButton');
+const editSearchAddressButton = document.getElementById('editSearchAddressButton');
+const editSaveButton = document.getElementById('editSave');
+const editCloseButton = document.getElementById('editClose');
+const listCloseButton = document.getElementById('listClose');
+let currentAddressId = null; // 수정할 주소의 ID 저장
+
 
 // 요소(element), input 혹은 상수
 const subtitleCart = document.querySelector("#subtitleCart");
 const receiverNameInput = document.querySelector("#receiverName");
 const receiverPhoneNumberInput = document.querySelector("#receiverPhoneNumber");
 const postalCodeInput = document.querySelector("#postalCode");
-const searchAddressButton = document.querySelector("#searchAddressButton");
+const mainSearchAddressButton = document.querySelector("#mainSearchAddressButton");
 const address1Input = document.querySelector("#address1");
 const address2Input = document.querySelector("#address2");
 const requestSelectBox = document.querySelector("#requestSelectBox");
 const customRequestContainer = document.querySelector(
   "#customRequestContainer"
 );
+
+//배송지 리스트 모달 먼저 선언!
+const addressListModal = document.getElementById('addressListModal');
+
 const customRequestInput = document.querySelector("#customRequest");
 const itemsTitleElem = document.querySelector("#itemsTitle");
 const itemsTotalElem = document.querySelector("#itemsTotal");
@@ -45,15 +72,137 @@ addAllEvents();
 function addAllElements() {
   createNavbar();
   insertCheckOutSummary();
-  insertUserData();
 }
+
+
 
 // addEventListener들을 묶어주어서 코드를 깔끔하게 하는 역할임.
 function addAllEvents() {
+  // 배송지 입력 모달 열기
+  checkAddressButton.addEventListener('click', function() {
+    addressListModal.classList.add('is-active');
+    checkAddress();
+  });
+  // 취소 누르면 닫힘
+  listCloseButton.addEventListener('click', function() {
+    addressListModal.classList.remove('is-active');
+  });
   subtitleCart.addEventListener("click", navigate("/cart"));
-  searchAddressButton.addEventListener("click", searchAddress);
+  mainSearchAddressButton.addEventListener("click", searchAddress);
   requestSelectBox.addEventListener("change", handleRequestChange);
   checkOutButton.addEventListener("click", doCheckOut);
+}
+
+
+async function checkAddress() {
+  fetchUserAddress();
+  //우편번호 찾기
+  searchAddressButton.addEventListener('click', modalSearchAddress);
+  editSearchAddressButton.addEventListener('click', modalSearchAddress);
+
+  // 배송지 입력 모달 열기
+  addAddressButton.addEventListener('click', function() {
+      document.getElementById('addressForm').reset();
+      addressModal.classList.add('is-active');
+  });
+
+  // 저장하기
+  saveButton.addEventListener('click', async function() {
+      await saveAddress();
+  });
+
+  // 취소 누르면 닫힘
+  closeButton.addEventListener('click', function() {
+      addressModal.classList.remove('is-active');
+  });
+
+};
+
+// 배송지 목록 가져오기 오버라이딩 방법 몰라서 재정의
+async function fetchUserAddress() {
+  const token = sessionStorage.getItem('accessToken');
+  console.log('Access Token:', token);
+  try {
+      let response = await fetch('/api/users/userAddress', {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+          }
+      });
+
+      if (!response.ok) {
+          console.error('Error:', response.status);
+          if (response.status === 401) {
+              await fetchNewAccessToken();
+              return fetchUserAddress();
+          }
+          throw new Error(`HTTP error status: ${response.status}`);
+      }
+
+      const userData = await response.json();
+      console.log(userData);
+
+      const addressContainer = document.getElementById('address-container');
+      addressContainer.innerHTML = '';
+
+      userData.forEach((address) => {
+          const addressHTML = `
+              <div class="address-item py-3">
+                  <div class="columns is-vcentered">
+                      <div class="column">
+                          <p><strong>${address.recipientName}</strong></p>
+                          <p>${address.recipientPhone}</p>
+                          <p>(${address.postalCode}) ${address.address1}, ${address.address2}</p>
+                      </div>
+                      <div class="column is-narrow has-text-right">
+                          <button class="button is-light is-small mb-2 select-button" data-id="${address.id}">선택</button>
+                          <button class="button is-light is-small delete-button" data-id="${address.id}">삭제</button>
+                      </div>
+                  </div>
+                  <hr /></div>`;
+
+          addressContainer.innerHTML += addressHTML;
+      });
+
+      buttonMethod();
+
+  } catch (error) {
+      alert(`오류가 발생했습니다: ${error.message}`);
+      window.location.href = '/users/login';
+  }
+}
+
+//배송지 선택/삭제 버튼 동작
+function buttonMethod() {
+  const editButtons = document.querySelectorAll('.select-button');
+  editButtons.forEach(button => {
+      button.addEventListener('click', async function() {
+          const addressId = this.dataset.id;
+          const addressData = await loadAddressForEdit(addressId);
+          await insertUserData(addressData);
+      });
+  });
+
+  const deleteButtons = document.querySelectorAll('.delete-button');
+  deleteButtons.forEach(button => {
+      button.addEventListener('click', async function() {
+          const addressId = this.dataset.id;
+          await deleteAddress(addressId);
+      });
+  });
+}
+
+//배송지 확인에서 유저정보 받고 팝업 닫기
+async function insertUserData(addressData) {
+    receiverNameInput.value = addressData.recipientName;
+    receiverPhoneNumberInput.value = addressData.recipientPhone;
+    postalCode.value = addressData.postalCode;
+    address1Input.value = addressData.address1;
+    address2Input.value = addressData.address2;
+
+    currentAddressId = addressData.id;
+    addressListModal.classList.remove('is-active');
 }
 
 // Daum 주소 API (사용 설명 https://postcode.map.daum.net/guide)
@@ -159,29 +308,6 @@ async function insertCheckOutSummary() {
   receiverNameInput.focus();
 }
 
-//유저정보 받기
-async function insertUserData() {
-  const userData = await Api.get("/api/users/userAddress");
-
-  //TODO 일단 0번 데이터만 등록
-  const { id, recipientName, recipientPhone, postalCode, address1, address2 } = userData[0];
-
-  // 만약 db에 데이터 값이 있었다면, 배송지정보에 삽입
-  if (recipientName) {
-    receiverNameInput.value = recipientName;
-  }
-
-  if (recipientPhone) {
-    receiverPhoneNumberInput.value = recipientPhone;
-  }
-
-  if (address) {
-    postalCode.value = postalCode;
-    address1Input.value = address1;
-    address2Input.value = address2;
-  }
-}
-
 // "직접 입력" 선택 시 input칸 보이게 함
 // default값(배송 시 요청사항을 선택해 주세여) 이외를 선택 시 글자가 진해지도록 함
 function handleRequestChange(e) {
@@ -222,6 +348,7 @@ async function doCheckOut() {
   let request;
   if (requestType === "0") {
     request = "요청사항 없음.";
+    return alert("요청사항을 선택하거나 작성해 주세요.");
   } else if (requestType === "6") {
     if (!customRequest) {
       return alert("요청사항을 작성해 주세요.");
@@ -274,7 +401,11 @@ async function doCheckOut() {
 
     }
 
-
+   
+    receiverNameInput.value = "";
+    receiverPhoneNumberInput.value = "";
+    postalCodeInput.value = "";
+    
     alert("결제 및 주문이 정상적으로 완료되었습니다.\n감사합니다.");
     window.location.href = "/checkout/complete";
   } catch (err) {

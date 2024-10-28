@@ -1,10 +1,3 @@
-@font-face {
-    font-family: 'Freesentation-9Black';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-9Black.woff2') format('woff2');
-    font-weight: 900;
-    font-style: normal;
-}
-
 .header-search-input {
     width: 20rem;
 }
@@ -77,15 +70,13 @@
     line-height: 1.5rem;
 }
 
-.Freesentation-9Black-title {
-    font-family: "Freesentation-9Black";
+.black-title {
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
 }
 
-.Freesentation-9Black-price {
-    font-family: "Freesentation-9Black";
+.black-price {
     font-optical-sizing: auto;
     font-weight: 200;
     font-style: normal;

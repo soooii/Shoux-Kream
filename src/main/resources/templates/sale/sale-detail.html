@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>마이페이지</title>
+    <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/elice-rabbit-favicon.png"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/js/bulma-carousel.min.js"
+    ></script>
+
+    <!-- 폰트 어썸: 아이콘 -->
+    <script
+            defer
+            src="https://kit.fontawesome.com/9daa42bcef.js"
+            crossorigin="anonymous"
+    ></script>
+    <!-- AWS S3 사진 업로드용 -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+    <!-- 커스텀 css, js -->
+    <link rel="stylesheet" href="/css/sale/sale-detail.css" />
+    <script src="js/home/home.js" type="module" defer></script>
+    <script src="/js/login-logout.js" type="module" defer></script>
+    <script src="/js/sale/sale-detail.js" type="module" defer></script>
+    <link rel="stylesheet" href="/css/common/common.css" />
+    <style>
+        .mypage-title a {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+
+        .larger-text {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div id ="wrapper">
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <aside class="column is-3">
+                    <nav class="menu">
+                        <p class="menu-label mypage-title">
+                            <a href="/users/me">마이 페이지</a></p>
+                        <ul class="menu-list">
+                            <li class="larger-text">쇼핑 정보</li>
+                            <li><a href="/users/me/purchase">구매 내역</a></li>
+                            <li><a href="/selling">판매 내역</a></li>
+                            <li class="larger-text">내 정보</li>
+                            <li><a href="/users/me/account">계정 관리</a></li>
+                            <li><a href="/users/me/address">주소록</a></li>
+                        </ul>
+                    </nav>
+                </aside>
+
+                <div class="column is-9">
+                    <div>
+                        <p class="sale-list">판매 입찰</p>
+                    </div>
+                    <div class="is-flex is-justify-content-flex-end">
+                        <button class="button is-danger" id="delete-btn">입찰 지우기</button>
+                    </div>
+                    <p class="m-2"></p>
+                    <div class="box">
+                        <!--판매내역 상세-->
+                        <div class="sale-detail-container" id="sale-detail-container">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</html>

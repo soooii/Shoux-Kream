@@ -1,6 +1,6 @@
 package com.shoux_kream.item.dto.response;
 
-import com.shoux_kream.item.entity.KeyWord;
+import com.shoux_kream.category.entity.Category;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -10,13 +10,13 @@ public record ItemUpdateResponse(
         Long id,
 //        BrandResponse brand,
         String title,
-//        Category category,
+        Category category,
         String manufacturer,
         String shortDescription,
         String detailDescription,
-        MultipartFile image,
+        MultipartFile imageFile,
         Integer inventory,
         Integer price,
-        List<KeyWord> keyWords // 배열로 받기 위해 List<String> 사용
+        List<String> keyWords // 배열로 받기 위해 List<String> 사용
 ) {
 }

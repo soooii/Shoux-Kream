@@ -1,0 +1,41 @@
+.sale-list {
+    font-size: 27px;
+    font-weight: bolder;
+}
+
+.image {
+    width: 100px;
+    height: 100px;
+    margin-right: 1.2rem; /* 이미지와 텍스트 간의 간격 */
+    cursor: pointer;
+}
+
+.price-due {
+    display: flex;
+    flex-direction: row; /* 수평 정렬 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    align-items: center; /* 세로 정렬을 가운데로 */
+    gap: 20px; /* 요소 사이의 간격 조정 */
+}
+
+.price, .due {
+    min-width: 100px; /* 최소 너비를 설정하여 위치 고정 */
+    text-align: right; /* 텍스트 오른쪽 정렬 */
+}
+
+.labels {
+    display: flex; /* Flexbox 사용 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    gap: 22px; /* 요소 간의 간격 조정 */
+}
+
+.label-item {
+    text-align: right; /* 텍스트 오른쪽 정렬 */
+    margin-right: 32px; /* 기본 여백 제거 */
+}
+
+.label-item p {
+    margin: 0; /* 기본 여백 제거 */
+    line-height: 1.5; /* 줄 간격 조정 (선택적) */
+}
+

@@ -34,6 +34,13 @@ public class CheckOutService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
+    public List<CheckOutItemResponseDto> getCheckOutItem(Long checkoutId){
+        List<CheckOutItem> checkOuts = checkOutItemRepository.findByCheckOutId(checkoutId);
+        return checkOuts.stream()
+                .map(checkOutItem -> checkOutItem.toDto())
+                .collect(Collectors.toList());
+    }
+
     //TODO Transactional을 언제, 왜, 어떻게 써야할까요?
     @Transactional
     public CheckOutResponseDto createCheckout(Long userId, CheckOutRequestDto checkOutRequestDto) {
@@ -57,6 +64,11 @@ public class CheckOutService {
                 .checkOut(checkOutRepository.findById(checkoutItemRequestDto.getCheckOutId()).orElseThrow(() -> new IllegalArgumentException("checkoutId not found")))
                 .build();
         checkOutItemRepository.save(checkOutItem);
+
+        // 주문 완료 후 재고 감소
+        Item item = itemRepository.findById(checkoutItemRequestDto.getItemId())
+                .orElseThrow(() -> new IllegalArgumentException("itemId not found"));
+        item.removeStock(checkoutItemRequestDto.getQuantity());
     }
 
     public List<CheckOutResponseDto> getCheckOuts(Long userId) {
@@ -66,9 +78,9 @@ public class CheckOutService {
                 .collect(Collectors.toList());
     }
 
-    public CheckOutResponseDto updateCheckOut(Long detailId, UserAddressDto userAddressDto) {
+    public CheckOutResponseDto updateCheckOut(Long detailId, CheckOutRequestDto checkOutRequestDto) {
         CheckOut checkOut =  checkOutRepository.findById(detailId).orElseThrow(() -> new IllegalArgumentException("checkoutId not found"));
-        checkOut.updateAddress(userAddressDto.toEntity());
+        checkOut.updateAddress(checkOutRequestDto);
         checkOutRepository.save(checkOut);
         return  checkOut.toDto();
     }
@@ -78,9 +90,8 @@ public class CheckOutService {
         return checkOut.toDto();
     }
 
-    public Long deleteCheckOut(String email, Long detailId) {
-        CheckOut checkOut = checkOutRepository.findByUserAndId(userRepository.findByEmail(email).orElseThrow(), detailId);
-        checkOutRepository.delete(checkOut);
+    public Long deleteCheckOut(Long detailId) {
+        checkOutRepository.deleteById(detailId);
         return detailId;
     }
 
@@ -119,5 +130,19 @@ public class CheckOutService {
     @Transactional
     public void deleteCheckOutEach(Long checkOutEacId) {
         checkOutEachRepository.deleteById(checkOutEacId);
+    }
+
+    // 어드민 주문 내역 전체 조회
+    public List<CheckOutResponseDto> getAllCheckOuts() {
+        List<CheckOut> checkOuts = checkOutRepository.findAll();
+        return checkOuts.stream()
+                .map(checkOut -> checkOut.toAdminDto())
+                .collect(Collectors.toList());
+    }
+
+    public Long deleteUserCheckOut(Long detailId) {
+        CheckOut checkOut = checkOutRepository.findById(detailId).orElseThrow(() -> new IllegalArgumentException("checkoutId not found"));
+        checkOutRepository.delete(checkOut);
+        return detailId;
     }
 }

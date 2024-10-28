@@ -25,9 +25,9 @@ public class AdminItemApiController {
         return new ResponseEntity<>(itemService.findAll(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
-        itemService.delete(id);
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long itemId) {
+        itemService.delete(itemId);
         return ResponseEntity.noContent().build();
     }
 

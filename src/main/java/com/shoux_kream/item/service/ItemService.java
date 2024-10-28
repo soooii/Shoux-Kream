@@ -5,16 +5,14 @@ import com.shoux_kream.category.repository.CategoryRepository;
 import com.shoux_kream.config.s3.S3Uploader;
 import com.shoux_kream.exception.ErrorCode;
 import com.shoux_kream.exception.KreamException;
-import com.shoux_kream.item.dto.ItemDto;
 import com.shoux_kream.item.dto.request.ItemSaveRequest;
 import com.shoux_kream.item.dto.request.ItemUpdateRequest;
-//import com.shoux_kream.item.dto.response.BrandResponse;
 import com.shoux_kream.item.dto.response.ItemResponse;
 import com.shoux_kream.item.dto.response.ItemUpdateResponse;
 //import com.shoux_kream.item.entity.Brand;
+import com.shoux_kream.item.dto.response.SaleItemResponseDto;
 import com.shoux_kream.item.entity.Item;
 //import com.shoux_kream.item.repository.BrandRepository;
-import com.shoux_kream.item.entity.KeyWord;
 import com.shoux_kream.item.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -24,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,9 +42,8 @@ public class ItemService {
     public ItemResponse save(ItemSaveRequest itemSaveRequest,  MultipartFile imageFile) throws IOException {
 
 //        Brand brand = findBrandById(itemSaveRequest.brandId());
-//        Category category = findCategoryById(itemSaveRequest.categoryId());
-//        Category category = categoryRepository.findByName("미지정")
-//                .orElseThrow(() -> new RuntimeException("Default '미지정' category not found"));
+        Category category = findCategoryById(itemSaveRequest.categoryId());
+        //TODO 카테고리 미지정 선택불가 처리
 
         String imageKey = s3Uploader.upload(imageFile, "item-images");
 
@@ -52,7 +51,7 @@ public class ItemService {
 //              brand,
                 itemSaveRequest.id(),
                 itemSaveRequest.title(),
-//                category, // Category 엔티티 사용
+                category, // Category 엔티티 사용
                 itemSaveRequest.manufacturer(),
                 itemSaveRequest.shortDescription(),
                 itemSaveRequest.detailDescription(),
@@ -68,7 +67,7 @@ public class ItemService {
                 savedItem.getId(),
 //                new BrandResponse(savedItem.getBrand().getId(), savedItem.getBrand().getTitle()),
                 savedItem.getTitle(),
-//                savedItem.getCategory(), // Category 엔티티 사용
+                savedItem.getCategory(), // Category 엔티티 사용
                 savedItem.getManufacturer(),
                 savedItem.getShortDescription(),
                 savedItem.getDetailDescription(),
@@ -112,9 +111,11 @@ public class ItemService {
             String imageKey = s3Uploader.upload(imageFile, "item-images");
             item.setImageKey(imageKey);  // 새로운 이미지 키로 업데이트
         }
+        Category category = findCategoryById(itemUpdateRequest.categoryId());
 
         // Item의 필드 값 업데이트
         item.setTitle(itemUpdateRequest.title());
+        item.setCategory(category);
         item.setManufacturer(itemUpdateRequest.manufacturer());
         item.setShortDescription(itemUpdateRequest.shortDescription());
         item.setDetailDescription(itemUpdateRequest.detailDescription());
@@ -128,10 +129,11 @@ public class ItemService {
         return new ItemUpdateResponse(
                 item.getId(),
                 item.getTitle(),
+                item.getCategory(),
                 item.getManufacturer(),
                 item.getShortDescription(),
                 item.getDetailDescription(),
-                itemUpdateRequest.image(), // MultipartFile을 그대로 넘김
+                imageFile, // MultipartFile을 그대로 넘김
                 item.getInventory(),
                 item.getPrice(),
                 item.getKeyWords()
@@ -145,10 +147,10 @@ public class ItemService {
         return new ItemUpdateRequest(
                 item.getId(),
                 item.getTitle(),
+                item.getCategory().getId(),
                 item.getManufacturer(),
                 item.getShortDescription(),
                 item.getDetailDescription(),
-                null, // MultipartFile은 수정 요청 시 클라이언트에서 처리
                 item.getInventory(),
                 item.getPrice(),
                 item.getKeyWords()
@@ -171,6 +173,7 @@ public class ItemService {
     }
 
     // 모든 상품의 목록을 조회하고 dto 리스트로 반환
+    // TODO 추가
     public List<ItemResponse> findAll() {
         return itemRepository.findAll().stream()
                 .map(ItemResponse::fromEntity)
@@ -182,4 +185,27 @@ public class ItemService {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new KreamException(ErrorCode.INVALID_ID));
     }
+
+    // 판매 등록을 위한 상품 찾기
+    public SaleItemResponseDto findSaleItemById(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NoSuchElementException("Item not found. item id : " + itemId));
+
+        return new SaleItemResponseDto(item);
+    }
+
+    // 상품 검색
+    public List<ItemResponse> searchItems(String searchKeyword) {
+        return itemRepository.findByTitleContaining(searchKeyword).stream()
+                .map(ItemResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    //카테고리에 따른 상품 리스트
+    public List<ItemResponse> findItemsByCategoryId(Long categoryId) {
+        return itemRepository.findByCategoryId(categoryId).stream()
+                .map(ItemResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
 }

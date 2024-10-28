@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shopping Mall</title>
+
+    <!-- 아이콘 -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/elice-rabbit-favicon.png" />
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+
+    <!-- Font Awesome: 아이콘 -->
+    <script defer src="https://kit.fontawesome.com/9daa42bcef.js" crossorigin="anonymous"></script>
+
+    <!-- Daum 주소 API 사용하기 위한 파일 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <!-- 커스텀 CSS, JS -->
+    <script src="/js/user/mypage-checkout-detail.js" type="module" defer></script>
+    <script src="/js/login-logout.js" type="module" defer></script>
+
+</head>
+<body>
+    <!-- 헤더 -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+<div id="wrapper">
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <aside class="column is-3">
+                    <nav class="menu">
+                        <p class="menu-label mypage-title">
+                            <a href="/users/me">마이 페이지</a></p>
+                        <ul class="menu-list">
+                            <li class="larger-text">쇼핑 정보</li>
+                            <li><a href="/users/me/purchase">구매 내역</a></li>
+                            <li><a href="/selling">판매 내역</a></li>
+                            <li class="larger-text">내 정보</li>
+                            <li><a href="/users/me/account">계정 관리</a></li>
+                            <li><a href="/users/me/address">주소록</a></li>
+                        </ul>
+                    </nav>
+                </aside>
+
+                <!-- 구매페이지 섹션 -->
+                <div class="column is-9">
+                    <div class="box">
+                        <div class="level">
+                            <div class="level-left">
+                                <p class="title">주문 상세 정보</p>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <!-- 주문 디테일을 표시할 영역 -->
+                        <div id="checkout-detail-container">
+
+                          <!-- checkoutitem-checkout 번호 기반 검색 => 뿌리기 -->
+
+                        </div>
+
+                        <!--  -->
+                        <!-- 주문 정보 요약 -->
+                        <div class="box is-parent tile-checkout-summary">
+                          <div class="container is-fullhd checkout-summary">
+                            <div class="is-size-3">
+                              <p><strong>결제정보</strong></p>
+                            </div>
+                            <div class="checkout-info">
+                              <div>
+                                <p class="info is-size-4">상품총액</p>
+                                <p class="info is-size-5" id="itemsTotal"></p>
+                              </div>
+                              <div>
+                                <p class="info is-size-4">배송비</p>
+                                <p class="info is-size-5" id="deliveryFee"></p>
+                              </div>
+                            </div>
+                            <div class="total">
+                              <p class="total-label is-size-4"><strong>총 결제금액</strong></p>
+                              <strong><p class="total-price is-size-4" id="checkOutTotal"></p></strong>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="tile is-ancestor">
+                            <div class="container is-fullhd cart-items">
+                              <div class="box delivery-info">
+                                <!-- 배송지 정보 -->
+                                <div class="level">
+                                    <div class="level-left">
+                                        <p class="is-size-4"><strong>배송지 정보</strong></p>
+                                    </div>
+                                    <div class="level-right">
+                                        <button class="button is-link" id="checkAddress">배송지 확인</button>
+                                    </div>
+                                </div>
+                                <div class="field is-horizontal">
+                                  <div class="field-label is-normal">
+                                    <label class="label" for="receiverName">이름</label>
+                                  </div>
+                                  <div class="field-body">
+                                    <div class="field">
+                                      <p class="control">
+                                        <input
+                                          class="input"
+                                          id="receiverName"
+                                          type="text"
+                                          placeholder="받는 분 이름을 입력해 주세요."
+                                          autocomplete="on"
+                                        />
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                  
+                                <div class="field is-horizontal">
+                                  <div class="field-label is-normal">
+                                    <label class="label" for="receiverPhoneNumber">연락처</label>
+                                  </div>
+                                  <div class="field-body">
+                                    <div class="field">
+                                      <p class="control">
+                                        <input
+                                          class="input"
+                                          id="receiverPhoneNumber"
+                                          type="number"
+                                          placeholder="- 없이 입력해 주세요."
+                                          autocomplete="on"
+                                        />
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                  
+                                <div class="field is-horizontal">
+                                  <div class="field-label is-normal">
+                                    <label class="label" for="address2">주소</label>
+                                  </div>
+                                  <div class="field-body search">
+                                    <div class="field">
+                                      <p class="control">
+                                        <input
+                                          class="input"
+                                          id="postalCode"
+                                          type="text"
+                                          placeholder="주소찾기를 클릭해 주세요."
+                                          readonly
+                                        />
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <button
+                                        class="button is-light is-hovered"
+                                        id="mainSearchAddressButton"
+                                      >
+                                        주소찾기
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                  
+                                <div class="field is-horizontal">
+                                  <div class="field-label is-normal no-label"></div>
+                                  <div class="field-body">
+                                    <div class="field">
+                                      <p class="control">
+                                        <input
+                                          class="input"
+                                          id="address1"
+                                          type="text"
+                                          placeholder=""
+                                          autocomplete="on"
+                                          readonly
+                                        />
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                  
+                                <div class="field is-horizontal">
+                                  <div class="field-label is-normal no-label"></div>
+                                  <div class="field-body">
+                                    <div class="field">
+                                      <p class="control">
+                                        <input
+                                          class="input"
+                                          id="address2"
+                                          type="text"
+                                          placeholder=""
+                                          autocomplete="on"
+                                        />
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                  
+                                <div class="field is-horizontal">
+                                  <div class="field-label is-normal">
+                                    <label class="label" for="requestSelectBox">요청사항</label>
+                                  </div>
+                                  <div class="field-body">
+                                    <div class="select">
+                                      <select id="requestSelectBox">
+                                        <option value="0" selected disabled hidden>
+                                          배송시 요청사항을 선택해 주세요.
+                                        </option>
+                                        <option value="1" class="select-option">
+                                          직접 수령하겠습니다.
+                                        </option>
+                                        <option value="2" class="select-option">
+                                          배송 전 연락바랍니다.
+                                        </option>
+                                        <option value="3" class="select-option">
+                                          부재 시 경비실에 맡겨주세요.
+                                        </option>
+                                        <option value="4" class="select-option">
+                                          부재 시 문 앞에 놓아주세요.
+                                        </option>
+                                        <option value="5" class="select-option">
+                                          부재 시 택배함에 넣어주세요.
+                                        </option>
+                                        <option value="6" class="select-option">직접 입력</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                  
+                                <div
+                                  class="field is-horizontal custom-request"
+                                  id="customRequestContainer"
+                                >
+                                  <div class="field-label is-normal no-label"></div>
+                                  <div class="field-body">
+                                    <div class="field">
+                                      <p class="control">
+                                        <input
+                                          class="input"
+                                          id="customRequest"
+                                          type="text"
+                                          maxlength="50"
+                                          placeholder="최대 50자 입력이 가능합니다."
+                                          autocomplete="on"
+                                        />
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="columns is-centered mt-3">
+                            <button class="button is-small is-link" id="editCheckOut">수정</button>
+                            <button class="button is-small is-light" id="cancel">취소</button>
+                            <button class="button is-small is-danger" id="deleteCheckOut">삭제</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 주소록 표현할 아티클 -->
+    <div class="modal" id="addressListModal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">주소록</p>
+          <button class="button is-link level-right" id="addAddress">새 배송지 추가</button>
+        </header>
+        <section class="modal-card-body" id="address-container">
+          <!-- 배송지 정보를 표시할 영역 -->
+        </section>
+        <div class="modal-card-foot">
+          <button class="button" id="listClose">닫기</button>
+        </div>
+      </div>
+    </div>
+    <!-- 배송지 선택창을 표시할 영역 -->
+    <div th:insert="~{fragments/address :: addressFragment}"></div>
+</div>
+
+<style>
+    .mypage-title a {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: black;
+        text-decoration: none;
+    }
+
+    .larger-text {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .modal-card {
+        width: 500px;
+    }
+</style>
+</body>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</html>

@@ -63,6 +63,6 @@ public class CheckOutViewController {
 
     @GetMapping("/checkout/complete")
     public String getCheckOutCompletePage(){
-        return "checkout/checkoutcomplete";
+        return "checkout/checkout-complete";
     }
 }

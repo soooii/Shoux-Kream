@@ -10,10 +10,11 @@
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
     <link rel="stylesheet" href="/css/item/item-add.css" />
     <script src="/js/item/item-edit.js" type="module" defer></script>
+    <link rel="stylesheet" href="/css/common/common.css" />
 </head>
 <body>
 <!-- 헤더 -->
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<!-- <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="container mt-3">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
@@ -34,7 +35,7 @@
             </div>
         </div>
     </div>
-</nav>
+</nav> -->
 
 <!-- 상품 수정 폼 -->
 <section class="section">
@@ -49,6 +50,15 @@
                     <label class="label" for="titleInput">상품 이름</label>
                     <div class="control">
                         <input class="input" id="titleInput" type="text" placeholder="아이보리 티셔츠" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="categorySelectBox">카테고리</label>
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select id="categorySelectBox">
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="field">
@@ -116,25 +126,5 @@
         </div>
     </div>
 </section>
-
-<!--<script>-->
-<!--    document.addEventListener("DOMContentLoaded", async () => {-->
-<!--        // 상품 ID를 기반으로 기존 데이터를 로드하여 필드에 미리 채우기-->
-<!--        const itemId = "ID를 서버에서 받아옴"; // URL에서 상품 ID 가져오기 또는 서버에서 제공-->
-<!--        const response = await fetch(`/api/items/${itemId}`);-->
-<!--        const itemData = await response.json();-->
-
-<!--        document.getElementById("titleInput").value = itemData.title;-->
-<!--        document.getElementById("manufacturerInput").value = itemData.manufacturer;-->
-<!--        document.getElementById("shortDescriptionInput").value = itemData.shortDescription;-->
-<!--        document.getElementById("detailDescriptionInput").value = itemData.detailDescription;-->
-<!--        document.getElementById("inventoryInput").value = itemData.inventory;-->
-<!--        document.getElementById("priceInput").value = itemData.price;-->
-<!--        document.getElementById("fileNameSpan").textContent = "현재 사진: " + itemData.imageKey;-->
-<!--        itemData.searchKeywords.forEach(keyword => {-->
-<!--            // 키워드를 필드에 추가하는 로직 작성-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
 </body>
 </html>
